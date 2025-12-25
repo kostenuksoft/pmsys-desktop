@@ -1,0 +1,58 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:sty="clr-namespace:FluentAvalonia.Styling;assembly=FluentAvalonia"
+             xmlns:converters="clr-namespace:PMS.Core.Extensions.Converters"
+             xmlns:controls="clr-namespace:PMS.Views.Controls"
+             x:Class="PMS.App"
+             RequestedThemeVariant="Light">
+
+	<Application.Styles>
+		<FluentTheme DensityStyle="Compact"/>
+        <sty:FluentAvaloniaTheme />
+		<StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
+		<StyleInclude Source="Styles/GeneralStyles.axaml" />
+		<StyleInclude Source="Styles/ButtonStyles.axaml" />
+		<StyleInclude Source="Styles/ToggleButtonStyles.axaml" />
+		<StyleInclude Source="Styles/TextBoxStyles.axaml" />
+		<StyleInclude Source="Styles/BorderStyles.axaml" />
+		<StyleInclude Source="Styles/CheckBoxStyles.axaml" />
+		<StyleInclude Source="Styles/ComboBoxStyles.axaml" />
+        <StyleInclude Source="Styles/ToggleSwitchStyles.axaml" />
+		<StyleInclude Source="Styles/Calendar.axaml"/>
+        <StyleInclude Source="Styles/ContentDialog.axaml"/>
+		<StyleInclude Source="Styles/MessageBoxStyles.axaml"/>
+        <StyleInclude Source="Styles/DataGrid.axaml"/>
+		<StyleInclude Source="Styles/ListBoxStyles.axaml"/>
+	</Application.Styles>
+
+	<Application.Resources>
+		
+		<Thickness x:Key="SmallMargin">5</Thickness>
+		<Thickness x:Key="MediumMargin">10</Thickness>
+		<Thickness x:Key="LargeMargin">20</Thickness>
+
+		<x:Double x:Key="SmallFontSize">12</x:Double>
+		<x:Double x:Key="NormalFontSize">14</x:Double>
+		<x:Double x:Key="LargeFontSize">16</x:Double>
+		<x:Double x:Key="HeaderFontSize">18</x:Double>
+		<x:Double x:Key="TitleFontSize">20</x:Double>
+
+		<converters:EnumToBoolConverter x:Key="EnumToBoolConverter" />
+		<converters:StringConverters x:Key="StringIsNotNullOrEmpty" />
+		<converters:StringConverters x:Key="StringIsNullOrEmpty" />
+		<converters:ObjectConverters x:Key="ObjectIsNotNull" />
+		<converters:ObjectConverters x:Key="ObjectIsNull" />
+		<converters:CertificationListConverter x:Key="CertificationListConverter" />
+
+        <converters:StatusToColorConverter x:Key="StatusToColorConverter"/>
+        <converters:StatusToPendingConverter x:Key="StatusToPendingConverter"/>
+        <converters:StatusToApprovedConverter x:Key="StatusToApprovedConverter"/>
+        <converters:StatusToRejectedConverter x:Key="StatusToRejectedConverter"/>
+        <converters:EqualConverter x:Key="EqualConverter" />
+        <converters:NotEqualConverter x:Key="NotEqualConverter" />
+
+        <converters:BoolToBackgroundConverter x:Key="BoolToBackgroundConverter" />
+		
+
+    </Application.Resources>
+</Application>
