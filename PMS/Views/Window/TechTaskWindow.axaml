@@ -1,0 +1,245 @@
+﻿<windowing:AppWindow xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:windowing="clr-namespace:FluentAvalonia.UI.Windowing;assembly=FluentAvalonia"
+        x:Class="PMS.Views.Window.TechTaskView"
+        Topmost="True"
+        Width="500"
+        MinWidth="350"
+        Title="Тех. Завдання"
+        MinHeight="350"
+        WindowStartupLocation="CenterScreen"
+        SystemDecorations="BorderOnly"
+        CornerRadius="14">
+    <Window.Background>
+        <SolidColorBrush Color="#F5F5F5"/>
+    </Window.Background>
+    
+    <DockPanel>
+        <Border Background="{DynamicResource WindowGradient}"
+                BorderBrush="#4A6F6F"
+                BorderThickness="1"
+                CornerRadius="12"
+                BoxShadow="0 4 20 0 #30000000">
+            <Grid RowDefinitions="Auto,*,Auto">
+                <!-- Header -->
+                <Grid Grid.Row="0"
+                      Height="40"
+                      ColumnDefinitions="Auto,*,Auto">
+                    <Grid.Background>
+                        <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+                            <GradientStop Color="#3A5F5F" Offset="0"/>
+                            <GradientStop Color="#2F4F4F" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Grid.Background>
+                    
+                    <!-- Left side - Title -->
+                    <StackPanel Grid.Column="0"
+                                Orientation="Horizontal"
+                                VerticalAlignment="Center"
+                                Margin="20,0,10,0"
+                                Spacing="10">
+                        <TextBlock Text="Технічне завдання"
+                                   Foreground="White"
+                                   FontSize="16"
+                                   FontWeight="SemiBold"
+                                   VerticalAlignment="Center"
+                                   FontFamily="Segoe UI Variable"/>
+                    </StackPanel>
+                    
+                    <StackPanel Grid.Column="1"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center"
+                                Orientation="Horizontal"/>
+               
+                </Grid>
+
+                <!-- Content -->
+                <ScrollViewer Grid.Row="1"
+                              VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled">
+                    <StackPanel Margin="25,20,25,15"
+                                Spacing="16">
+                        <!-- System Description -->
+                        <StackPanel Spacing="10">
+                            <TextBlock TextWrapping="Wrap"
+                                       Foreground="#2F4F4F"
+                                       FontSize="13"
+                                       LineHeight="20"
+                                       FontFamily="Segoe UI Variable">
+                                Система повинна зберігати загальну інформацію про лікарів, пацієнтів, кабінети та лікувальні процедури, а також здійснювати облік звернень, обстежень та лікування пацієнтів (історія хвороби, діагноз, призначені аналізи, процедури, ліки тощо).
+                            </TextBlock>
+
+                            <TextBlock TextWrapping="Wrap"
+                                       Foreground="#2F4F4F"
+                                       FontSize="13"
+                                       LineHeight="20"
+                                       FontFamily="Segoe UI Variable">
+                                Необхідно передбачити можливість виклику дільничного лікаря до дому, автоматизувати видачу різноманітних довідок та виписок для пацієнтів, формувати графік роботи лікарів та процедурних кабінетів (по змінно у визначений день тижня).
+                            </TextBlock>
+                        </StackPanel>
+
+                        <!-- Separator -->
+                        <Border Height="1"
+                                Background="#E0E8E8"
+                                Margin="0,6"/>
+
+                        <!-- Queries Section -->
+                        <StackPanel Spacing="12">
+                            <TextBlock Text="Види запитів в інформаційній системі:"
+                                       FontWeight="SemiBold"
+                                       FontSize="15"
+                                       Foreground="#2F4F4F"
+                                       FontFamily="Segoe UI Variable"/>
+
+                            <StackPanel Spacing="14" Margin="12,0,0,0">
+                                <Border Background="#F5F8F8"
+                                        CornerRadius="6"
+                                        Padding="12,10">
+                                    <TextBlock TextWrapping="Wrap"
+                                               Foreground="#2F4F4F"
+                                               FontSize="13"
+                                               LineHeight="20"
+                                               FontFamily="Segoe UI Variable">
+                                        <Run FontWeight="SemiBold">1)</Run> Виведіть інформацію про прийомні дні тижня та години (день тижня, год.початку і кінця прийому) терапевтів та кабінети, в яких вони приймають.
+                                    </TextBlock>
+                                </Border>
+
+                                <Border Background="#F5F8F8"
+                                        CornerRadius="6"
+                                        Padding="12,10">
+                                    <TextBlock TextWrapping="Wrap"
+                                               Foreground="#2F4F4F"
+                                               FontSize="13"
+                                               LineHeight="20"
+                                               FontFamily="Segoe UI Variable">
+                                        <Run FontWeight="SemiBold">2)</Run> Вивести детальну інформацію про лікарів, та довідки, які вони видавали пацієнтам; кількість пацієнтів, які обстежує заданий лікар за тиждень.
+                                    </TextBlock>
+                                </Border>
+
+                                <Border Background="#F5F8F8"
+                                        CornerRadius="6"
+                                        Padding="12,10">
+                                    <TextBlock TextWrapping="Wrap"
+                                               Foreground="#2F4F4F"
+                                               FontSize="13"
+                                               LineHeight="20"
+                                               FontFamily="Segoe UI Variable">
+                                        <Run FontWeight="SemiBold">3)</Run> Вивести інформацію про відомості пацієнтів за прізвищем, за номером історії хвороби, за станом здоров'я, за прив'язкою до лікаря-терапевта.
+                                    </TextBlock>
+                                </Border>
+
+                                <Border Background="#F5F8F8"
+                                        CornerRadius="6"
+                                        Padding="12,10">
+                                    <TextBlock TextWrapping="Wrap"
+                                               Foreground="#2F4F4F"
+                                               FontSize="13"
+                                               LineHeight="20"
+                                               FontFamily="Segoe UI Variable">
+                                        <Run FontWeight="SemiBold">4)</Run> Вивести інформацію про пацієнтів, які обстежувалися у більше ніж двох лікарів за тиждень; кількість хворих, яким було поставлено діагноз ангіна протягом місяця.
+                                    </TextBlock>
+                                </Border>
+
+                                <Border Background="#F5F8F8"
+                                        CornerRadius="6"
+                                        Padding="12,10">
+                                    <TextBlock TextWrapping="Wrap"
+                                               Foreground="#2F4F4F"
+                                               FontSize="13"
+                                               LineHeight="20"
+                                               FontFamily="Segoe UI Variable">
+                                        <Run FontWeight="SemiBold">5)</Run> Вивести повну інформацію про графік роботи заданого лікаря на тиждень; на місяць; перелік та загальну кількість лікарів вказаного профілю.
+                                    </TextBlock>
+                                </Border>
+
+                                <Border Background="#F5F8F8"
+                                        CornerRadius="6"
+                                        Padding="12,10">
+                                    <TextBlock TextWrapping="Wrap"
+                                               Foreground="#2F4F4F"
+                                               FontSize="13"
+                                               LineHeight="20"
+                                               FontFamily="Segoe UI Variable">
+                                        <Run FontWeight="SemiBold">6)</Run> Вивести прізвище та адресу пацієнтів, які викликали дільничного лікаря; кількість викликів до дому, прийнятих кожним лікарем.
+                                    </TextBlock>
+                                </Border>
+
+                                <Border Background="#F5F8F8"
+                                        CornerRadius="6"
+                                        Padding="12,10">
+                                    <TextBlock TextWrapping="Wrap"
+                                               Foreground="#2F4F4F"
+                                               FontSize="13"
+                                               LineHeight="20"
+                                               FontFamily="Segoe UI Variable">
+                                        <Run FontWeight="SemiBold">7)</Run> Отримати інформацію про перелік лікувальних процедур, які надає поліклініка; загальну кількість наданих процедур за тиждень; перелік пацієнтів, які отримали процедури за тиждень.
+                                    </TextBlock>
+                                </Border>
+
+                                <Border Background="#F5F8F8"
+                                        CornerRadius="6"
+                                        Padding="12,10">
+                                    <TextBlock TextWrapping="Wrap"
+                                               Foreground="#2F4F4F"
+                                               FontSize="13"
+                                               LineHeight="20"
+                                               FontFamily="Segoe UI Variable">
+                                        <Run FontWeight="SemiBold">8)</Run> Отримати інформацію про хворих, які робили флюорографію у заданий день; які не пройшли планове щеплення.
+                                    </TextBlock>
+                                </Border>
+
+                                <Border Background="#F5F8F8"
+                                        CornerRadius="6"
+                                        Padding="12,10">
+                                    <TextBlock TextWrapping="Wrap"
+                                               Foreground="#2F4F4F"
+                                               FontSize="13"
+                                               LineHeight="20"
+                                               FontFamily="Segoe UI Variable">
+                                        <Run FontWeight="SemiBold">9)</Run> Отримати повну інформацію про фіз.кабінети; інформацію про графік роботи фіз.кабінетів по зміна (перша, друга, дві зміни); кількість лікарів, які працють в кожному кабінеті протягом тижня.
+                                    </TextBlock>
+                                </Border>
+
+                                <Border Background="#F5F8F8"
+                                        CornerRadius="6"
+                                        Padding="12,10">
+                                    <TextBlock TextWrapping="Wrap"
+                                               Foreground="#2F4F4F"
+                                               FontSize="13"
+                                               LineHeight="20"
+                                               FontFamily="Segoe UI Variable">
+                                        <Run FontWeight="SemiBold">10)</Run> Підрахувати кількість відвідувань поліклініки за місяць в цілому і по кожній групі лікарів.
+                                    </TextBlock>
+                                </Border>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+
+                <!-- Footer -->
+                <Border Grid.Row="2"
+                        Background="#F5F8F8"
+                        Padding="20,15"
+                        BorderBrush="#E0E8E8"
+                        BorderThickness="0,1,0,0">
+                    <Button Name="CloseButton"
+                            Content="OK"
+                            HorizontalAlignment="Center"
+                            MinWidth="120"
+                            Height="36"
+                            Click="OkButton_Click"
+                            Classes="WButton accent"
+                            Cursor="Hand">
+                    </Button>
+                </Border>
+            </Grid>
+        </Border>
+    </DockPanel>
+    
+    <Window.Resources>
+        <LinearGradientBrush x:Key="WindowGradient" StartPoint="0%,0%" EndPoint="0%,100%">
+            <GradientStop Color="#FFFFFF" Offset="0"/>
+            <GradientStop Color="#F8FAFA" Offset="1"/>
+        </LinearGradientBrush>
+    </Window.Resources>
+</windowing:AppWindow>

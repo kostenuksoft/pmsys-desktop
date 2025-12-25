@@ -1,0 +1,99 @@
+<windowing:AppWindow xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ui="using:FluentAvalonia.UI.Controls"
+        xmlns:windowing="clr-namespace:FluentAvalonia.UI.Windowing;assembly=FluentAvalonia"
+        xmlns:vm="clr-namespace:PMS.ViewModels"
+        x:Class="PMS.Views.Window.IrWindow"
+        x:DataType="vm:IRWindowViewModel"
+        Title="{Binding WindowTitle.Value}"
+        Topmost="True"
+        SizeToContent="WidthAndHeight"
+        CanResize="False"
+        WindowStartupLocation="CenterScreen"
+        SystemDecorations="BorderOnly"
+        CornerRadius="12">
+
+	<Window.Background>
+		<SolidColorBrush Color="#F5F5F5"/>
+	</Window.Background>
+<DockPanel>
+	<Border Background="{DynamicResource WindowGradient}"
+            BorderBrush="#4A6F6F"
+            BorderThickness="1"
+            CornerRadius="12">
+
+		<Grid RowDefinitions="Auto,*,Auto">
+
+			<Border Grid.Row="0"
+                    Height="45"
+                    Padding="20,0">
+				<Border.Background>
+					<LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+						<GradientStop Color="#3A5F5F" Offset="0"/>
+						<GradientStop Color="#2F4F4F" Offset="1"/>
+					</LinearGradientBrush>
+				</Border.Background>
+
+				<TextBlock Text="{Binding WindowTitle.Value}"
+                          Foreground="White"
+                          FontSize="16"
+                          FontWeight="SemiBold"
+                          VerticalAlignment="Center"
+                          FontFamily="Segoe UI Variable"/>
+			</Border>
+
+			<StackPanel Grid.Row="1"
+                       Margin="30,30,30,20"
+                       Spacing="20"
+                       VerticalAlignment="Center">
+
+				<ui:SymbolIcon Symbol="Important"
+                              FontSize="48"
+                              Foreground="#3A5F5F"
+                              HorizontalAlignment="Center"/>
+
+				<TextBlock Text="{Binding Message.Value}"
+                          FontSize="15"
+                          Foreground="#2F4F4F"
+                          TextAlignment="Center"
+                          TextWrapping="Wrap"
+                          HorizontalAlignment="Center"
+                          FontFamily="Segoe UI Variable"/>
+
+				<TextBlock Text="{Binding Hint.Value}"
+                          FontSize="13"
+                          Foreground="#5F7F7F"
+                          TextAlignment="Center"
+                          HorizontalAlignment="Center"
+                          FontFamily="Segoe UI Variable"/>
+			</StackPanel>
+
+			<Border Grid.Row="2"
+                    Background="#F5F8F8"
+                    Padding="20,15"
+                    BorderBrush="#E0E8E8"
+                    BorderThickness="0,1,0,0">
+
+				<Button Name="OkButton"
+                       Content="{Binding OkButton.Value}"
+                       HorizontalAlignment="Center"
+                       MinWidth="120"
+                       Height="36"
+                       Classes="WButton accent"
+                       Cursor="Hand"
+                       Click="OkButton_Click">
+				</Button>
+			</Border>
+
+		</Grid>
+	</Border>
+</DockPanel>
+
+<Window.Resources>
+		<LinearGradientBrush x:Key="WindowGradient" StartPoint="0%,0%" EndPoint="0%,100%">
+			<GradientStop Color="#FFFFFF" Offset="0"/>
+			<GradientStop Color="#F8FAFA" Offset="1"/>
+		</LinearGradientBrush>
+	</Window.Resources>
+
+</windowing:AppWindow>

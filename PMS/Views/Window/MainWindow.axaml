@@ -1,0 +1,654 @@
+<windowing:AppWindow xmlns="https://github.com/avaloniaui"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:vm="clr-namespace:PMS.ViewModels"
+                     xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+                     xmlns:windowing="clr-namespace:FluentAvalonia.UI.Windowing;assembly=FluentAvalonia"
+                     xmlns:common="clr-namespace:PMS.Core.Models.Common"
+                     x:Class="PMS.Views.Window.MainWindow"
+                     Title="Система управління поліклінікою"
+                     IsVisible="True"
+                     Name="MainWindow2"
+                     MinHeight="450"
+                     MinWidth="720"
+                     Icon="avares://PMS/Assets/al.ico"
+                     WindowStartupLocation="CenterScreen"
+                     x:DataType="vm:MainWindowViewModel"
+                     x:CompileBindings="True"
+                     Closing="Window_OnClosing"
+                     KeyDown="OnWindowKeyDown">
+
+    <DockPanel>
+
+        <Grid DockPanel.Dock="Top"
+              Height="40"
+              Name="CustomTitleBar" ColumnDefinitions="Auto,*,Auto,138">
+
+
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0%,0%" EndPoint="50%,100%">
+                    <GradientStop Color="#764ba2" Offset="0" />
+                    <GradientStop Color="DarkSlateGray" Offset="1" />
+                </LinearGradientBrush>
+            </Grid.Background>
+
+            <StackPanel></StackPanel>
+
+            <StackPanel Grid.Column="0"
+                        Orientation="Horizontal"
+                        VerticalAlignment="Center"
+                        Margin="10,0" Spacing="10">
+
+                <Viewbox Width="25">
+                    <Image Source="avares://PMS/Assets/al.ico" />
+                </Viewbox>
+
+                <TextBlock Text="{Binding ApplicationTitle}"
+                           Foreground="AliceBlue"
+                           FontWeight="SemiBold"
+                           Padding="0,5"
+                           FontSize="{DynamicResource FontSizeLarge}" />
+            </StackPanel>
+
+            <StackPanel Grid.Column="1"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Orientation="Horizontal"
+                        Margin="100, 0,10 ,0" Spacing="10">
+             <!--   
+                <Viewbox Width="25">
+                    <controls:IconSourceElement IconSource="Find" Foreground="White" />
+                </Viewbox>-->
+
+             <!--   <AutoCompleteBox
+                    IsTextCompletionEnabled="True"
+                    MinWidth="350"
+                    MaxWidth="500"
+                    IsEnabled="False">
+                </AutoCompleteBox>-->
+
+            </StackPanel>
+
+
+            <WrapPanel Grid.Column="2"
+                       VerticalAlignment="Center"
+                       Margin="10, 0,10 ,0">
+
+
+            </WrapPanel>
+
+
+        </Grid>
+
+        <Menu DockPanel.Dock="Top" Height="40">
+
+            <MenuItem Name="ExitItems">
+                <MenuItem.Header>
+                    <Viewbox Width="25" Height="25">
+                        <controls:IconSourceElement IconSource="Directions" />
+                    </Viewbox>
+                </MenuItem.Header>
+                <ToolTip.Tip>
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                        <TextBlock Text="Меню виходу" VerticalAlignment="Center" />
+                    </StackPanel>
+                </ToolTip.Tip>
+
+                <MenuItem Header="Перезапустити застосунок"
+                          Name="RestartApp"
+                          Command="{Binding RestartAppCommand}">
+                    <MenuItem.Icon>
+                        <Viewbox Width="40" Height="40">
+                            <controls:IconSourceElement IconSource="Refresh" />
+                        </Viewbox>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator />
+                <MenuItem Header="Завершити сеанс"
+                          Name="TerminateSessionMenuItem"
+                          Command="{Binding EndSessionCommand}"
+                          IsVisible="{Binding IsAuthenticated}">
+                    <MenuItem.Icon>
+                        <Viewbox Width="40" Height="40">
+                            <controls:IconSourceElement IconSource="Switch" />
+                        </Viewbox>
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <Separator />
+                <MenuItem Header="Завершити роботу"
+                          Name="ExitMenuItem"
+                          Command="{Binding ExitCommand}">
+                    <MenuItem.Icon>
+                        <Viewbox Width="40" Height="40">
+                            <controls:IconSourceElement IconSource="Back" />
+                        </Viewbox>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+
+            <Separator Background="#764ba2"
+                       Width="75"
+                       Margin="5,5" />
+
+            <MenuItem Name="DirectoryItems"
+                      IsEnabled="{Binding IsAuthenticated}">
+                <MenuItem.Header>
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                        <Viewbox Width="20" Height="20">
+                            <controls:IconSourceElement IconSource="PhoneBook" />
+                        </Viewbox>
+                        <TextBlock Text="Довідник" />
+                    </StackPanel>
+
+                </MenuItem.Header>
+                <MenuItem.Icon>
+                    <controls:IconSourceElement IconSource="ContactInfo" />
+                </MenuItem.Icon>
+
+                <MenuItem Header="Лікарі"
+                          Name="DoctorsMenuItem"
+                          Command="{Binding ShowDoctorsCommand}">
+
+                    <MenuItem.Icon>
+                        <Viewbox Width="20" Height="20">
+                            <controls:IconSourceElement IconSource="Contact2" />
+                        </Viewbox>
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <MenuItem Header="Пацієнти"
+                          Name="PatientsMenuItem"
+                          Command="{Binding ShowPatientsCommand}">
+
+                    <MenuItem.Icon>
+                        <Viewbox Width="20" Height="20">
+                            <controls:IconSourceElement IconSource="People" />
+                        </Viewbox>
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <MenuItem Header="Кабінети"
+                          Name="RoomsMenuItem"
+                          Command="{Binding ShowRoomsCommand}">
+
+                    <MenuItem.Icon>
+                        <Viewbox Width="20" Height="20">
+                            <controls:SymbolIcon Symbol="Home" />
+                        </Viewbox>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Header="Обстеження"
+                          Name="ExaminationsMenuItem"
+                          Command="{Binding ShowExaminationsCommand}">
+
+                    <MenuItem.Icon>
+                        <Viewbox Width="20" Height="20">
+                            <controls:SymbolIcon Symbol="Document" />
+                        </Viewbox>
+                    </MenuItem.Icon>
+                </MenuItem>
+                
+                <MenuItem Header="Процедури"
+                          Name="ProceduresMenuItem">
+                    <MenuItem.Icon>
+                        <Viewbox Width="20" Height="20">
+                            <controls:IconSourceElement IconSource="Target" />
+                        </Viewbox>
+                    </MenuItem.Icon>
+
+                    <MenuItem Header="Послуги клініки"
+                              Name="AllProceduresMenuItem"
+                              Command="{Binding ShowProceduresCommand}">
+                        <MenuItem.Icon>
+                            <Viewbox Width="20" Height="20">
+                                <controls:SymbolIcon Symbol="Library" />
+                            </Viewbox>
+                        </MenuItem.Icon>
+
+                    </MenuItem>
+
+
+                    <MenuItem Header="Для пацієнтів"
+                              Name="PositionsMenuItem"
+                              Command="{Binding ShowPatientProceduresCommand}">
+                        <MenuItem.Icon>
+                            <Viewbox Width="20" Height="20">
+                                <controls:SymbolIcon Symbol="People" />
+                            </Viewbox>
+                        </MenuItem.Icon>
+
+                    </MenuItem>
+                </MenuItem>
+
+            </MenuItem>
+
+            <MenuItem Name="OperationsItems"
+                      IsEnabled="{Binding IsAuthenticated}">
+                <MenuItem.Header>
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                        <Viewbox Width="20" Height="20">
+                            <controls:IconSourceElement IconSource="Manage" />
+                        </Viewbox>
+                        <TextBlock Text="Операції" />
+                    </StackPanel>
+                </MenuItem.Header>
+
+                <MenuItem Header="Прийом пацієнта"
+                          Name="AppointmentMenuItem"
+                          Command="{Binding ShowAppointmentCommand}">
+                    <MenuItem.Icon>
+                        <controls:SymbolIcon Symbol="CalendarDay"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <MenuItem Header="Виклик лікаря додому"
+                          Command="{Binding ShowHomeVisitCommand}">
+                    <MenuItem.Icon>
+                        <controls:SymbolIcon Symbol="Home"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <MenuItem Header="Видача довідок"
+                          Command="{Binding ShowCertificatesCommand}">
+                    <MenuItem.Icon>
+                        <controls:IconSourceElement IconSource="Document" />
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+
+            <MenuItem Name="ScheduleMenu"
+                      IsEnabled="{Binding IsAuthenticated}"
+                      IsVisible="False" 
+                      Command="{Binding ShowDoctorScheduleCommand}">
+
+                <MenuItem.Header>
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                        <Viewbox Width="20" Height="20">
+                            <controls:IconSourceElement IconSource="Calendar" />
+                        </Viewbox>
+                        <TextBlock Text="Розклад" />
+                    </StackPanel>
+                </MenuItem.Header>
+
+                <MenuItem.Icon>
+                    <controls:SymbolIcon Symbol="Calendar" />
+                </MenuItem.Icon>
+                <MenuItem Header="Розклад лікарів"
+                          Name="DoctorScheduleMenuItem"
+                          Command="{Binding ShowDoctorScheduleCommand}">
+                    <MenuItem.Icon>
+                        <controls:SymbolIcon FontSize="20" Symbol="People" />
+                    </MenuItem.Icon>
+                </MenuItem>
+         
+            </MenuItem>
+
+            <MenuItem Name="ReportItems"
+                      IsEnabled="{Binding IsAuthenticated}">
+
+                <MenuItem.Header>
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                        <Viewbox Width="20" Height="20">
+                            <controls:IconSourceElement IconSource="PreviewLink" />
+                        </Viewbox>
+                        <TextBlock Text="Звіти" />
+                    </StackPanel>
+
+                </MenuItem.Header>
+                <MenuItem.Icon>
+                    <controls:IconSourceElement IconSource="ChartMultiple" />
+                </MenuItem.Icon>
+
+                <MenuItem Header="Агрегації MongoDB"
+                          Name="AggregationsMenuItem"
+                          Command="{Binding ShowAggregationsCommand}">
+                    <MenuItem.Icon>
+                        <controls:SymbolIcon Symbol="Code" FontSize="20" />
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+
+            <MenuItem Name="AdministrationItems"
+                      IsEnabled="{Binding IsAuthenticated}"
+                      IsVisible="{Binding IsAdminMenuVisible}">
+
+                <MenuItem.Header>
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                        <Viewbox Width="20" Height="20">
+                            <controls:SymbolIcon Symbol="Admin" />
+                        </Viewbox>
+                        <TextBlock Text="Адміністрування" />
+                    </StackPanel>
+
+                </MenuItem.Header>
+
+
+                <MenuItem Header="Користувачі та права доступу"
+                          Name="UsersMenuItem"
+                          Command="{Binding ShowUsersCommand}">
+                    <MenuItem.Icon>
+                        <controls:SymbolIcon FontSize="20" Symbol="OtherUser" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+          
+            </MenuItem>
+
+            <Separator Background="DarkSlateGray"
+                       Margin="5,5" HorizontalAlignment="Stretch" Width="1024" />
+
+        </Menu>
+
+
+        <Border DockPanel.Dock="Bottom"
+                Background="DarkSlateGray"
+                BorderThickness="0,1,0,0"
+                BorderBrush="{DynamicResource SurfaceStrokeColorDefaultBrush}"
+                Height="50">
+            <DockPanel>
+                <controls:CommandBar DockPanel.Dock="Left"
+                                     Foreground="#F5F5F5"
+                                     Background="DarkSlateGray"
+                                     DefaultLabelPosition="Right"
+                                     IsDynamicOverflowEnabled="True"
+                                     IsOpen="False">
+
+                    <controls:CommandBar.PrimaryCommands>
+                        <controls:CommandBarButton IconSource="Contact"
+                                                   Label="{Binding UserName}"
+                                                   IsEnabled="True"
+                                                   Foreground="AliceBlue"
+                                                   Background="DarkSlateGray" />
+
+
+                        <controls:CommandBarButton IconSource="Permissions"
+                                                   Label="{Binding RoleName}"
+                                                   IsEnabled="True"
+                                                   Foreground="AliceBlue"
+                                                   Background="DarkSlateGray" />
+                        <controls:CommandBarSeparator />
+
+                        <controls:CommandBarButton Label="{Binding MemoryUsage}"
+                                                   IconSource="ViewAll"
+                                                   FontWeight="Normal"
+                                                   IsVisible="False"
+                                                   VerticalAlignment="Center"
+                                                   Foreground="AliceBlue"
+                                                   Background="DarkSlateGray">
+                        </controls:CommandBarButton>
+
+                        <controls:CommandBarSeparator />
+
+                        <controls:CommandBarButton Label="{Binding ActiveKeyCombination}"
+                                                   IconSource="Keyboard"
+                                                   FontWeight="Normal"
+                                                   VerticalAlignment="Center"
+                                                   Foreground="AliceBlue"
+                                                   Background="DarkSlateGray">
+                        </controls:CommandBarButton>
+
+
+                    </controls:CommandBar.PrimaryCommands>
+
+               
+                </controls:CommandBar>
+
+
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+
+                            Spacing="10"
+                            Margin="0, 0, 10, 0">
+                    <Viewbox Width="20" Height="20">
+                        <controls:IconSourceElement IconSource="Clock"
+                                                    Foreground="AliceBlue" />
+                    </Viewbox>
+                    <TextBlock Name="DateTimeText"
+                               Text="{Binding DateTimeText}"
+                               Foreground="AliceBlue"
+                               FontWeight="Normal"
+                               VerticalAlignment="Center" />
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <controls:NavigationView x:Name="NavView"
+                                 PaneDisplayMode="LeftCompact"
+                                 IsSettingsVisible="False"
+                                 IsPaneOpen="True"
+                                 IsPaneToggleButtonVisible="True"
+                                 IsBackEnabled="True"
+                                 OpenPaneLength="250"
+                                 CompactPaneLength="48"
+                                 Background="#FBFBFB">
+
+            <controls:NavigationView.MenuItems>
+                <controls:NavigationViewItemHeader Content="Швидкий доступ"
+                                                   IsEnabled="{Binding IsAuthenticated}" />
+
+                <controls:NavigationViewItem Content="На головну"
+                                             Name="HomeItem"
+                                             IconSource="Home">
+                    <Interaction.Behaviors>
+                        <EventTriggerBehavior EventName="Tapped">
+                            <InvokeCommandAction Command="{Binding ShowHomeCommand}" />
+                        </EventTriggerBehavior>
+                    </Interaction.Behaviors>
+                </controls:NavigationViewItem>
+
+                <controls:NavigationViewItem Content="Новий прийом"
+                                             Tag="QuickAppointment"
+                                             Name="QuickAppointmentNavItem"
+                                             IsEnabled="{Binding IsAuthenticated}">
+                    <controls:NavigationViewItem.IconSource>
+                        <controls:SymbolIconSource Symbol="Add" />
+                    </controls:NavigationViewItem.IconSource>
+
+                    <Interaction.Behaviors>
+                        <EventTriggerBehavior EventName="Tapped">
+                            <InvokeCommandAction Command="{Binding QuickAppointmentCommand}" />
+                        </EventTriggerBehavior>
+                    </Interaction.Behaviors>
+                </controls:NavigationViewItem>
+
+
+                <controls:NavigationViewItem Content="Пошук пацієнта"
+                                             Tag="QuickPatient"
+                                             Name="QuickPatientNavItem"
+                                             IsEnabled="{Binding IsAuthenticated}">
+                    <controls:NavigationViewItem.IconSource>
+                        <controls:SymbolIconSource Symbol="Find" />
+                    </controls:NavigationViewItem.IconSource>
+                    <Interaction.Behaviors>
+                        <EventTriggerBehavior EventName="Tapped">
+                            <InvokeCommandAction Command="{Binding QuickPatientSearchCommand}" />
+                        </EventTriggerBehavior>
+                    </Interaction.Behaviors>
+                </controls:NavigationViewItem>
+
+                <controls:NavigationViewItem Content="Розклад лікаря"
+                                             Tag="QuickDoctor"
+                                             Name="QuickDoctorNavItem"
+                                             IsEnabled="{Binding IsAuthenticated}">
+                    <controls:NavigationViewItem.IconSource>
+                        <controls:SymbolIconSource Symbol="Calendar" />
+                    </controls:NavigationViewItem.IconSource>
+                    <Interaction.Behaviors>
+                        <EventTriggerBehavior EventName="Tapped">
+                            <InvokeCommandAction Command="{Binding QuickDoctorScheduleCommand}" />
+                        </EventTriggerBehavior>
+                    </Interaction.Behaviors>
+                </controls:NavigationViewItem>
+
+                <controls:NavigationViewItem Content="Видати довідку"
+                                             Tag="QuickCertificate"
+                                             Name="QuickCertificateNavItem"
+                                             IsEnabled="{Binding IsAuthenticated}">
+                    <controls:NavigationViewItem.IconSource>
+                        <controls:SymbolIconSource Symbol="Document" />
+                    </controls:NavigationViewItem.IconSource>
+                    <Interaction.Behaviors>
+                        <EventTriggerBehavior EventName="Tapped">
+                            <InvokeCommandAction Command="{Binding QuickCertificateCommand}" />
+                        </EventTriggerBehavior>
+                    </Interaction.Behaviors>
+                </controls:NavigationViewItem>
+
+                <controls:NavigationViewItemSeparator />
+
+                <controls:NavigationViewItem Content="Журннал дій"
+                                             Tag="RecentActions"
+                                             Name="RecentActionsNavItem"
+                                             IsEnabled="{Binding IsAuthenticated}">
+                    <controls:NavigationViewItem.IconSource>
+                        <controls:SymbolIconSource Symbol="Clock" />
+                    </controls:NavigationViewItem.IconSource>
+                </controls:NavigationViewItem>
+
+                <controls:NavigationViewItem Content="Про додаток"
+                                             Tag="About"
+                                             Name="AboutNavItem">
+                    <controls:NavigationViewItem.IconSource>
+                        <controls:SymbolIconSource Symbol="Help" />
+                    </controls:NavigationViewItem.IconSource>
+                    <Interaction.Behaviors>
+                        <EventTriggerBehavior EventName="Tapped">
+                            <InvokeCommandAction Command="{Binding ShowAboutCommand}" />
+                        </EventTriggerBehavior>
+                    </Interaction.Behaviors>
+                </controls:NavigationViewItem>
+
+            </controls:NavigationView.MenuItems>
+
+            <controls:NavigationView.Content>
+                <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" RowDefinitions="Auto,*,Auto"
+                      Background="#F5F5F5">
+
+                    <Border Grid.Row="0" Padding="5" CornerRadius="5">
+                        <controls:TabView x:Name="MainTabView"
+                                          CanDragTabs="True"
+                                          CanReorderTabs="True"
+                                          CloseButtonOverlayMode="OnPointerOver"
+                                          AllowDropTabs="True"
+                                          IsAddTabButtonVisible="True"
+                                          TabItems="{Binding Tabs}"
+                                          SelectedItem="{Binding SelectedTab, Mode=TwoWay}"
+                                          AddTabButtonCommand="{Binding AddTabCommand}"
+                                          TabCloseRequested="OnTabCloseRequested"
+                                          TabDroppedOutside="OnTabDroppedOutside"
+                                          SelectionChanged="OnTabSelectionChanged"
+                                          TabWidthMode="SizeToContent"
+                                          IsEnabled="{Binding IsAuthenticated}">
+
+
+                            <controls:TabView.TabItemTemplate>
+                                <DataTemplate DataType="common:TabItemModel">
+                                    <controls:TabViewItem Header="{Binding DisplayHeader}"
+                                                          Name="TabViewItemControl"
+                                                          IconSource="{Binding IconSource}"
+                                                          BorderBrush="#F5F5F5"
+                                                          IsClosable="{Binding IsClosable}">
+
+                                        <controls:TabViewItem.ContextFlyout>
+                                            <MenuFlyout>
+                                                <MenuItem Header="Зачинити"
+                                                          Command="{Binding #MainWindow2.DataContext.CloseTabCommand}"
+                                                          CommandParameter="{Binding}">
+                                                    <MenuItem.Icon>
+                                                        <controls:SymbolIcon Symbol="Cancel" />
+                                                    </MenuItem.Icon>
+                                                </MenuItem>
+                                                <MenuItem Header="Зачинити інші"
+                                                          Command="{Binding #MainWindow2.DataContext.CloseOtherTabsCommand}"
+                                                          CommandParameter="{Binding}">
+                                                    <MenuItem.Icon>
+                                                        <controls:SymbolIcon Symbol="People" />
+                                                    </MenuItem.Icon>
+                                                </MenuItem>
+                                                <MenuItem Header="Зачинити всі"
+                                                          Command="{Binding #MainWindow2.DataContext.CloseAllTabsCommand}">
+                                                    <MenuItem.Icon>
+                                                        <controls:SymbolIcon Symbol="Clear" />
+                                                    </MenuItem.Icon>
+                                                </MenuItem>
+                                                <Separator />
+                                                <MenuItem Header="Дублікувати вкладку"
+                                                          Command="{Binding #MainWindow2.DataContext.DuplicateTabCommand}"
+                                                          CommandParameter="{Binding}">
+                                                    <MenuItem.Icon>
+                                                        <controls:SymbolIcon Symbol="Copy" />
+                                                    </MenuItem.Icon>
+                                                </MenuItem>
+                                            </MenuFlyout>
+                                        </controls:TabViewItem.ContextFlyout>
+                                    </controls:TabViewItem>
+                                </DataTemplate>
+                            </controls:TabView.TabItemTemplate>
+                        </controls:TabView>
+                    </Border>
+
+
+                    <ScrollViewer Grid.Row="1"
+                                  HorizontalAlignment="Stretch"
+                                  VerticalAlignment="Top"
+                                  AllowAutoHide="True"
+                                  VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Auto">
+                        <ContentControl Name="MainContent"
+                                        HorizontalContentAlignment="Stretch"
+                                        VerticalContentAlignment="Stretch"
+                                        Content="{Binding CurrentView}"
+                                        Margin="5" />
+                    </ScrollViewer>
+
+                    <Border Grid.Row="2" Padding="10">
+                        <controls:InfoBar Title="{Binding Title}"
+                                          Message="{Binding Message}"
+                                          Severity="{Binding MessageSeverity}"
+                                          Background="White"
+                                          IsOpen="{Binding IsInfoBarVisible}"
+                                          HorizontalAlignment="Stretch" />
+                    </Border>
+                </Grid>
+            </controls:NavigationView.Content>
+
+            <controls:NavigationView.FooterMenuItems>
+                <controls:NavigationViewItem Content="Налаштування"
+                                             Tag="Settings"
+                                             Name="SettingsNavItem">
+                    <controls:NavigationViewItem.IconSource>
+                        <controls:SymbolIconSource Symbol="Setting" />
+                    </controls:NavigationViewItem.IconSource>
+
+                    <Interaction.Behaviors>
+                        <EventTriggerBehavior EventName="Tapped">
+                            <InvokeCommandAction Command="{Binding ShowSettingsCommand}" />
+                        </EventTriggerBehavior>
+                    </Interaction.Behaviors>
+                </controls:NavigationViewItem>
+
+
+                <controls:NavigationViewItem Name="ToggleInfoBar">
+
+                    <Viewbox Width="16">
+                        <controls:FontIcon FontSize="12" Glyph="&#xE946;"
+                                           FontFamily="{StaticResource SymbolThemeFontFamily}" />
+                    </Viewbox>
+
+                    <Interaction.Behaviors>
+                        <EventTriggerBehavior EventName="Tapped">
+                            <InvokeCommandAction Command="{Binding CollapseInfoBarCommand}" />
+                        </EventTriggerBehavior>
+                    </Interaction.Behaviors>
+                </controls:NavigationViewItem>
+
+
+            </controls:NavigationView.FooterMenuItems>
+        </controls:NavigationView>
+
+
+    </DockPanel>
+
+</windowing:AppWindow>

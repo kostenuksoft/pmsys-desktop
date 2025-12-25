@@ -1,0 +1,413 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+             xmlns:vm="using:PMS.ViewModels"
+             x:Class="PMS.Views.Controls.StatusCheckView"
+             x:DataType="vm:StatusCheckViewModel">
+
+	
+	
+	<UserControl.Styles>
+		<Style Selector="Border.card">
+			<Setter Property="Background" Value="#FFFFFF"/>
+			<Setter Property="CornerRadius" Value="12"/>
+			<Setter Property="BoxShadow" Value="0 4 16 0 #15000000"/>
+		</Style>
+
+		<Style Selector="Border.section-card">
+			<Setter Property="Background" Value="#FAFCFC"/>
+			<Setter Property="CornerRadius" Value="8"/>
+			<Setter Property="Padding" Value="20"/>
+		</Style>
+
+		<Style Selector="TextBlock.title">
+			<Setter Property="FontSize" Value="24"/>
+			<Setter Property="FontWeight" Value="SemiBold"/>
+			<Setter Property="Foreground" Value="#2F4F4F"/>
+		</Style>
+
+		<Style Selector="TextBlock.subtitle">
+			<Setter Property="FontSize" Value="14"/>
+			<Setter Property="Foreground" Value="#5F9EA0"/>
+			<Setter Property="LineHeight" Value="22"/>
+		</Style>
+
+		<Style Selector="TextBlock.section-title">
+			<Setter Property="FontSize" Value="16"/>
+			<Setter Property="FontWeight" Value="SemiBold"/>
+			<Setter Property="Foreground" Value="#2F4F4F"/>
+		</Style>
+
+		<Style Selector="TextBlock.secondary">
+			<Setter Property="Foreground" Value="#999999"/>
+			<Setter Property="FontSize" Value="13"/>
+		</Style>
+	</UserControl.Styles>
+
+	<ScrollViewer VerticalScrollBarVisibility="Auto">
+		<Border Background="DarkSlateGray" Padding="30">
+			<StackPanel Spacing="20" MaxWidth="800" HorizontalAlignment="Center">
+
+				<!-- Header Section -->
+				<Border Classes="card" Padding="32,40">
+					<StackPanel Spacing="16">
+						<Border Width="72" Height="72" CornerRadius="36" HorizontalAlignment="Center">
+							<Border.Background>
+								<LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+									<GradientStop Color="#5F9EA0" Offset="0"/>
+									<GradientStop Color="#2F4F4F" Offset="1"/>
+								</LinearGradientBrush>
+							</Border.Background>
+							<ui:SymbolIcon Symbol="Find"
+                                           FontSize="36"
+                                           Foreground="White"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"/>
+						</Border>
+
+						<TextBlock Classes="title"
+                                   Text="Перевірка статусу заявки"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,4,0,0"/>
+
+						<TextBlock Classes="subtitle"
+                                   Text="Введіть 8-значний код вашої заявки для перевірки її статусу"
+                                   HorizontalAlignment="Center"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap"
+                                   MaxWidth="400"/>
+					</StackPanel>
+				</Border>
+
+				<!-- Input Section -->
+				<Border Classes="card" Padding="24">
+					<StackPanel Spacing="16">
+						<Grid ColumnDefinitions="Auto,*">
+							<ui:SymbolIcon Grid.Column="0"
+                                           Symbol="Read"
+                                           FontSize="20"
+                                           Foreground="#5F9EA0"
+                                           VerticalAlignment="Center"
+                                           Margin="0,0,12,0"/>
+							<StackPanel Grid.Column="1" Spacing="4">
+								<TextBlock Classes="section-title" Text="Код заявки"/>
+								<TextBlock Classes="secondary" 
+                                           Text="Введіть код, отриманий при реєстрації"/>
+							</StackPanel>
+						</Grid>
+
+						<Border Classes="section-card" Padding="16">
+							<Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="12">
+								<TextBox Grid.Column="0"
+                                         Name="RequestCodeBox"
+                                         Text="{Binding RequestCode}"
+                                         MaxLength="8"
+                                         Tag="Введіть код"
+                                         FontFamily="Cascadia Code, Consolas, Courier New"
+                                         FontSize="18"
+                                         FontWeight="Medium"
+                                         VerticalContentAlignment="Center"
+                                         Background="Transparent"
+                                         BorderThickness="0"
+                                         LetterSpacing="2"/>
+
+								<Button Grid.Column="1"
+                                        Command="{Binding CheckStatusCommand}"
+                                        Classes="WButton accent"
+                                        Height="40"
+                                        Padding="20,0">
+									<StackPanel Orientation="Horizontal" Spacing="8">
+										<ui:SymbolIcon Symbol="Find" FontSize="16"/>
+										<TextBlock Text="Перевірити" FontWeight="SemiBold"/>
+									</StackPanel>
+								</Button>
+
+								<Button Grid.Column="2"
+                                        Command="{Binding ClearCommand}"
+                                        Classes="WButton"
+                                        Height="40"
+                                        Width="40"
+                                        Padding="0"
+                                        ToolTip.Tip="Очистити">
+									<ui:SymbolIcon Symbol="Clear" FontSize="16"/>
+								</Button>
+							</Grid>
+						</Border>
+					</StackPanel>
+				</Border>
+
+				<!-- Loading State -->
+				<Border IsVisible="{Binding IsChecking}"
+                        Classes="card"
+                        Padding="48">
+					<StackPanel Spacing="20" HorizontalAlignment="Center">
+						<ui:ProgressRing IsActive="True"
+                                         Width="56"
+										 Foreground="#2F4F4F"
+                                         Height="56"
+                                         HorizontalAlignment="Center"/>
+						<StackPanel Spacing="8">
+							<TextBlock Text="Перевірка статусу заявки..."
+                                       FontSize="16"
+                                       FontWeight="SemiBold"
+                                       Foreground="#2F4F4F"
+                                       HorizontalAlignment="Center"/>
+							<TextBlock Classes="secondary"
+                                       Text="Будь ласка, зачекайте..."
+                                       HorizontalAlignment="Center"/>
+						</StackPanel>
+					</StackPanel>
+				</Border>
+
+				<!-- Results Section -->
+				<Border IsVisible="{Binding HasResult}"
+                        Classes="card"
+                        Padding="0">
+					<Grid RowDefinitions="Auto,*">
+						<!-- Header with gradient -->
+						<Border Grid.Row="0" 
+                                CornerRadius="12,12,0,0"
+                                Padding="24,20">
+							<Border.Background>
+								<LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
+									<GradientStop Color="#F0F8F8" Offset="0"/>
+									<GradientStop Color="#E8F4F4" Offset="1"/>
+								</LinearGradientBrush>
+							</Border.Background>
+							<Grid ColumnDefinitions="Auto,*">
+								<ui:SymbolIcon Grid.Column="0"
+                                               FontSize="24"
+                                               Foreground="#2F4F4F"
+                                               VerticalAlignment="Center"
+                                               Margin="0,0,12,0"/>
+								<StackPanel Grid.Column="1" Spacing="4">
+									<TextBlock Classes="section-title"
+                                               Text="Результати перевірки"
+                                               Margin="0"/>
+									<TextBlock Classes="secondary"
+                                               Text="Інформація про вашу заявку"
+                                               FontSize="12"/>
+								</StackPanel>
+							</Grid>
+						</Border>
+
+						<StackPanel Grid.Row="1" Spacing="16" Margin="24,20,24,24">
+							<!-- Status Card -->
+							<ui:SettingsExpander Header="Статус заявки"
+                                                 Description="{Binding RequestDetails.RequestCode}"
+                                                 IconSource="Document"
+                                                 IsExpanded="True">
+								<ui:SettingsExpander.Footer>
+									<Border CornerRadius="4" Padding="12,6">
+										
+										<TextBlock Text="{Binding RequestDetails.Status}"
+                                                   FontWeight="SemiBold"
+                                                   FontSize="13"
+                                                   Foreground="Black"/>
+									</Border>
+								</ui:SettingsExpander.Footer>
+
+								<StackPanel Spacing="12" Margin="-38,8,12,12">
+									<!-- User Info -->
+									<Border Classes="section-card" Padding="16">
+										<Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*" RowSpacing="8">
+											<ui:SymbolIcon Grid.Row="0" Grid.Column="0"
+                                                           Symbol="Contact"
+                                                           FontSize="14"
+                                                           Foreground="#5F9EA0"
+                                                           Margin="0,0,10,0"/>
+											<TextBlock Grid.Row="0" Grid.Column="1"
+                                                       Text="{Binding RequestDetails.FullName}"
+                                                       FontWeight="SemiBold"
+                                                       FontSize="14"/>
+
+											<ui:SymbolIcon Grid.Row="1" Grid.Column="0"
+                                                           Symbol="Mail"
+                                                           FontSize="14"
+                                                           Foreground="#5F9EA0"
+                                                           Margin="0,0,10,0"/>
+											<TextBlock Grid.Row="1" Grid.Column="1"
+                                                       Text="{Binding RequestDetails.Email}"
+                                                       FontSize="13"
+                                                       Foreground="#666666"/>
+
+											<ui:SymbolIcon Grid.Row="2" Grid.Column="0"
+                                                           Symbol="Phone"
+                                                           FontSize="14"
+                                                           Foreground="#5F9EA0"
+                                                           Margin="0,0,10,0"
+                                                           IsVisible="{Binding RequestDetails.MobilePhone, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+											<TextBlock Grid.Row="2" Grid.Column="1"
+                                                       Text="{Binding RequestDetails.MobilePhone}"
+                                                       FontSize="13"
+                                                       Foreground="#666666"
+                                                       IsVisible="{Binding RequestDetails.MobilePhone, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+
+											<ui:SymbolIcon Grid.Row="3" Grid.Column="0"
+                                                           Symbol="Clock"
+                                                           FontSize="14"
+                                                           Foreground="#5F9EA0"
+                                                           Margin="0,0,10,0"/>
+											<TextBlock Grid.Row="3" Grid.Column="1"
+                                                       FontSize="13"
+                                                       Foreground="#666666">
+												<WrapPanel ItemSpacing="5">
+                                                    <TextBlock Text="Дата подачі:"/>
+                                                    <TextBlock Text="123"
+                                                               VerticalAlignment="Center"
+                                                               Margin="0,2, 0,0"
+                                                               FontWeight="SemiBold"
+                                                               FontFamily="Consolas"/>
+                                                </WrapPanel>
+                                            
+											</TextBlock>
+										</Grid>
+									</Border>
+
+									<!-- Admin Response -->
+									<Border Classes="section-card"
+                                            Padding="16"
+                                            IsVisible="{Binding RequestDetails.AdminResponse, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+										<StackPanel Spacing="8">
+											<Grid ColumnDefinitions="Auto,*">
+
+                                                <ui:SymbolIcon Grid.Column="0"
+                                                               Symbol="ContactInfo"
+                                                               FontSize="16"
+                                                               Foreground="#D13438"
+                                                               VerticalAlignment="Top"
+                                                               Margin="0,2,10,0"/>
+												<TextBlock Grid.Column="1"
+                                                           Text="{Binding RequestDetails.AdminResponse}"
+                                                           TextWrapping="Wrap"
+                                                           LineHeight="22"
+                                                           FontSize="14"/>
+											</Grid>
+
+											<Border Background="#15000000"
+                                                    CornerRadius="4"
+                                                    Padding="10,6"
+                                                    HorizontalAlignment="Left"
+                                                    IsVisible="{Binding RequestDetails.ProcessedDate, Converter={x:Static ObjectConverters.IsNotNull}}">
+												<StackPanel Orientation="Horizontal" Spacing="8">
+													<ui:SymbolIcon Symbol="Clock"
+                                                                   FontSize="12"
+                                                                   Foreground="#999999"/>
+													<TextBlock Text="Оброблено:"
+                                                               FontSize="12"
+                                                               Foreground="#999999"/>
+													<TextBlock Text="{Binding RequestDetails.ProcessedDate, StringFormat='{}{0:dd.MM.yyyy HH:mm}'}"
+                                                               FontSize="12"
+                                                               FontWeight="SemiBold"
+                                                               FontFamily="Consolas"
+                                                               Foreground="#999999"/>
+												</StackPanel>
+											</Border>
+										</StackPanel>
+									</Border>
+								</StackPanel>
+							</ui:SettingsExpander>
+
+							<!-- Status InfoBars -->
+							<ui:InfoBar IsOpen="{Binding RequestDetails.Status, Converter={StaticResource StatusToPendingConverter}}"
+                                        Severity="Informational"
+                                        Title="Заявка на розгляді"
+                                        Message="Ваша заявка знаходиться на розгляді адміністратора. Зазвичай це займає 1-2 робочих дні."
+                                        IsClosable="False"
+                                        CornerRadius="8"
+                                        Margin="0,4"/>
+
+							<ui:InfoBar IsOpen="{Binding RequestDetails.Status, Converter={StaticResource StatusToApprovedConverter}}"
+                                        Severity="Success"
+                                        Title="Заявку схвалено!"
+                                        Message="Ваша заявка була схвалена. Тепер ви можете увійти, використовуючи вказані при реєстрації дані."
+                                        IsClosable="False"
+                                        CornerRadius="8"
+                                        Margin="0,4">
+								<ui:InfoBar.ActionButton>
+									<Button Content="Перейти до входу"
+                                            Classes="WButton accent"
+                                            Padding="16,8"
+                                            Command="{Binding }"/>
+								</ui:InfoBar.ActionButton>
+							</ui:InfoBar>
+
+							<ui:InfoBar IsOpen="{Binding RequestDetails.Status, Converter={StaticResource StatusToRejectedConverter}}"
+                                        Severity="Error"
+                                        Title="Заявку відхилено"
+                                        Message="На жаль, ваша заявка була відхилена. Перегляньте відповідь адміністратора для отримання деталей."
+                                        IsClosable="False"
+                                        CornerRadius="8"
+                                        Margin="0,4"/>
+						</StackPanel>
+					</Grid>
+				</Border>
+
+				<!-- Help Section -->
+				<Border Classes="card" Padding="20">
+					<Button HorizontalAlignment="Stretch"
+                            Click="ShowHelp_Click"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Padding="12,10">
+						<Grid ColumnDefinitions="Auto,*,Auto">
+							<Border Grid.Column="0"
+                                    Width="40"
+                                    Height="40"
+                                    CornerRadius="20">
+								<Border.Background>
+									<LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+										<GradientStop Color="#E8F4F4" Offset="0"/>
+										<GradientStop Color="#D8E8E8" Offset="1"/>
+									</LinearGradientBrush>
+								</Border.Background>
+								<ui:SymbolIcon Symbol="Help"
+                                               FontSize="18"
+                                               Foreground="#5F9EA0"/>
+							</Border>
+							<StackPanel Grid.Column="1"
+                                        Spacing="2"
+                                        VerticalAlignment="Center"
+                                        Margin="16,0,0,0">
+								<TextBlock Text="Де знайти код заявки?"
+                                           FontSize="15"
+                                           FontWeight="SemiBold"
+                                           Foreground="#2F4F4F"/>
+								<TextBlock Classes="secondary"
+                                           Text="Натисніть, щоб дізнатися більше"
+                                           FontSize="12"/>
+							</StackPanel>
+							<ui:SymbolIcon Grid.Column="2"
+                                           Symbol="ChevronRight"
+                                           FontSize="16"
+                                           Foreground="#999999"
+                                           VerticalAlignment="Center"/>
+						</Grid>
+					</Button>
+				</Border>
+
+				<!-- Teaching Tip -->
+				<ui:TeachingTip IsLightDismissEnabled="True"
+                                Title="Де знайти код?"
+                                Subtitle="Інформація про код заявки"
+                                IconSource="Help"
+                                IsOpen="False"
+                                Name="HelpTip"
+                                PreferredPlacement="Top">
+					<StackPanel Spacing="12" MaxWidth="320">
+						<TextBlock Text="Після реєстрації ви отримаєте 8-значний код на вказану електронну пошту."
+                                   TextWrapping="Wrap"
+                                   LineHeight="20"
+                                   Foreground="#666666"/>
+						<TextBlock Text="Зберігайте цей код для перевірки статусу вашої заявки."
+                                   TextWrapping="Wrap"
+                                   LineHeight="20"
+                                   FontWeight="SemiBold"
+                                   Foreground="#2F4F4F"/>
+					</StackPanel>
+				</ui:TeachingTip>
+
+			</StackPanel>
+		</Border>
+	</ScrollViewer>
+</UserControl>

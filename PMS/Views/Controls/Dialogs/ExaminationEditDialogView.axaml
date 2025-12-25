@@ -1,0 +1,289 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+             xmlns:vm="using:PMS.ViewModels.Dialogs"
+             x:Class="PMS.Views.Controls.Dialogs.ExaminationEditDialogView"
+             x:DataType="vm:ExaminationEditDialogViewModel"
+             MinWidth="650"
+             x:CompileBindings="True">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+        <StackPanel Spacing="16" Margin="0,0,0,20">
+
+            <!-- Section 1: Patient & Doctor Selection -->
+            <Border Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}"
+                    CornerRadius="8"
+                    Padding="16">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="Пацієнт та лікар"
+                               FontWeight="SemiBold"
+                               FontSize="14" />
+
+                    <!-- Patient Search -->
+                    <Grid ColumnDefinitions="*,12,Auto">
+                        <StackPanel Grid.Column="0" Spacing="4">
+                            <TextBlock Text="Пошук пацієнта *"
+                                       FontSize="12"
+                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                            <TextBox Text="{Binding PatientSearchText}"
+                                     IsReadOnly="True"
+                                     Watermark="Оберіть пацієнта..." />
+                        </StackPanel>
+
+                        <Button Grid.Column="2"
+                                Command="{Binding SearchPatientCommand}"
+                                VerticalAlignment="Bottom"
+                                Height="32"
+                                Padding="16,0">
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                    <ui:SymbolIcon Symbol="Find" FontSize="14" />
+                                    <TextBlock Text="Пошук" />
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+                    </Grid>
+
+                    <!-- Doctor Selection -->
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="Лікар *"
+                                   FontSize="12"
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                        <ComboBox ItemsSource="{Binding AvailableDoctors}"
+                                  SelectedItem="{Binding SelectedDoctor}"
+                                  DisplayMemberBinding="{Binding FullName}"
+                                  HorizontalAlignment="Stretch"
+                                  PlaceholderText="Оберіть лікаря..." />
+                    </StackPanel>
+
+                    <!-- Examination Date -->
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="Дата огляду *"
+                                   FontSize="12"
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                        <CalendarDatePicker SelectedDate="{Binding ExaminationDate}"
+                                            HorizontalAlignment="Stretch" />
+                    </StackPanel>
+
+                </StackPanel>
+            </Border>
+
+            <!-- Section 2: Medical Information -->
+            <Border Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}"
+                    CornerRadius="8"
+                    Padding="16">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="Медична інформація"
+                               FontWeight="SemiBold"
+                               FontSize="14" />
+
+                    <!-- Anamnesis -->
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="Анамнез"
+                                   FontSize="12"
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                        <TextBox Text="{Binding Anamnesis}"
+                                 AcceptsReturn="True"
+                                 TextWrapping="Wrap"
+                                 Height="100"
+                                 VerticalContentAlignment="Top"
+                                 Watermark="Скарги пацієнта, історія захворювання..." />
+                    </StackPanel>
+
+                    <!-- Objective Status -->
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="Об'єктивний статус"
+                                   FontSize="12"
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                        <TextBox Text="{Binding ObjectiveStatus}"
+                                 AcceptsReturn="True"
+                                 TextWrapping="Wrap"
+                                 Height="100"
+                                 VerticalContentAlignment="Top"
+                                 Watermark="Результати огляду, фізикальні дані..." />
+                    </StackPanel>
+
+                </StackPanel>
+            </Border>
+
+            <!-- Section 3: Diagnoses -->
+            <Border Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}"
+                    CornerRadius="8"
+                    Padding="16">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="Діагнози"
+                               FontWeight="SemiBold"
+                               FontSize="14" />
+
+                    <!-- Add Diagnosis Button -->
+                    <Button Command="{Binding AddDiagnosisCommand}"
+                            HorizontalAlignment="Left"
+                            Padding="12,6">
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <ui:SymbolIcon Symbol="Add" FontSize="14" />
+                            <TextBlock Text="Додати діагноз" />
+                        </StackPanel>
+                    </Button>
+
+                    <!-- Selected Diagnoses List -->
+                    <ItemsControl ItemsSource="{Binding SelectedDiagnoses}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="{DynamicResource ControlFillColorDefaultBrush}"
+                                        CornerRadius="4"
+                                        Padding="12,8"
+                                        Margin="0,4">
+                                    <Grid ColumnDefinitions="Auto,*,Auto">
+                                        <!-- ICD Code Badge -->
+                                        <Border Grid.Column="0"
+                                                Background="{DynamicResource AccentFillColorDefaultBrush}"
+                                                CornerRadius="3"
+                                                Padding="8,4"
+                                                Margin="0,0,12,0">
+                                            <TextBlock Text="{Binding IcdCode}"
+                                                       FontSize="11"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="White" />
+                                        </Border>
+
+                                        <!-- Diagnosis Name -->
+                                        <TextBlock Grid.Column="1"
+                                                   Text="{Binding Name}"
+                                                   VerticalAlignment="Center"
+                                                   TextWrapping="Wrap" />
+
+                                        <!-- Remove Button -->
+                                        <Button Grid.Column="2"
+                                                Command="{Binding $parent[ItemsControl].((vm:ExaminationEditDialogViewModel)DataContext).RemoveDiagnosisCommand}"
+                                                CommandParameter="{Binding}"
+                                                Background="Transparent"
+                                                Padding="8,4">
+                                            <ui:SymbolIcon Symbol="Delete"
+                                                           FontSize="14"
+                                                           Foreground="{DynamicResource SystemFillColorCriticalBrush}" />
+                                        </Button>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                </StackPanel>
+            </Border>
+
+            <!-- Section 4: Recommendations -->
+            <Border Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}"
+                    CornerRadius="8"
+                    Padding="16">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="Рекомендації"
+                               FontWeight="SemiBold"
+                               FontSize="14" />
+
+                    <TextBox Text="{Binding Recommendations}"
+                             AcceptsReturn="True"
+                             TextWrapping="Wrap"
+                             Height="120"
+                             VerticalContentAlignment="Top"
+                             Watermark="Введіть рекомендації для пацієнта..." />
+
+                </StackPanel>
+            </Border>
+
+            <!-- Section 5: Sick Leave (Conditional) -->
+            <Border Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}"
+                    CornerRadius="8"
+                    Padding="16">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="Лікарняний"
+                               FontWeight="SemiBold"
+                               FontSize="14" />
+
+                    <!-- Has Sick Leave Checkbox -->
+                    <CheckBox IsChecked="{Binding HasSickLeave}"
+                              Content="Видати лікарняний" />
+
+                    <!-- Sick Leave Dates -->
+                    <Grid ColumnDefinitions="*,12,*"
+                          IsVisible="{Binding HasSickLeave}">
+                        <StackPanel Grid.Column="0" Spacing="4">
+                            <TextBlock Text="Початок лікарняного *"
+                                       FontSize="12"
+                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                            <CalendarDatePicker SelectedDate="{Binding SickLeaveFrom}"
+                                                HorizontalAlignment="Stretch" />
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="2" Spacing="4">
+                            <TextBlock Text="Кінець лікарняного *"
+                                       FontSize="12"
+                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                            <CalendarDatePicker SelectedDate="{Binding SickLeaveTo}"
+                                                HorizontalAlignment="Stretch" />
+                        </StackPanel>
+                    </Grid>
+
+                </StackPanel>
+            </Border>
+
+            <!-- Section 6: Follow-up (Conditional) -->
+            <Border Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}"
+                    CornerRadius="8"
+                    Padding="16">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="Наступний огляд"
+                               FontWeight="SemiBold"
+                               FontSize="14" />
+
+                    <!-- Has Follow-up Checkbox -->
+                    <CheckBox IsChecked="{Binding HasFollowUp}"
+                              Content="Призначити наступний огляд" />
+
+                    <!-- Follow-up Date -->
+                    <StackPanel IsVisible="{Binding HasFollowUp}" Spacing="4">
+                        <TextBlock Text="Дата наступного огляду *"
+                                   FontSize="12"
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                        <CalendarDatePicker SelectedDate="{Binding FollowUpDate}"
+                                            HorizontalAlignment="Stretch" />
+                    </StackPanel>
+
+                </StackPanel>
+            </Border>
+
+            <!-- Required Fields Note -->
+            <Border Background="{DynamicResource SystemFillColorAttentionBackgroundBrush}"
+                    CornerRadius="4"
+                    Padding="12,8">
+                <TextBlock FontSize="11"
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}">
+                    <Run Text="*" FontWeight="Bold" />
+                    <Run Text="— обов'язкові поля для заповнення" />
+                </TextBlock>
+            </Border>
+
+            <!-- Validation Errors Display -->
+            <ItemsControl ItemsSource="{Binding ValidationContext.Validations}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Background="{DynamicResource SystemFillColorCriticalBackgroundBrush}"
+                                CornerRadius="4"
+                                Padding="8,6"
+                                Margin="0,2">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <ui:SymbolIcon Symbol="Important"
+                                               FontSize="14"
+                                               Foreground="{DynamicResource SystemFillColorCriticalBrush}" />
+                                <TextBlock Text="{Binding}"
+                                           FontSize="11"
+                                           TextWrapping="Wrap"
+                                           Foreground="{DynamicResource SystemFillColorCriticalBrush}" />
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+        </StackPanel>
+    </ScrollViewer>
+
+</UserControl>

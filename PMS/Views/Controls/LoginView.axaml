@@ -1,0 +1,215 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+             xmlns:vm="clr-namespace:PMS.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignWidth="500" 
+             d:DesignHeight="600"
+             x:Class="PMS.Views.Controls.LoginView"
+             x:DataType="vm:LoginViewModel">
+
+	<UserControl.Styles>
+		<Style Selector="TextBox">
+			<Setter Property="Height" Value="42"/>
+			<Setter Property="FontSize" Value="14"/>
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+		</Style>
+
+		<Style Selector="HyperlinkButton.link-button">
+			<Setter Property="Foreground" Value="#5F9EA0"/>
+			<Setter Property="Background" Value="Transparent"/>
+			<Setter Property="BorderThickness" Value="0"/>
+			<Setter Property="Padding" Value="0"/>
+			<Setter Property="FontSize" Value="13"/>
+			<Setter Property="Cursor" Value="Hand"/>
+		</Style>
+
+		<Style Selector="HyperlinkButton.link-button:pointerover">
+			<Setter Property="Foreground" Value="#2F4F4F"/>
+		</Style>
+	</UserControl.Styles>
+
+	<Border Background="#FFFFFF"
+            CornerRadius="12"
+            BoxShadow="0 4 24 0 #20000000"
+            Margin="30"
+			MinWidth="450"
+            HorizontalAlignment="Center">
+
+
+
+        <Grid RowDefinitions="Auto,*,Auto">
+			
+			<!-- Header Section -->
+			<Border Grid.Row="0"
+                    CornerRadius="12,12,0,0"
+                    Padding="40,20"
+                    BorderBrush="#E8F4F4"
+                    BorderThickness="0,0,0,1">
+		
+				
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
+                        <GradientStop Color="#FAFCFC" Offset="0"/>
+                        <GradientStop Color="#F5F9F9" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+
+				<StackPanel Orientation="Vertical" Spacing="0">
+					<StackPanel Orientation="Horizontal" Spacing="15">
+						<Viewbox Width="48" Height="48">
+							<controls:IconSourceElement IconSource="Permissions"/>
+						</Viewbox>
+
+						<StackPanel VerticalAlignment="Center">
+							<TextBlock Text="{Binding LoginHeader.Value}"
+                                       FontWeight="SemiBold"
+                                       FontSize="24"
+                                       Foreground="#2F4F4F"/>
+							<TextBlock Text="{Binding LoginSubtitle.Value}"
+                                       FontSize="13"
+                                       Foreground="#5F9EA0"
+                                       Margin="0,4,0,0"/>
+						</StackPanel>
+					</StackPanel>
+
+					<!-- InfoBar -->
+					<controls:InfoBar x:Name="NotificationBar"
+                                      Title="{Binding Title}"
+                                      Message="{Binding Message}"
+                                      Severity="{Binding MessageSeverity}"
+                                      IsVisible="{Binding IsInfoBarVisible}"
+                                      IsOpen="True"
+                                      IsClosable="False"
+                                      CornerRadius="8"
+                                      Margin="0,8,0,0">
+						<controls:InfoBar.ActionButton>
+							<Button Content="{Binding ChangePasswordButton.Value}"
+                                    IsVisible="{Binding ForgotPasswordVisible}"
+                                    Command="{Binding ChangePasswordCommand}"
+                                    Classes="WButton accent"
+                                    Padding="16,8"/>
+						</controls:InfoBar.ActionButton>
+					</controls:InfoBar>
+				</StackPanel>
+			</Border>
+
+			<!-- Form Content -->
+			<StackPanel Grid.Row="1" Margin="40,24,40,20" Spacing="16">
+
+				
+                <TextBox Name="UsernameBox"
+                         Text="{Binding Username}"
+                         Tag="{Binding UsernameWatermark.Value}"/>
+
+				<!-- Password Field -->
+				<StackPanel>
+					<Grid ColumnDefinitions="*,Auto,Auto">
+						<!-- Password TextBox (Hidden) -->
+						<TextBox Grid.Column="0"
+                                 Text="{Binding Password}"
+                                 IsVisible="{Binding ShowPassword}"
+                                 KeyDown="DisableTextOperations_KeyDown"
+                                 Tag="{Binding PasswordWatermark.Value}"
+                                 ContextFlyout="{x:Null}"/>
+
+						<!-- Password TextBox (Masked) -->
+						<TextBox Grid.Column="0"
+                                 Name="PasswordBox"
+                                 Text="{Binding Password}"
+                                 PasswordChar="•"
+                                 KeyDown="DisableTextOperations_KeyDown"
+                                 IsVisible="{Binding !ShowPassword}"
+                                 Tag="{Binding PasswordWatermark.Value}"
+                                 ContextFlyout="{x:Null}"/>
+
+						<!-- Remember Me Toggle -->
+						<ToggleButton Grid.Column="1"
+									  Classes="primary"
+                                      Name="RememberMeCheck"
+									  Height="42"
+                                      IsChecked="{Binding RememberMe}"
+                                      Margin="8,0,0,0">
+							<ToolTip.Tip>
+								<TextBlock Text="{Binding RememberMeTooltip.Value}"/>
+							</ToolTip.Tip>
+							<Viewbox Width="20">
+								<controls:IconSourceElement IconSource="SaveLocal"/>
+							</Viewbox>
+						</ToggleButton>
+
+						<!-- Show Password Toggle -->
+						<ToggleButton Grid.Column="2"
+                                      Name="ShowPasswordCheck"
+                                      IsChecked="{Binding ShowPassword}"
+									  Height="42"
+                                      Classes="primary"
+                                      Margin="4,0,0,0">
+							<ToolTip.Tip>
+								<TextBlock Text="{Binding ShowPasswordTooltip.Value}"/>
+							</ToolTip.Tip>
+							<Viewbox Width="20">
+								<controls:IconSourceElement IconSource="View"/>
+							</Viewbox>
+						</ToggleButton>
+					</Grid>
+				</StackPanel>
+
+				<!-- Options Links -->
+				<StackPanel Orientation="Vertical" Spacing="8" Margin="0,8,0,0">
+					<HyperlinkButton Name="ForgotPasswordBtn"
+                                     Content="{Binding ForgotPasswordLink.Value}"
+                                     Command="{Binding ForgotPasswordCommand}"
+                                     Classes="link-button"
+                                     HorizontalAlignment="Left"/>
+				</StackPanel>
+			</StackPanel>
+
+			<Border Grid.Row="2"
+                    CornerRadius="0,0,12,12"
+                    Padding="40, 20"
+                    BorderBrush="#E8F4F4"
+                    BorderThickness="0,1,0,0">
+				<Border.Background>
+					<LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
+						<GradientStop Color="#FAFCFC" Offset="0"/>
+						<GradientStop Color="#F5F9F9" Offset="1"/>
+					</LinearGradientBrush>
+				</Border.Background>
+
+				<Grid ColumnDefinitions="*,Auto">
+					<StackPanel Grid.Column="0" VerticalAlignment="Center" Spacing="3">
+						<TextBlock Text="{Binding NoAccountText.Value}"
+                                   FontSize="14"
+                                   FontWeight="Medium"
+                                   Foreground="#2F4F4F"/>
+
+                        <HyperlinkButton Name="RegistrationLink"
+                                         Content="{Binding RegistrationLink.Value}"
+                                         Command="{Binding NavigateToRegistrationCommand}"
+                                         Classes="link-button"
+                                         HorizontalAlignment="Left"/>
+					</StackPanel>
+
+					<!-- Login Button -->
+					<Button Grid.Column="1"
+                            Name="LoginBtn"
+                            Command="{Binding LoginCommand}"
+                            Classes="WButton accent"
+                            Click="SubmitButton_Click"
+                            Height="40"
+                            HorizontalAlignment="Right">
+						<Button.Content>
+							<StackPanel Orientation="Horizontal" Spacing="8">
+								<controls:SymbolIcon Symbol="ChevronRight" FontSize="16"/>
+								<TextBlock Text="{Binding LoginButton.Value}" VerticalAlignment="Center"/>
+							</StackPanel>
+						</Button.Content>
+					</Button>
+				</Grid>
+			</Border>
+		</Grid>
+	</Border>
+</UserControl>

@@ -1,0 +1,375 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+             xmlns:vm="using:PMS.ViewModels.Dialogs"
+             x:Class="PMS.Views.Controls.Dialogs.ExaminationQueriesDialogView"
+             x:DataType="vm:ExaminationQueriesDialogViewModel"
+             x:CompileBindings="True">
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto">
+
+
+        <!-- Clear Filters Button -->
+        <Border Grid.Row="1"
+                Padding="12,8"
+                BorderThickness="0,0,0,1"
+                BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}">
+            <Button Command="{Binding ClearFiltersCommand}"
+                    HorizontalAlignment="Right">
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                    <ui:SymbolIcon Symbol="Clear" FontSize="14" />
+                    <TextBlock Text="Очистити фільтри" />
+                </StackPanel>
+            </Button>
+        </Border>
+
+        <!-- Content with TabView -->
+        <ui:TabView Grid.Row="2"
+                    SelectedIndex="{Binding SelectedTabIndex}"
+                    TabWidthMode="Equal"
+                    CanReorderTabs="False"
+                    IsAddTabButtonVisible="False"
+                    Margin="0"
+                    MinHeight="500">
+
+            <!-- Tab 1: Multiple Doctors Query -->
+            <ui:TabViewItem Header="Пацієнти з декількома лікарями" IsClosable="False">
+                <ui:TabViewItem.IconSource>
+                    <ui:SymbolIconSource Symbol="People" />
+                </ui:TabViewItem.IconSource>
+
+                <StackPanel Spacing="16" Margin="16">
+
+                    <Border Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}"
+                            CornerRadius="8"
+                            Padding="16">
+                        <StackPanel Spacing="12">
+
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <ui:SymbolIcon Symbol="Document" FontSize="16" VerticalAlignment="Center" />
+                                <TextBlock Text="Опис запиту"
+                                           FontSize="13"
+                                           FontWeight="SemiBold"
+                                           VerticalAlignment="Center" />
+                            </StackPanel>
+
+                            <TextBlock
+                                Text="Знайти пацієнтів, які обстежувалися у більше ніж 2 лікарів протягом обраного періоду. Оберіть діапазон дат на календарі."
+                                FontSize="11"
+                                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                TextWrapping="Wrap" />
+
+                            <!-- Calendar with MultipleRange Selection -->
+                            <Border BorderThickness="1"
+                                    BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                                    CornerRadius="4"
+                                    HorizontalAlignment="Center">
+                                <Calendar SelectionMode="MultipleRange"
+                                          DisplayDate="{Binding MaximumDate}"
+                                          IsTodayHighlighted="True"
+                                          HorizontalAlignment="Center"
+                                          SelectedDatesChanged="OnExaminationSelectedDatesChanged"/>
+                            </Border>
+
+                            <TextBlock FontSize="10"
+                                       Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                       HorizontalAlignment="Center"
+                                       TextWrapping="Wrap">
+                                <ui:SymbolIcon Symbol="Help" FontSize="10" />
+                                <Run Text=" Натисніть і перетягніть для вибору діапазону дат." />
+                            </TextBlock>
+
+                            <!-- Search Button -->
+                            <Button Command="{Binding SearchMultipleDoctorsCommand}"
+                                    HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Center"
+                                    Theme="{StaticResource AccentButtonTheme}"
+                                    Margin="0,8,0,0">
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <ui:SymbolIcon Symbol="Find" FontSize="16" />
+                                    <TextBlock Text="Виконати запит" FontSize="13" />
+                                </StackPanel>
+                            </Button>
+
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Results Section -->
+                    <Border Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}"
+                            CornerRadius="8"
+                            Padding="16"
+                            IsVisible="{Binding !!PatientsWithMultipleDoctors.Count}">
+                        <StackPanel Spacing="12">
+
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <ui:SymbolIcon Symbol="Contact" FontSize="16" VerticalAlignment="Center" />
+                                <TextBlock VerticalAlignment="Center">
+                                    <Run Text="Результати: " FontWeight="SemiBold" />
+                                    <Run Text="{Binding PatientsWithMultipleDoctors.Count}" FontWeight="Bold" />
+                                    <Run Text=" пацієнтів" />
+                                </TextBlock>
+                            </StackPanel>
+
+                            <Border BorderThickness="1"
+                                    BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                                    CornerRadius="4"
+                                    Height="200">
+                                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                    <ItemsControl ItemsSource="{Binding PatientsWithMultipleDoctors}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border BorderThickness="0,0,0,1"
+                                                        BorderBrush="{DynamicResource DividerStrokeColorDefaultBrush}"
+                                                        Padding="12,10"
+                                                        Background="Transparent">
+                                                    <Border.Styles>
+                                                        <Style Selector="Border:pointerover">
+                                                            <Setter Property="Background"
+                                                                    Value="{DynamicResource SubtleFillColorSecondaryBrush}" />
+                                                        </Style>
+                                                    </Border.Styles>
+                                                    <StackPanel Spacing="6">
+                                                        <TextBlock FontWeight="SemiBold" FontSize="13">
+                                                            <Run Text="{Binding PatientFullName}" />
+                                                            <Run Text=" ("
+                                                                 Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                                            <Run Text="{Binding PatientMedicalRecordNumber}"
+                                                                 Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                                            <Run Text=")"
+                                                                 Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                                        </TextBlock>
+                                                        <StackPanel Orientation="Horizontal" Spacing="6">
+                                                            <ui:SymbolIcon Symbol="Contact" FontSize="10"
+                                                                           VerticalAlignment="Center" />
+                                                            <TextBlock FontSize="11"
+                                                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                                       VerticalAlignment="Center">
+                                                                <Run Text="Лікарів:" />
+                                                                <Run Text="{Binding UniqueDoctorCount}"
+                                                                     FontWeight="SemiBold" />
+                                                                <Run Text=" | Обстежень:" />
+                                                                <Run Text="{Binding TotalExaminations}"
+                                                                     FontWeight="SemiBold" />
+                                                            </TextBlock>
+                                                        </StackPanel>
+                                                        <!-- Doctors List -->
+                                                        <ItemsControl ItemsSource="{Binding Doctors}" Margin="16,4,0,0">
+                                                            <ItemsControl.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <StackPanel Orientation="Horizontal" Spacing="6"
+                                                                                Margin="0,2,0,0">
+                                                                        <ui:SymbolIcon Symbol="Contact" FontSize="8"
+                                                                                       VerticalAlignment="Center" />
+                                                                        <TextBlock FontSize="10"
+                                                                                   Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                                                   VerticalAlignment="Center">
+                                                                            <Run Text="{Binding FullName}" />
+                                                                            <Run Text=" — " />
+                                                                            <Run Text="{Binding Specialty}"
+                                                                                 FontStyle="Italic" />
+                                                                        </TextBlock>
+                                                                    </StackPanel>
+                                                                </DataTemplate>
+                                                            </ItemsControl.ItemTemplate>
+                                                        </ItemsControl>
+                                                    </StackPanel>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </ScrollViewer>
+                            </Border>
+
+                        </StackPanel>
+                    </Border>
+
+                </StackPanel>
+            </ui:TabViewItem>
+
+            <!-- Tab 2: Diagnosis Query -->
+            <ui:TabViewItem Header="Пацієнти за діагнозом" IsClosable="False">
+                <ui:TabViewItem.IconSource>
+                    <ui:SymbolIconSource Symbol="Placeholder" />
+                </ui:TabViewItem.IconSource>
+
+                <StackPanel Spacing="16" Margin="16">
+
+                    <Border Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}"
+                            CornerRadius="8"
+                            Padding="16">
+                        <StackPanel Spacing="12">
+
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <ui:SymbolIcon Symbol="Document" FontSize="16" VerticalAlignment="Center" />
+                                <TextBlock Text="Опис запиту"
+                                           FontSize="13"
+                                           FontWeight="SemiBold"
+                                           VerticalAlignment="Center" />
+                            </StackPanel>
+
+                            <TextBlock
+                                Text="Знайти кількість та список пацієнтів з певним діагнозом за обраний період"
+                                FontSize="11"
+                                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                TextWrapping="Wrap" />
+
+                            <!-- Diagnosis Name -->
+                            <StackPanel Spacing="4" Margin="0,8,0,0">
+                                <TextBlock Text="Назва діагнозу" FontSize="12" FontWeight="SemiBold" />
+                                <TextBox Text="{Binding DiagnosisSearchText}"
+                                         Watermark="напр. ангіна, грип, ГРВІ, бронхіт..."
+                                         HorizontalAlignment="Stretch" />
+                            </StackPanel>
+
+                            <!-- Calendar with MultipleRange Selection -->
+                            <StackPanel Spacing="4">
+                                <TextBlock Text="Період" FontSize="12" FontWeight="SemiBold" />
+                                <Border BorderThickness="1"
+                                        BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                                        CornerRadius="4"
+                                        HorizontalAlignment="Center">
+
+                                    <Calendar SelectionMode="MultipleRange"
+                                              DisplayDate="{Binding MaximumDate}"
+                                              IsTodayHighlighted="True"
+                                              HorizontalAlignment="Center"
+                                              SelectedDatesChanged="OnDiagnosisSelectedDatesChanged"/>
+                                </Border>
+                            </StackPanel>
+
+                            <TextBlock FontSize="10"
+                                       Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                       HorizontalAlignment="Center"
+                                       TextWrapping="Wrap">
+                                <ui:SymbolIcon Symbol="Placeholder" FontSize="10" />
+                                <Run Text=" Оберіть діапазон дат для пошуку. Майбутні дати недоступні." />
+                            </TextBlock>
+
+                            <!-- Search Button -->
+                            <Button Command="{Binding SearchDiagnosisCommand}"
+                                    HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Center"
+                                    Theme="{StaticResource AccentButtonTheme}"
+                                    Margin="0,8,0,0">
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <ui:SymbolIcon Symbol="Find" FontSize="16" />
+                                    <TextBlock Text="Виконати запит" FontSize="13" />
+                                </StackPanel>
+                            </Button>
+
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Count Result -->
+                    <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center" IsVisible="{Binding !!DiagnosisPatientCount}">
+                        <ui:SymbolIcon Symbol="Contact" FontSize="18"
+                                       VerticalAlignment="Center" />
+                        <TextBlock FontSize="16"
+                                   FontWeight="Bold"
+                                   VerticalAlignment="Center">
+                            <Run Text="Знайдено пацієнтів: " />
+                            <Run Text="{Binding DiagnosisPatientCount}" />
+                        </TextBlock>
+                    </StackPanel>
+
+                    <!-- Results List -->
+                    <Border Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}"
+                            CornerRadius="8"
+                            Padding="16"
+                            IsVisible="{Binding !!PatientsDiagnosisResults.Count}">
+                        <StackPanel Spacing="12">
+
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <ui:SymbolIcon Symbol="List" FontSize="16" VerticalAlignment="Center" />
+                                <TextBlock Text="Детальний список"
+                                           FontSize="13"
+                                           FontWeight="SemiBold"
+                                           VerticalAlignment="Center" />
+                            </StackPanel>
+
+                            <Border BorderThickness="1"
+                                    BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                                    CornerRadius="4"
+                                    Height="200">
+                                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                    <ItemsControl ItemsSource="{Binding PatientsDiagnosisResults}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border BorderThickness="0,0,0,1"
+                                                        BorderBrush="{DynamicResource DividerStrokeColorDefaultBrush}"
+                                                        Padding="12,10"
+                                                        Background="Transparent">
+                                                    <Border.Styles>
+                                                        <Style Selector="Border:pointerover">
+                                                            <Setter Property="Background"
+                                                                    Value="{DynamicResource SubtleFillColorSecondaryBrush}" />
+                                                        </Style>
+                                                    </Border.Styles>
+                                                    <StackPanel Spacing="6">
+                                                        <TextBlock FontWeight="SemiBold" FontSize="13">
+                                                            <Run Text="{Binding PatientFullName}" />
+                                                            <Run Text=" ("
+                                                                 Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                                            <Run Text="{Binding PatientMedicalRecordNumber}"
+                                                                 Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                                            <Run Text=")"
+                                                                 Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                                        </TextBlock>
+                                                        <StackPanel Orientation="Horizontal" Spacing="6">
+                                                            <ui:SymbolIcon Symbol="Phone" FontSize="10"
+                                                                           VerticalAlignment="Center" />
+                                                            <TextBlock FontSize="11"
+                                                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                                       Text="{Binding PatientPhone}"
+                                                                       VerticalAlignment="Center" />
+                                                        </StackPanel>
+                                                        <StackPanel Orientation="Horizontal" Spacing="6">
+                                                            <ui:SymbolIcon Symbol="Placeholder" FontSize="10"
+                                                                           VerticalAlignment="Center" />
+                                                            <TextBlock FontSize="11" VerticalAlignment="Center">
+                                                                <Run Text="Діагноз: "
+                                                                     Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                                                <Run Text="{Binding DiagnosisName}"
+                                                                     FontWeight="SemiBold" />
+                                                                <Run Text=" ("
+                                                                     Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                                                <Run Text="{Binding DiagnosisCode}"
+                                                                     Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                                                <Run Text=")"
+                                                                     Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                                            </TextBlock>
+                                                        </StackPanel>
+                                                        <StackPanel Orientation="Horizontal" Spacing="6">
+                                                            <ui:SymbolIcon Symbol="Calendar" FontSize="10"
+                                                                           VerticalAlignment="Center" />
+                                                            <TextBlock FontSize="10"
+                                                                       Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                                       VerticalAlignment="Center">
+                                                                <Run Text="Обстежень: " />
+                                                                <Run Text="{Binding ExaminationCount}" />
+                                                                <Run Text=" | " />
+                                                                <Run
+                                                                    Text="{Binding FirstExaminationDate, StringFormat='dd.MM.yyyy'}" />
+                                                                <Run Text=" — " />
+                                                                <Run
+                                                                    Text="{Binding LastExaminationDate, StringFormat='dd.MM.yyyy'}" />
+                                                            </TextBlock>
+                                                        </StackPanel>
+                                                    </StackPanel>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </ScrollViewer>
+                            </Border>
+
+                        </StackPanel>
+                    </Border>
+
+                </StackPanel>
+            </ui:TabViewItem>
+
+        </ui:TabView>
+    </Grid>
+
+</UserControl>

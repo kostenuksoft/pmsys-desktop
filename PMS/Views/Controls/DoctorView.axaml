@@ -1,0 +1,340 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+             xmlns:vm="using:PMS.ViewModels"
+             x:Class="PMS.Views.Controls.DoctorsView"
+             x:DataType="vm:DoctorsViewModel"
+             x:CompileBindings="True">
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto,Auto">
+
+        <Grid Grid.Row="0" RowDefinitions="Auto, Auto">
+            <!-- Search Box -->
+            <Grid Grid.Row="0" ColumnDefinitions="Auto, Auto" HorizontalAlignment="Center">
+                <ui:SymbolIcon
+                    Symbol="Find"
+                    FontSize="25"
+                    Margin="10, 0"
+                    VerticalAlignment="Center" />
+                <TextBox Grid.Column="1"
+                         Tag="Пошук за ПІБ, табельним номером, спеціальністю..."
+                         Foreground="Black"
+                         MinWidth="500"
+                         MaxWidth="500"
+                         Text="{Binding SearchText}"
+                         Margin="0,10,0,12">
+                </TextBox>
+            </Grid>
+
+            <!-- Filters -->
+            <StackPanel Grid.Row="1"
+                        Orientation="Horizontal"
+                        Spacing="12"
+                        HorizontalAlignment="Center"
+                        Margin="0,0,0,12">
+
+                <!-- Status Filter -->
+                <StackPanel Spacing="4">
+                    <TextBlock Text="Статус лікаря" FontSize="11" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    <ComboBox MinWidth="130"
+                              SelectedItem="{Binding StatusFilter}"
+                              HorizontalAlignment="Stretch">
+                        <ComboBoxItem Content="Всі" />
+                        <ComboBoxItem Content="Активні" />
+                        <ComboBoxItem Content="Неактивні" />
+                    </ComboBox>
+                </StackPanel>
+
+                <!-- Specialty Filter -->
+                <StackPanel Spacing="4">
+                    <TextBlock Text="Спеціальність" FontSize="11" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    <ComboBox MinWidth="220"
+                              SelectedItem="{Binding SpecialtyFilter}"
+                              ItemsSource="{Binding AvailableSpecialties}"
+                              HorizontalAlignment="Stretch"
+                              PlaceholderText="Всі спеціальності...">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <TextBlock Text="{Binding Name}" VerticalAlignment="Center" />
+                                    <TextBlock Text="{Binding Code, StringFormat='({0})'}"
+                                               FontSize="10"
+                                               Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                               VerticalAlignment="Center" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </StackPanel>
+
+                <!-- District Doctor Filter -->
+                <StackPanel Spacing="4">
+                    <TextBlock Text="Тип" FontSize="11" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    <ComboBox MinWidth="150"
+                              SelectedItem="{Binding DoctorTypeFilter}"
+                              HorizontalAlignment="Stretch">
+                        <ComboBoxItem Content="Всі" />
+                        <ComboBoxItem Content="Дільничні" />
+                        <ComboBoxItem Content="Спеціалісти" />
+                    </ComboBox>
+                </StackPanel>
+
+            </StackPanel>
+        </Grid>
+
+        <!-- Toolbar -->
+        <Grid Grid.Row="1" ColumnDefinitions="*, Auto, Auto">
+
+            <ui:CommandBar DefaultLabelPosition="Right"
+                           Margin="8">
+                <ui:CommandBar.PrimaryCommands>
+                    <ui:CommandBarButton
+                        Label="Новий лікар"
+                        Command="{Binding AddDoctorCommand}"
+                        IconSource="Add" />
+
+                    <ui:CommandBarButton 
+                        Label="Переглянути"
+                        Command="{Binding ViewDoctorCommand}"
+                        CommandParameter="{Binding SelectedDoctor}"
+                        IconSource="Contact"
+                        IsEnabled="{Binding SelectedDoctor, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+
+                    <ui:CommandBarButton 
+                        Label="Редагувати"
+                        Command="{Binding EditDoctorCommand}"
+                        CommandParameter="{Binding SelectedDoctor}"
+                        IconSource="Edit"
+                        IsEnabled="{Binding SelectedDoctor, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+
+                    <ui:CommandBarButton 
+                        Label="Видалити"
+                        Command="{Binding DeleteDoctorCommand}"
+                        CommandParameter="{Binding SelectedDoctor}"
+                        IconSource="Delete"
+                        IsEnabled="{Binding SelectedDoctor, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+
+                    <ui:CommandBarSeparator />
+                    <ui:CommandBarButton
+                        Label="Оновити"
+                        Command="{Binding RefreshCommand}"
+                        IconSource="Refresh" />
+                </ui:CommandBar.PrimaryCommands>
+            </ui:CommandBar>
+
+            <!-- Clear Filters Button -->
+            <Button Grid.Column="1"
+                    Command="{Binding ClearFiltersCommand}"
+                    VerticalAlignment="Center"
+                    Margin="0,8,8,8"
+                    ToolTip.Tip="Очистити всі фільтри">
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                    <ui:SymbolIcon Symbol="Clear" FontSize="14" />
+                    <TextBlock Text="Очистити фільтри" FontSize="12" />
+                </StackPanel>
+            </Button>
+
+            <!-- Pagination -->
+            <StackPanel Grid.Column="2"
+                        Orientation="Horizontal"
+                        Spacing="6"
+                        VerticalAlignment="Center"
+                        Margin="0,8,25,8">
+                <Button Command="{Binding PrevPageCommand}"
+                        Padding="8,5"
+                        MinWidth="32"
+                        ToolTip.Tip="Попередня сторінка">
+                    <ui:SymbolIcon Symbol="ChevronLeft" FontSize="12" />
+                </Button>
+
+                <Border Background="{DynamicResource SubtleFillColorSecondaryBrush}"
+                        CornerRadius="4"
+                        Padding="10,5"
+                        MinWidth="60"
+                        VerticalAlignment="Center">
+                    <TextBlock VerticalAlignment="Center"
+                               FontSize="12"
+                               HorizontalAlignment="Center">
+                        <Run Text="{Binding CurrentPage}" FontWeight="SemiBold" />
+                        <Run Text="/" />
+                        <Run Text="{Binding TotalPages}" />
+                    </TextBlock>
+                </Border>
+
+                <Button Command="{Binding NextPageCommand}"
+                        Padding="8,5"
+                        MinWidth="32"
+                        ToolTip.Tip="Наступна сторінка">
+                    <ui:SymbolIcon Symbol="ChevronRight" FontSize="12" />
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <!-- Main Content - DataGrid -->
+        <Grid Grid.Row="2" Margin="8,0,8,8">
+
+            <Border BorderThickness="1"
+                    BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                    CornerRadius="4"
+                    ClipToBounds="True">
+                <DataGrid ItemsSource="{Binding Doctors}"
+                          AutoGenerateColumns="False"
+                          IsReadOnly="True"
+                          GridLinesVisibility="Horizontal"
+                          CanUserReorderColumns="True"
+                          CanUserResizeColumns="True"
+                          CanUserSortColumns="True"
+                          SelectionMode="Single"
+                          HorizontalScrollBarVisibility="Auto"
+                          VerticalScrollBarVisibility="Auto"
+                          SelectedItem="{Binding SelectedDoctor}">
+
+                    <DataGrid.Columns>
+
+                        <DataGridTextColumn Header="Табельний №"
+                                            Binding="{Binding EmployeeNumber}"
+                                            Width="Auto" />
+
+                        <DataGridTextColumn Header="ПІБ"
+                                            Binding="{Binding FullName}"
+                                            Width="Auto"
+                                            MinWidth="200" />
+
+                        <DataGridTextColumn Header="Спеціальність"
+                                            Binding="{Binding SpecialtyName}"
+                                            Width="Auto"
+                                            MinWidth="150" />
+
+                        <DataGridTextColumn Header="Категорія"
+                                            Binding="{Binding CategoryDisplay}"
+                                            Width="Auto" />
+
+                        <DataGridTextColumn Header="Стаж (років)"
+                                            Binding="{Binding ExperienceYears}"
+                                            Width="Auto" />
+
+                        <DataGridTextColumn Header="Кабінет"
+                                            Binding="{Binding RoomNumber}"
+                                            Width="Auto" />
+
+                        <DataGridTextColumn Header="Телефон"
+                                            Binding="{Binding Phone}"
+                                            Width="Auto" />
+
+                        <DataGridTextColumn Header="Тип"
+                                            Binding="{Binding DoctorTypeDisplay}"
+                                            Width="Auto" />
+
+                        <DataGridTextColumn Header="Статус"
+                                            Binding="{Binding StatusDisplay}"
+                                            Width="Auto" />
+
+                    </DataGrid.Columns>
+
+                    <!-- Context Menu -->
+                    <DataGrid.ContextFlyout>
+                        <MenuFlyout>
+                            <MenuItem Header="Переглянути"
+                                      Command="{Binding ViewDoctorCommand}"
+                                      CommandParameter="{Binding $parent[DataGrid].SelectedItem}">
+                                <MenuItem.Icon>
+                                    <ui:SymbolIcon Symbol="Contact" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="Редагувати"
+                                      Command="{Binding EditDoctorCommand}"
+                                      CommandParameter="{Binding $parent[DataGrid].SelectedItem}">
+                                <MenuItem.Icon>
+                                    <ui:SymbolIcon Symbol="Edit" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <Separator />
+                            <MenuItem Header="Розклад"
+                                      Command="{Binding ViewScheduleCommand}"
+                                      CommandParameter="{Binding $parent[DataGrid].SelectedItem}">
+                                <MenuItem.Icon>
+                                    <ui:SymbolIcon Symbol="Calendar" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="Видалити"
+                                      Command="{Binding DeleteDoctorCommand}"
+                                      CommandParameter="{Binding $parent[DataGrid].SelectedItem}">
+                                <MenuItem.Icon>
+                                    <ui:SymbolIcon Symbol="Delete" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </MenuFlyout>
+                    </DataGrid.ContextFlyout>
+
+                </DataGrid>
+            </Border>
+
+        </Grid>
+
+        <!-- Statistics Footer -->
+        <Border Grid.Row="3"
+                Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}"
+                BorderThickness="1"
+                BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                CornerRadius="4"
+                Padding="12,8"
+                Margin="8,0,8,8">
+            <Grid ColumnDefinitions="Auto,*,Auto">
+                <!-- Statistics -->
+                <StackPanel Grid.Column="0"
+                            Orientation="Horizontal"
+                            Spacing="12"
+                            VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <ui:SymbolIcon Symbol="Contact" FontSize="14" VerticalAlignment="Center" />
+                        <TextBlock VerticalAlignment="Center" FontSize="12">
+                            <Run Text="Всього лікарів:" />
+                            <Run Text="{Binding TotalDoctors}" FontWeight="SemiBold" />
+                        </TextBlock>
+                    </StackPanel>
+                    <Border Width="1" Height="16"
+                            Background="{DynamicResource DividerStrokeColorDefaultBrush}" />
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <ui:SymbolIcon Symbol="Home" FontSize="14" VerticalAlignment="Center" />
+                        <TextBlock VerticalAlignment="Center" FontSize="12">
+                            <Run Text="Дільничних:" />
+                            <Run Text="{Binding DistrictDoctorsCount}" FontWeight="SemiBold" />
+                        </TextBlock>
+                    </StackPanel>
+                    <Border Width="1" Height="16"
+                            Background="{DynamicResource DividerStrokeColorDefaultBrush}" />
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <ui:SymbolIcon Symbol="ContactInfo" FontSize="14" VerticalAlignment="Center" />
+                        <TextBlock VerticalAlignment="Center" FontSize="12">
+                            <Run Text="Спеціалістів:" />
+                            <Run Text="{Binding SpecialistsCount}" FontWeight="SemiBold" />
+                        </TextBlock>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- Busy Indicator -->
+                <StackPanel Grid.Column="2"
+                            Orientation="Horizontal"
+                            Spacing="8"
+                            IsVisible="{Binding IsBusy}"
+                            VerticalAlignment="Center">
+                    <ui:ProgressRing Width="16"
+                                     Height="16"
+                                     IsIndeterminate="True" />
+                    <TextBlock Text="{Binding BusyMessage}"
+                               FontSize="11"
+                               VerticalAlignment="Center" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- InfoBar -->
+        <Grid Grid.Row="4" Margin="8,0,8,8">
+            <ui:InfoBar Title="{Binding Title}"
+                        Message="{Binding Message}"
+                        Severity="{Binding MessageSeverity}"
+                        IsOpen="{Binding IsInfoBarVisible}"
+                        IsClosable="True" />
+        </Grid>
+    </Grid>
+</UserControl>

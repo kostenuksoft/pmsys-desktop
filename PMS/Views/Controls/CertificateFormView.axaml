@@ -1,0 +1,340 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:PMS.ViewModels"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+             mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
+             x:Class="PMS.Views.Controls.CertificateFormView"
+             x:DataType="vm:CertificateFormViewModel"
+             Width="1200"
+             Height="900"
+             HorizontalAlignment="Center"
+             VerticalAlignment="Center">
+
+    <UserControl.Styles>
+        <Style Selector="TextBlock.section-title">
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#2F4F4F"/>
+        </Style>
+
+        <Style Selector="TextBlock.field-label">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Foreground" Value="#4A6F6F"/>
+            <Setter Property="Margin" Value="0,0,0,4"/>
+        </Style>
+
+        <Style Selector="Border.form-section">
+            <Setter Property="Background" Value="#FAFAFA"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="Margin" Value="0,0,0,16"/>
+        </Style>
+    </UserControl.Styles>
+
+    <Grid RowDefinitions="Auto,*,Auto"
+          HorizontalAlignment="Stretch"
+          VerticalAlignment="Stretch">
+        <Border Grid.Row="0"
+                Background="{DynamicResource WindowGradient}"
+                Padding="24,16"
+                CornerRadius="8,8,0,0">
+            <Grid ColumnDefinitions="Auto,*">
+                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="12">
+                    <ui:SymbolIcon Symbol="Document" FontSize="24"/>
+                    <TextBlock Text="Видача довідки"
+                               FontSize="18"
+                               FontWeight="SemiBold"
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <ScrollViewer Grid.Row="1" Padding="24">
+            <StackPanel MaxWidth="1000" HorizontalAlignment="Center" Spacing="0">
+
+                <Border Classes="form-section">
+                    <StackPanel Spacing="14">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <ui:SymbolIcon Symbol="Contact" FontSize="16" Foreground="#5F9EA0"/>
+                            <TextBlock Classes="section-title" Text="Інформація про пацієнта" Margin="0"/>
+                        </StackPanel>
+
+                        <Grid ColumnDefinitions="*,12,Auto">
+                            <StackPanel Grid.Column="0" Spacing="6">
+                                <TextBlock Classes="field-label" Text="Пошук пацієнта *"/>
+                                <TextBox Text="{Binding PatientSearchText}"
+                                        Watermark="Введіть ПІБ або номер картки..."
+                                        Height="36"
+                                        VerticalContentAlignment="Center"/>
+                            </StackPanel>
+
+                            <Button Grid.Column="2"
+                                   Classes="WButton accent"
+                                   Content="Пошук"
+                                   Command="{Binding SearchPatientCommand}"
+                                   VerticalAlignment="Bottom"
+                                   Height="36"
+                                   Padding="16,0" />
+                        </Grid>
+
+                        <Border Background="#F0F8F8"
+                                BorderBrush="#5F9EA0"
+                                BorderThickness="1"
+                                CornerRadius="4"
+                                Padding="12"
+                                IsVisible="{Binding IsPatientInfoVisible}">
+                            <Grid ColumnDefinitions="Auto,Auto,*,Auto,Auto,*" RowDefinitions="Auto" ColumnSpacing="8">
+                                <ui:SymbolIcon Grid.Column="0" Symbol="Contact" FontSize="14" Foreground="#5F9EA0"/>
+                                <TextBlock Grid.Column="1" Text="ПІБ:" FontWeight="Medium" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="2" Text="{Binding PatientNameDisplay}" VerticalAlignment="Center"/>
+
+                                <ui:SymbolIcon Grid.Column="3" Symbol="Calendar" FontSize="14" Foreground="#5F9EA0" Margin="12,0,0,0"/>
+                                <TextBlock Grid.Column="4" Text="Дата народження:" FontWeight="Medium" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="5" Text="{Binding BirthDateDisplay}" VerticalAlignment="Center"/>
+                            </Grid>
+                        </Border>
+                    </StackPanel>
+                </Border>
+
+                <Border Classes="form-section">
+                    <StackPanel Spacing="14">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <ui:SymbolIcon Symbol="Document" FontSize="16" Foreground="#5F9EA0"/>
+                            <TextBlock Classes="section-title" Text="Деталі довідки" Margin="0"/>
+                        </StackPanel>
+
+                        <Grid ColumnDefinitions="*,16,*" RowDefinitions="Auto,12,Auto,12,Auto,12,Auto,12,Auto">
+                            <StackPanel Grid.Column="0" Grid.Row="0" Spacing="6">
+                                <TextBlock Classes="field-label" Text="Тип довідки *"/>
+                                <ComboBox ItemsSource="{Binding CertificateTypes}"
+                                         SelectedValue="{Binding SelectedCertificateType}"
+                                         DisplayMemberBinding="{Binding Value}"
+                                         SelectedValueBinding="{Binding Key}"
+                                         HorizontalAlignment="Stretch"
+                                         Height="36"
+                                         VerticalContentAlignment="Center"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2" Grid.Row="0" Spacing="6">
+                                <TextBlock Classes="field-label" Text="Номер довідки *"/>
+                                <TextBox Text="{Binding CertificateNumber}"
+                                        Watermark="Автоматично"
+                                        Height="36"
+                                        VerticalContentAlignment="Center"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="0" Grid.Row="2" Spacing="6">
+                                <TextBlock Classes="field-label" Text="Дата видачі *"/>
+                                <Grid ColumnDefinitions="*,8,Auto">
+                                    <TextBox Grid.Column="0"
+                                            Text="{Binding IssueDateText, Mode=OneWay}"
+                                            IsReadOnly="True"
+                                            Height="36"
+                                            Watermark="Оберіть дату..."
+                                            VerticalContentAlignment="Center" />
+                                    <Button Grid.Column="2"
+                                           Classes="WButton"
+                                           Command="{Binding SelectIssueDateCommand}"
+                                           Height="36"
+                                           Width="36"
+                                           Padding="0">
+                                        <ui:SymbolIcon Symbol="Calendar" FontSize="16" />
+                                    </Button>
+                                </Grid>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2" Grid.Row="2" Spacing="6">
+                                <TextBlock Classes="field-label" Text="Лікар *"/>
+                                <ComboBox ItemsSource="{Binding AvailableDoctors}"
+                                         SelectedItem="{Binding SelectedDoctor}"
+                                         HorizontalAlignment="Stretch"
+                                         VerticalContentAlignment="Center">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding FullName}" FontWeight="Medium" FontSize="13"/>
+                                                <TextBlock Text="{Binding  CategoryDisplay}" FontSize="11" Foreground="#999999"/>
+                                                <TextBlock Text="{Binding  Phone}" FontSize="11" Foreground="#999999"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="0" Grid.Row="4" Spacing="6">
+                                <TextBlock Classes="field-label" Text="Дійсна з"/>
+                                <Grid ColumnDefinitions="*,8,Auto">
+                                    <TextBox Grid.Column="0"
+                                            Text="{Binding ValidFromText, Mode=OneWay}"
+                                            IsReadOnly="True"
+                                            Height="36"
+                                            Watermark="Оберіть дату..."
+                                            VerticalContentAlignment="Center" />
+                                    <Button Grid.Column="2"
+                                           Classes="WButton"
+                                           Command="{Binding SelectValidFromCommand}"
+                                           Height="36"
+                                           Width="36"
+                                           Padding="0">
+                                        <ui:SymbolIcon Symbol="Calendar" FontSize="16" />
+                                    </Button>
+                                </Grid>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2" Grid.Row="4" Spacing="6">
+                                <TextBlock Classes="field-label" Text="Дійсна до"/>
+                                <Grid ColumnDefinitions="*,8,Auto">
+                                    <TextBox Grid.Column="0"
+                                            Text="{Binding ValidUntilText, Mode=OneWay}"
+                                            IsReadOnly="True"
+                                            Height="36"
+                                            Watermark="Оберіть дату..."
+                                            VerticalContentAlignment="Center" />
+                                    <Button Grid.Column="2"
+                                           Classes="WButton"
+                                           Command="{Binding SelectValidUntilCommand}"
+                                           Height="36"
+                                           Width="36"
+                                           Padding="0">
+                                        <ui:SymbolIcon Symbol="Calendar" FontSize="16" />
+                                    </Button>
+                                </Grid>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <Border Classes="form-section">
+                    <StackPanel Spacing="14">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <ui:SymbolIcon Symbol="Document" FontSize="16" Foreground="#5F9EA0"/>
+                            <TextBlock Classes="section-title" Text="Діагноз" Margin="0"/>
+                        </StackPanel>
+
+                        <Grid ColumnDefinitions="*,12,Auto">
+                            <StackPanel Grid.Column="0" Spacing="6">
+                                <TextBlock Classes="field-label" Text="Діагноз"/>
+                                <TextBox Text="{Binding DiagnosisText}"
+                                        Watermark="Оберіть діагноз або введіть вручну..."
+                                        Height="36"
+                                        VerticalContentAlignment="Center"/>
+                            </StackPanel>
+
+                            <Button Grid.Column="2"
+                                   Classes="WButton accent"
+                                   Content="Пошук діагнозу"
+                                   Command="{Binding SearchDiagnosisCommand}"
+                                   VerticalAlignment="Bottom"
+                                   Height="36"
+                                   Padding="16,0" />
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <Border Classes="form-section">
+                    <StackPanel Spacing="14">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <ui:SymbolIcon Symbol="Edit" FontSize="16" Foreground="#5F9EA0"/>
+                            <TextBlock Classes="section-title" Text="Додаткова інформація" Margin="0"/>
+                        </StackPanel>
+
+                        <TextBox Text="{Binding AdditionalInfo}"
+                                Watermark="Введіть додаткову інформацію для довідки..."
+                                AcceptsReturn="True"
+                                TextWrapping="Wrap"
+                                Height="80"
+                                VerticalContentAlignment="Top"
+                                VerticalAlignment="Top"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Classes="form-section">
+                    <StackPanel Spacing="14">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <ui:SymbolIcon Symbol="View" FontSize="16" Foreground="#5F9EA0"/>
+                            <TextBlock Classes="section-title" Text="Попередній перегляд" Margin="0"/>
+                        </StackPanel>
+
+                        <Border Background="White"
+                                BorderBrush="#E0E0E0"
+                                BorderThickness="1"
+                                CornerRadius="4"
+                                Padding="20"
+                                MinHeight="250">
+                            <TextBlock Text="{Binding PreviewText}"
+                                      TextWrapping="Wrap"
+                                      FontFamily="Courier New"
+                                      FontSize="12"
+                                      Foreground="#333333"/>
+                        </Border>
+                    </StackPanel>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
+
+        <Border Grid.Row="2"
+                Background="#F8F8F8"
+                BorderBrush="#E0E0E0"
+                BorderThickness="0,1,0,0"
+                Padding="24,16">
+            <Grid ColumnDefinitions="*,Auto">
+                <StackPanel Grid.Column="0"
+                            Spacing="6"
+                            VerticalAlignment="Center"
+                            IsVisible="{Binding HasValidationErrors}">
+
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <ui:SymbolIcon Symbol="AlertFilled" FontSize="14" Foreground="#D32F2F"/>
+                        <TextBlock Text="Помилки валідації:"
+                                   FontWeight="SemiBold"
+                                   FontSize="12"
+                                   Foreground="#D32F2F"/>
+                    </StackPanel>
+
+                    <ItemsControl ItemsSource="{Binding ValidationErrors}" Margin="20,0,0,0">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" Spacing="6" Margin="0,0,0,3">
+                                    <Ellipse Width="4" Height="4" Fill="#D32F2F" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{Binding}"
+                                               Foreground="#D32F2F"
+                                               FontSize="11"
+                                               TextWrapping="Wrap"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1"
+                           Orientation="Horizontal"
+                           Spacing="12"
+                           HorizontalAlignment="Right">
+                    <Button Classes="WButton"
+                            IsVisible="False"
+                           Content="Скасувати"
+                           Command="{Binding CancelCommand}"
+                           Width="120"
+                           Height="36" />
+
+                    <Button Classes="WButton"
+                           Content="Зберегти"
+                           Command="{Binding SaveCommand}"
+                           Width="120"
+                           Height="36" />
+
+                    <Button Classes="WButton accent"
+                           Content="Зберегти та експорт у PDF"
+                           Command="{Binding SaveAndPrintCommand}"
+                           Height="36" />
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

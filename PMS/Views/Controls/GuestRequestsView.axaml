@@ -1,0 +1,309 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+             xmlns:vm="using:PMS.ViewModels"
+             xmlns:models="using:PMS.Core.Models"
+             xmlns:converters1="clr-namespace:PMS.Core.Extensions.Converters"
+             x:Class="PMS.Views.Controls.GuestRequestsView"
+             x:DataType="vm:UserManagementViewModel"
+             x:CompileBindings="True">
+
+    <UserControl.Resources>
+        <converters1:StringNotEmptyConverter x:Key="StringNotEmptyConverter" />
+    </UserControl.Resources>
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto,Auto">
+
+        <!-- Header with Info Banner -->
+        <Border Grid.Row="0"
+                Background="#FFF3CD"
+                BorderBrush="#FFEAA7"
+                BorderThickness="1"
+                CornerRadius="4"
+                Padding="16"
+                Margin="12"
+                IsVisible="{Binding HasNewRequests}">
+            <Grid ColumnDefinitions="Auto,*">
+                <ui:SymbolIcon Grid.Column="0"
+                               Symbol="Important"
+                               FontSize="32"
+                               Foreground="#856404"
+                               VerticalAlignment="Center"
+                               Margin="0,0,16,0" />
+                <StackPanel Grid.Column="1"
+                            VerticalAlignment="Center"
+                            Spacing="4">
+                    <TextBlock FontSize="16"
+                               FontWeight="SemiBold"
+                               Foreground="#856404">
+                        <Run Text="Нових заявок:" />
+                        <Run Text="{Binding GuestRequestsCount}" />
+                    </TextBlock>
+                    <TextBlock Text="Перегляньте та обробіть заявки від нових користувачів"
+                               FontSize="13"
+                               Foreground="#856404"
+                               Opacity="0.85" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Empty State when no requests -->
+        <Border Grid.Row="0"
+                Padding="32"
+                Margin="12"
+                IsVisible="{Binding !HasNewRequests}">
+            <StackPanel HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Spacing="12">
+                <ui:SymbolIcon Symbol="Mail"
+                               FontSize="64"
+                               Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+                <TextBlock Text="Немає нових заявок"
+                           FontSize="18"
+                           FontWeight="SemiBold"
+                           HorizontalAlignment="Center"
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                <TextBlock Text="Заявки від гостей з'являться тут"
+                           FontSize="13"
+                           HorizontalAlignment="Center"
+                           Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+            </StackPanel>
+        </Border>
+
+        <!-- Toolbar -->
+        <ui:CommandBar Grid.Row="1"
+                       DefaultLabelPosition="Right"
+                       Margin="8,0,8,8">
+            <ui:CommandBar.PrimaryCommands>
+                <ui:CommandBarButton
+                    Label="Оновити"
+                    Command="{Binding RefreshCommand}"
+                    IconSource="Refresh" />
+            </ui:CommandBar.PrimaryCommands>
+        </ui:CommandBar>
+
+        <!-- Guest Requests List -->
+        <ScrollViewer Grid.Row="2"
+                      Margin="12,0,12,8"
+                      IsVisible="{Binding HasNewRequests}">
+            <ItemsControl ItemsSource="{Binding GuestRequests}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="models:GuestRequest">
+                        <Border Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                                BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                                BorderThickness="1"
+                                CornerRadius="4"
+                                Padding="20"
+                                Margin="0,0,0,12">
+                            <Grid RowDefinitions="Auto,Auto,Auto,Auto">
+
+                                <!-- Header -->
+                                <Grid Grid.Row="0"
+                                      ColumnDefinitions="*,Auto"
+                                      Margin="0,0,0,16">
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock Text="{Binding FullName}"
+                                                   FontSize="18"
+                                                   FontWeight="SemiBold" />
+                                        <TextBlock Text="{Binding RequestCode, StringFormat='Код заявки: {0}'}"
+                                                   FontSize="12"
+                                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                   Margin="0,4,0,0" />
+                                    </StackPanel>
+                                    <Border Grid.Column="1"
+                                            Background="#E3F2FD"
+                                            CornerRadius="4"
+                                            Padding="10,6">
+                                        <TextBlock Text="{Binding FormattedRequestDate}"
+                                                   FontSize="12"
+                                                   FontWeight="Medium"
+                                                   Foreground="#1976D2" />
+                                    </Border>
+                                </Grid>
+
+                                <Grid Grid.Row="1"
+                                      ColumnDefinitions="Auto,*,Auto,*"
+                                      RowDefinitions="Auto,Auto,Auto"
+                                      Margin="0,0,0,16">
+
+                                    <ui:SymbolIcon Grid.Row="0" Grid.Column="0"
+                                                   Symbol="Contact"
+                                                   FontSize="16"
+                                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                   Margin="0,0,12,0"
+                                                   VerticalAlignment="Center" />
+                                    <StackPanel Grid.Row="0" Grid.Column="1" Margin="0,0,24,8">
+                                        <TextBlock Text="Логін"
+                                                   FontSize="11"
+                                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                        <TextBlock Text="{Binding Login}"
+                                                   FontSize="13"
+                                                   FontWeight="Medium" />
+                                    </StackPanel>
+
+                                    <ui:SymbolIcon Grid.Row="0" Grid.Column="2"
+                                                   Symbol="Mail"
+                                                   FontSize="16"
+                                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                   Margin="0,0,12,0"
+                                                   VerticalAlignment="Center" />
+                                    <StackPanel Grid.Row="0" Grid.Column="3" Margin="0,0,0,8">
+                                        <TextBlock Text="Email"
+                                                   FontSize="11"
+                                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                        <TextBlock Text="{Binding Email}"
+                                                   FontSize="13"
+                                                   FontWeight="Medium" />
+                                    </StackPanel>
+
+                                    <ui:SymbolIcon Grid.Row="1" Grid.Column="0"
+                                                   Symbol="Phone"
+                                                   FontSize="16"
+                                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                   Margin="0,0,12,0"
+                                                   VerticalAlignment="Center" />
+                                    <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,0,24,8">
+                                        <TextBlock Text="Телефон"
+                                                   FontSize="11"
+                                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                        <TextBlock Text="{Binding MobilePhone}"
+                                                   FontSize="13"
+                                                   FontWeight="Medium" />
+                                    </StackPanel>
+
+                                    <!-- Organization -->
+                                    <ui:SymbolIcon Grid.Row="1" Grid.Column="2"
+                                                   Symbol="Help"
+                                                   FontSize="16"
+                                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                   Margin="0,0,12,0"
+                                                   VerticalAlignment="Center" />
+                                    <StackPanel Grid.Row="1" Grid.Column="3" Margin="0,0,0,8">
+                                        <TextBlock Text="Організація"
+                                                   FontSize="11"
+                                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                        <TextBlock Text="{Binding Organization}"
+                                                   FontSize="13"
+                                                   FontWeight="Medium"
+                                                   TextWrapping="Wrap" />
+                                    </StackPanel>
+
+                                    <!-- Position -->
+                                    <ui:SymbolIcon Grid.Row="2" Grid.Column="0"
+                                                   Symbol="ContactInfo"
+                                                   FontSize="16"
+                                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                   Margin="0,0,12,0"
+                                                   VerticalAlignment="Center" />
+                                    <StackPanel Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3">
+                                        <TextBlock Text="Посада"
+                                                   FontSize="11"
+                                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                        <TextBlock Text="{Binding Position}"
+                                                   FontSize="13"
+                                                   FontWeight="Medium" />
+                                    </StackPanel>
+
+                                </Grid>
+
+                                <!-- Message -->
+                                <Border Grid.Row="2"
+                                        Background="{DynamicResource SubtleFillColorSecondaryBrush}"
+                                        CornerRadius="4"
+                                        Padding="16"
+                                        Margin="0,0,0,16"
+                                        IsVisible="{Binding Message, Converter={StaticResource StringNotEmptyConverter}}">
+                                    <StackPanel Spacing="6">
+                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                            <ui:SymbolIcon Symbol="LeaveChat"
+                                                           FontSize="14"
+                                                           Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                            <TextBlock Text="Повідомлення від користувача"
+                                                       FontSize="12"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                        </StackPanel>
+                                        <TextBlock Text="{Binding Message}"
+                                                   TextWrapping="Wrap"
+                                                   FontSize="13"
+                                                   Margin="22,0,0,0" />
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- Action Buttons -->
+                                <Grid Grid.Row="3"
+                                      ColumnDefinitions="*,Auto,Auto">
+                                    <Button Grid.Column="1"
+                                            Content="Схвалити"
+                                            Command="{Binding $parent[ItemsControl].((vm:UserManagementViewModel)DataContext).ApproveRequestCommand}"
+                                            CommandParameter="{Binding}"
+                                            Padding="20,10"
+                                            Margin="0,0,8,0"
+                                            Classes="WButton">
+                                    </Button>
+                                    <Button Grid.Column="2"
+                                            Content="Відхилити"
+                                            Command="{Binding $parent[ItemsControl].((vm:UserManagementViewModel)DataContext).RejectRequestCommand}"
+                                            CommandParameter="{Binding}"
+                                            Padding="20,10"
+                                            Classes="WButton">
+                                    </Button>
+                                </Grid>
+
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <Border Grid.Row="3"
+                Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}"
+                BorderThickness="1"
+                BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                CornerRadius="4"
+                Padding="12,8"
+                Margin="8,0,8,8">
+            <Grid ColumnDefinitions="Auto,*,Auto">
+                <!-- Statistics -->
+                <StackPanel Grid.Column="0"
+                            Orientation="Horizontal"
+                            Spacing="12"
+                            VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <ui:SymbolIcon Symbol="Mail" FontSize="14" VerticalAlignment="Center" />
+                        <TextBlock VerticalAlignment="Center" FontSize="12">
+                            <Run Text="Заявок у черзі:" />
+                            <Run Text="{Binding GuestRequestsCount}" FontWeight="SemiBold" Foreground="#FF6B00" />
+                        </TextBlock>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- Busy Indicator -->
+                <StackPanel Grid.Column="2"
+                            Orientation="Horizontal"
+                            Spacing="8"
+                            IsVisible="{Binding IsBusy}"
+                            VerticalAlignment="Center">
+                    <ui:ProgressRing Width="16"
+                                     Height="16"
+                                     IsIndeterminate="True" />
+                    <TextBlock Text="{Binding BusyMessage}"
+                               FontSize="11"
+                               VerticalAlignment="Center" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- InfoBar -->
+        <Grid Grid.Row="4" Margin="8,0,8,8">
+            <ui:InfoBar Title="{Binding Title}"
+                        Message="{Binding Message}"
+                        Severity="{Binding MessageSeverity}"
+                        IsOpen="{Binding IsInfoBarVisible}"
+                        IsClosable="True" />
+        </Grid>
+
+    </Grid>
+
+</UserControl>

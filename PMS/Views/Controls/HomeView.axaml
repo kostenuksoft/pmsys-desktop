@@ -1,0 +1,632 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+             x:Class="PMS.Views.Controls.HomeView"
+             xmlns:vm="clr-namespace:PMS.ViewModels"
+             x:CompileBindings="True"
+             x:DataType="vm:HomeViewModel">
+
+    <UserControl.Resources>
+        <!-- Color Palette -->
+        <SolidColorBrush x:Key="PrimaryTeal" Color="#3A5F5F"/>
+        <SolidColorBrush x:Key="DarkTeal" Color="#2F4F4F"/>
+        <SolidColorBrush x:Key="LightTeal" Color="#5F7F7F"/>
+        <SolidColorBrush x:Key="BorderTeal" Color="#4A6F6F"/>
+        <SolidColorBrush x:Key="BackgroundLight" Color="#F8FAFA"/>
+        <SolidColorBrush x:Key="CardBackground" Color="#FFFFFF"/>
+        
+        <LinearGradientBrush x:Key="HeaderGradient" StartPoint="0%,0%" EndPoint="0%,100%">
+            <GradientStop Color="#3A5F5F" Offset="0"/>
+            <GradientStop Color="#2F4F4F" Offset="1"/>
+        </LinearGradientBrush>
+        
+        <LinearGradientBrush x:Key="CardGradient" StartPoint="0%,0%" EndPoint="0%,100%">
+            <GradientStop Color="#FFFFFF" Offset="0"/>
+            <GradientStop Color="#F8FAFA" Offset="1"/>
+        </LinearGradientBrush>
+    </UserControl.Resources>
+
+    <ScrollViewer Background="#F5F5F5">
+        <StackPanel Margin="40,30" Spacing="35" MaxWidth="1600">
+
+            <!-- Header Section -->
+            <Border Background="{StaticResource HeaderGradient}"
+                    BorderBrush="{StaticResource BorderTeal}"
+                    BorderThickness="1"
+                    CornerRadius="12"
+                    Padding="30,25">
+                <Grid ColumnDefinitions="*,Auto">
+                    <StackPanel Grid.Column="0" Spacing="6">
+                        <TextBlock Text="{Binding Greeting}"
+                                   FontSize="32"
+                                   FontWeight="Light"
+                                   Foreground="White"
+                                   FontFamily="Segoe UI Variable" />
+                        <TextBlock Text="Ласкаво просимо до системи управління поліклінікою"
+                                   FontSize="15"
+                                   Foreground="#E0E8E8"
+                                   FontFamily="Segoe UI Variable" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="4">
+                        <TextBlock Text="{Binding ApplicationVersion}"
+                                   FontSize="12"
+                                   Foreground="#B0C0C0"
+                                   HorizontalAlignment="Right"
+                                   FontFamily="Segoe UI Variable" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Main Content Grid -->
+            <Grid ColumnDefinitions="2*,1.2*" ColumnSpacing="30">
+
+                <!-- Left Column -->
+                <StackPanel Grid.Column="0" Spacing="30">
+
+                    <!-- Quick Access Section -->
+                    <Border Background="{StaticResource CardBackground}"
+                            BorderBrush="#E0E8E8"
+                            BorderThickness="1"
+                            CornerRadius="10"
+                            Padding="25,20">
+                        <StackPanel Spacing="18">
+                            <TextBlock Text="Швидкий доступ"
+                                       FontSize="18"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource DarkTeal}"
+                                       FontFamily="Segoe UI Variable" />
+
+                            <WrapPanel>
+                                <!-- Doctors Card -->
+                                <Button IsVisible="{Binding ShowDoctorsCard}"
+                                        Command="{Binding NavigateToDoctorsCommand}"
+                                        Classes="WButton"
+                                        Padding="0"
+                                        Margin="0,0,15,15"
+                                        Cursor="Hand">
+                                    <Border Background="{StaticResource CardGradient}"
+                                            CornerRadius="8"
+                                            Width="195"
+                                            Height="130"
+                                            Padding="18">
+                                        <Grid RowDefinitions="Auto,*,Auto">
+                                            <ui:SymbolIcon Symbol="People"
+                                                           Foreground="{StaticResource PrimaryTeal}"
+                                                           FontSize="36" />
+                                            <TextBlock Grid.Row="1"
+                                                       Text="Лікарі"
+                                                       FontSize="16"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="{StaticResource DarkTeal}"
+                                                       VerticalAlignment="Center"
+                                                       FontFamily="Segoe UI Variable" />
+                                            <TextBlock Grid.Row="2"
+                                                       Text="Управління персоналом"
+                                                       FontSize="12"
+                                                       Foreground="{StaticResource LightTeal}"
+                                                       TextWrapping="Wrap"
+                                                       FontFamily="Segoe UI Variable" />
+                                        </Grid>
+                                    </Border>
+                                </Button>
+
+                                <!-- Patients Card -->
+                                <Button IsVisible="{Binding ShowPatientsCard}"
+                                        Command="{Binding NavigateToPatientsCommand}"
+                                        Classes="WButton"
+                                        Padding="0"
+                                        Margin="0,0,15,15"
+                                        Cursor="Hand">
+                                    <Border Background="{StaticResource CardGradient}"
+                                            CornerRadius="8"
+                                            Width="195"
+                                            Height="130"
+                                            Padding="18">
+                                        <Grid RowDefinitions="Auto,*,Auto">
+                                            <ui:SymbolIcon Symbol="ContactInfo"
+                                                           FontSize="36"
+                                                           Foreground="{StaticResource PrimaryTeal}" />
+                                            <TextBlock Grid.Row="1"
+                                                       Text="Пацієнти"
+                                                       FontSize="16"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="{StaticResource DarkTeal}"
+                                                       VerticalAlignment="Center"
+                                                       FontFamily="Segoe UI Variable" />
+                                            <TextBlock Grid.Row="2"
+                                                       Text="Картотека пацієнтів"
+                                                       FontSize="12"
+                                                       Foreground="{StaticResource LightTeal}"
+                                                       TextWrapping="Wrap"
+                                                       FontFamily="Segoe UI Variable" />
+                                        </Grid>
+                                    </Border>
+                                </Button>
+
+                                <!-- Appointments Card -->
+                                <Button IsVisible="{Binding ShowAppointmentsCard}"
+                                        Command="{Binding NavigateToAppointmentsCommand}"
+                                        Classes="WButton"
+                                        Padding="0"
+                                        Margin="0,0,15,15"
+                                        Cursor="Hand">
+                                    <Border Background="{StaticResource CardGradient}"
+                                            CornerRadius="8"
+                                            Width="195"
+                                            Height="130"
+                                            Padding="18">
+                                        <Grid RowDefinitions="Auto,*,Auto">
+                                            <ui:SymbolIcon Symbol="Calendar"
+                                                           FontSize="36"
+                                                           Foreground="{StaticResource PrimaryTeal}" />
+                                            <TextBlock Grid.Row="1"
+                                                       Text="Прийоми"
+                                                       FontSize="16"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="{StaticResource DarkTeal}"
+                                                       VerticalAlignment="Center"
+                                                       FontFamily="Segoe UI Variable" />
+                                            <TextBlock Grid.Row="2"
+                                                       Text="Запис на прийом"
+                                                       FontSize="12"
+                                                       Foreground="{StaticResource LightTeal}"
+                                                       TextWrapping="Wrap"
+                                                       FontFamily="Segoe UI Variable" />
+                                        </Grid>
+                                    </Border>
+                                </Button>
+
+                                <!-- Home Visits Card -->
+                                <Button IsVisible="{Binding ShowHomeVisitsCard}"
+                                        Command="{Binding NavigateToHomeVisitsCommand}"
+                                        Classes="WButton"
+                                        Padding="0"
+                                        Margin="0,0,15,15"
+                                        Cursor="Hand">
+                                    <Border Background="{StaticResource CardGradient}"
+                                            CornerRadius="8"
+                                            Width="195"
+                                            Height="130"
+                                            Padding="18">
+                                        <Grid RowDefinitions="Auto,*,Auto">
+                                            <ui:SymbolIcon Symbol="Home"
+                                                           FontSize="36"
+                                                           Foreground="{StaticResource PrimaryTeal}" />
+                                            <TextBlock Grid.Row="1"
+                                                       Text="Виклики"
+                                                       FontSize="16"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="{StaticResource DarkTeal}"
+                                                       VerticalAlignment="Center"
+                                                       FontFamily="Segoe UI Variable" />
+                                            <TextBlock Grid.Row="2"
+                                                       Text="Виклик лікаря додому"
+                                                       FontSize="12"
+                                                       Foreground="{StaticResource LightTeal}"
+                                                       TextWrapping="Wrap"
+                                                       FontFamily="Segoe UI Variable" />
+                                        </Grid>
+                                    </Border>
+                                </Button>
+
+                                <!-- Reports Card -->
+                                <Button IsVisible="{Binding ShowReportsCard}"
+                                        Command="{Binding NavigateToReportsCommand}"
+                                        Classes="WButton"
+                                        Padding="0"
+                                        Margin="0,0,15,15"
+                                        Cursor="Hand">
+                                    <Border Background="{StaticResource CardGradient}"
+                                            CornerRadius="8"
+                                            Width="195"
+                                            Height="130"
+                                            Padding="18">
+                                        <Grid RowDefinitions="Auto,*,Auto">
+                                            <ui:SymbolIcon Symbol="Document"
+                                                           FontSize="36"
+                                                           Foreground="{StaticResource PrimaryTeal}" />
+                                            <TextBlock Grid.Row="1"
+                                                       Text="Звіти"
+                                                       FontSize="16"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="{StaticResource DarkTeal}"
+                                                       VerticalAlignment="Center"
+                                                       FontFamily="Segoe UI Variable" />
+                                            <TextBlock Grid.Row="2"
+                                                       Text="Аналітика та звітність"
+                                                       FontSize="12"
+                                                       Foreground="{StaticResource LightTeal}"
+                                                       TextWrapping="Wrap"
+                                                       FontFamily="Segoe UI Variable" />
+                                        </Grid>
+                                    </Border>
+                                </Button>
+
+                                <!-- Users Card -->
+                                <Button IsVisible="{Binding ShowUsersCard}"
+                                        Command="{Binding NavigateToUsersCommand}"
+                                        Classes="WButton"
+                                        Padding="0"
+                                        Margin="0,0,15,15"
+                                        Cursor="Hand">
+                                    <Border Background="{StaticResource CardGradient}"
+                                            CornerRadius="8"
+                                            Width="195"
+                                            Height="130"
+                                            Padding="18">
+                                        <Grid RowDefinitions="Auto,*,Auto">
+                                            <ui:SymbolIcon Symbol="Admin"
+                                                           FontSize="36"
+                                                           Foreground="{StaticResource PrimaryTeal}" />
+                                            <TextBlock Grid.Row="1"
+                                                       Text="Користувачі"
+                                                       FontSize="16"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="{StaticResource DarkTeal}"
+                                                       VerticalAlignment="Center"
+                                                       FontFamily="Segoe UI Variable" />
+                                            <TextBlock Grid.Row="2"
+                                                       Text="Управління доступом"
+                                                       FontSize="12"
+                                                       Foreground="{StaticResource LightTeal}"
+                                                       TextWrapping="Wrap"
+                                                       FontFamily="Segoe UI Variable" />
+                                        </Grid>
+                                    </Border>
+                                </Button>
+                            </WrapPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- System Information -->
+                    <Border Background="{StaticResource CardBackground}"
+                            BorderBrush="#E0E8E8"
+                            BorderThickness="1"
+                            CornerRadius="10"
+                            Padding="25,20">
+                        <ui:SettingsExpander Header="Про систему"
+                                             IconSource="Help"
+                                             IsExpanded="False"
+                                             Foreground="{StaticResource DarkTeal}">
+                            <StackPanel Spacing="12" Margin="0,0,0,12">
+                                <TextBlock TextWrapping="Wrap"
+                                           LineHeight="22"
+                                           Foreground="{StaticResource LightTeal}"
+                                           FontFamily="Segoe UI Variable">
+                                    Система управління поліклінікою - це комплексне рішення для автоматизації роботи медичного закладу.
+                                    Система забезпечує централізоване зберігання та обробку інформації про лікарів, пацієнтів, медичні процедури та візити.
+                                </TextBlock>
+
+                                <TextBlock Text="Основні можливості:"
+                                           FontWeight="SemiBold"
+                                           Foreground="{StaticResource DarkTeal}"
+                                           Margin="0,8,0,4"
+                                           FontFamily="Segoe UI Variable" />
+
+                                <StackPanel Spacing="6" Margin="16,0,0,0">
+                                    <TextBlock Foreground="{StaticResource LightTeal}" FontFamily="Segoe UI Variable">
+                                        •  Управління картотекою пацієнтів та медичними записами
+                                    </TextBlock>
+                                    <TextBlock Foreground="{StaticResource LightTeal}" FontFamily="Segoe UI Variable">
+                                        •  Планування прийомів та розклад роботи лікарів
+                                    </TextBlock>
+                                    <TextBlock Foreground="{StaticResource LightTeal}" FontFamily="Segoe UI Variable">
+                                        •  Виклики лікаря додому та їх координація
+                                    </TextBlock>
+                                    <TextBlock Foreground="{StaticResource LightTeal}" FontFamily="Segoe UI Variable">
+                                        •  Видача медичних довідок та сертифікатів
+                                    </TextBlock>
+                                    <TextBlock Foreground="{StaticResource LightTeal}" FontFamily="Segoe UI Variable">
+                                        •  Облік медичних процедур
+                                    </TextBlock>
+                                    <TextBlock Foreground="{StaticResource LightTeal}" FontFamily="Segoe UI Variable">
+                                        •  Аналітика та звітність на базі MongoDB
+                                    </TextBlock>
+                                </StackPanel>
+                            </StackPanel>
+                        </ui:SettingsExpander>
+                    </Border>
+
+                    <!-- Technical Requirements -->
+                    <Border Background="{StaticResource CardBackground}"
+                            BorderBrush="#E0E8E8"
+                            BorderThickness="1"
+                            CornerRadius="10"
+                            Padding="25,20">
+                        <ui:SettingsExpander Header="Технічне завдання №32"
+                                             IconSource="Document"
+                                             IsExpanded="False"
+                                             Foreground="{StaticResource DarkTeal}">
+                            <ui:SettingsExpander.Footer>
+                                <Button Classes="WButton accent"
+                                        Padding="10,6"
+                                        Command="{Binding BringTechTaskWindow}"
+                                        ToolTip.Tip="Відкрити в окремому вікні"
+                                        CornerRadius="6"
+                                        Cursor="Hand">
+                                    <StackPanel Orientation="Horizontal" Spacing="6">
+                                        <ui:SymbolIcon FontSize="16" Symbol="NewWindow"/>
+                                        <TextBlock Text="Відкрити" FontSize="12" FontFamily="Segoe UI Variable" />
+                                    </StackPanel>
+                                </Button>
+                            </ui:SettingsExpander.Footer>
+
+                            <ScrollViewer MaxHeight="400">
+                                <StackPanel Spacing="12" Margin="0,0,0,12">
+                                    <TextBlock TextWrapping="Wrap"
+                                               LineHeight="22"
+                                               Foreground="{StaticResource LightTeal}"
+                                               FontFamily="Segoe UI Variable">
+                                        Система повинна зберігати загальну інформацію про лікарів, пацієнтів, кабінети та лікувальні процедури,
+                                        а також здійснювати облік звернень, обстежень та лікування пацієнтів.
+                                    </TextBlock>
+
+                                    <TextBlock Text="Види запитів:"
+                                               FontWeight="SemiBold"
+                                               Foreground="{StaticResource DarkTeal}"
+                                               Margin="0,12,0,8"
+                                               FontFamily="Segoe UI Variable" />
+
+                                    <StackPanel Spacing="8" Margin="16,0,0,0">
+                                        <TextBlock TextWrapping="Wrap" LineHeight="20" Foreground="{StaticResource LightTeal}" FontFamily="Segoe UI Variable">
+                                            1) Інформація про прийомні дні тижня та години терапевтів
+                                        </TextBlock>
+                                        <TextBlock TextWrapping="Wrap" LineHeight="20" Foreground="{StaticResource LightTeal}" FontFamily="Segoe UI Variable">
+                                            2) Детальна інформація про лікарів та довідки
+                                        </TextBlock>
+                                        <TextBlock TextWrapping="Wrap" LineHeight="20" Foreground="{StaticResource LightTeal}" FontFamily="Segoe UI Variable">
+                                            3) Відомості пацієнтів за різними критеріями
+                                        </TextBlock>
+                                        <TextBlock TextWrapping="Wrap" LineHeight="20" Foreground="{StaticResource LightTeal}" FontFamily="Segoe UI Variable">
+                                            4) Аналіз обстежень та діагнозів
+                                        </TextBlock>
+                                        <TextBlock TextWrapping="Wrap" LineHeight="20" Foreground="{StaticResource LightTeal}" FontFamily="Segoe UI Variable">
+                                            5) Графіки роботи лікарів
+                                        </TextBlock>
+                                        <TextBlock TextWrapping="Wrap" LineHeight="20" Foreground="{StaticResource LightTeal}" FontFamily="Segoe UI Variable">
+                                            6) Виклики дільничного лікаря
+                                        </TextBlock>
+                                        <TextBlock TextWrapping="Wrap" LineHeight="20" Foreground="{StaticResource LightTeal}" FontFamily="Segoe UI Variable">
+                                            7) Лікувальні процедури та статистика
+                                        </TextBlock>
+                                        <TextBlock TextWrapping="Wrap" LineHeight="20" Foreground="{StaticResource LightTeal}" FontFamily="Segoe UI Variable">
+                                            8) Флюорографія та щеплення
+                                        </TextBlock>
+                                        <TextBlock TextWrapping="Wrap" LineHeight="20" Foreground="{StaticResource LightTeal}" FontFamily="Segoe UI Variable">
+                                            9) Фізичні кабінети та графіки
+                                        </TextBlock>
+                                        <TextBlock TextWrapping="Wrap" LineHeight="20" Foreground="{StaticResource LightTeal}" FontFamily="Segoe UI Variable">
+                                            10) Підрахунок відвідувань поліклініки
+                                        </TextBlock>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ScrollViewer>
+                        </ui:SettingsExpander>
+                    </Border>
+
+                </StackPanel>
+
+                <!-- Right Column - User Profile -->
+                <StackPanel Grid.Column="1" Spacing="20">
+
+                    <Border Background="{StaticResource CardBackground}"
+                            BorderBrush="#E0E8E8"
+                            BorderThickness="1"
+                            CornerRadius="10"
+                            Padding="25,20">
+                        <StackPanel Spacing="20">
+                            
+                            <!-- User Header -->
+                            <Grid ColumnDefinitions="Auto,*,Auto">
+                                <Border Grid.Column="0"
+                                        Width="50" Height="50"
+                                        CornerRadius="25"
+                                        Background="{StaticResource HeaderGradient}"
+                                        Margin="0,0,12,0">
+                                    <ui:SymbolIcon Symbol="Contact"
+                                                   FontSize="28"
+                                                   Foreground="White"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center" />
+                                </Border>
+                                
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="4">
+                                    <TextBlock Text="{Binding UserName}"
+                                               FontSize="16"
+                                               FontWeight="SemiBold"
+                                               Foreground="{StaticResource DarkTeal}"
+                                               FontFamily="Segoe UI Variable" />
+                                    <TextBlock Text="{Binding UserRole}"
+                                               FontSize="12"
+                                               Foreground="{StaticResource LightTeal}"
+                                               FontFamily="Segoe UI Variable" />
+                                </StackPanel>
+                                
+                                <Button Grid.Column="2"
+                                        Command="{Binding RefreshCommand}"
+                                        Classes="WButton"
+                                        Padding="8"
+                                        Width="36" Height="36"
+                                        CornerRadius="18"
+                                        ToolTip.Tip="Оновити"
+                                        Cursor="Hand">
+                                    <ui:SymbolIcon FontSize="16" Symbol="Refresh" Foreground="{StaticResource PrimaryTeal}" />
+                                </Button>
+                            </Grid>
+
+                            <Separator Background="#E0E8E8" Height="1" />
+
+                            <!-- Session Information -->
+                            <StackPanel Spacing="12">
+                                <TextBlock Text="Інформація сесії"
+                                           FontSize="13"
+                                           FontWeight="SemiBold"
+                                           Foreground="{StaticResource DarkTeal}"
+                                           FontFamily="Segoe UI Variable" />
+                                
+                                <StackPanel Spacing="10">
+                                    <Grid ColumnDefinitions="Auto,*">
+                                        <ui:SymbolIcon Grid.Column="0" Symbol="Clock" FontSize="16" Foreground="{StaticResource LightTeal}" Margin="0,0,10,0" />
+                                        <StackPanel Grid.Column="1">
+                                            <TextBlock Text="Останній вхід"
+                                                       FontSize="11"
+                                                       Foreground="{StaticResource LightTeal}"
+                                                       FontFamily="Segoe UI Variable" />
+                                            <TextBlock Text="{Binding LastLoginDate}"
+                                                       FontSize="13"
+                                                       Foreground="{StaticResource DarkTeal}"
+                                                       FontFamily="Segoe UI Variable" />
+                                        </StackPanel>
+                                    </Grid>
+                                    
+                                    <Grid ColumnDefinitions="Auto,*">
+                                        <ui:SymbolIcon Grid.Column="0" Symbol="Clock" FontSize="16" Foreground="{StaticResource LightTeal}" Margin="0,0,10,0" />
+                                        <StackPanel Grid.Column="1">
+                                            <TextBlock Text="Тривалість сесії"
+                                                       FontSize="11"
+                                                       Foreground="{StaticResource LightTeal}"
+                                                       FontFamily="Segoe UI Variable" />
+                                            <TextBlock Text="{Binding SessionDuration}"
+                                                       FontSize="13"
+                                                       Foreground="{StaticResource DarkTeal}"
+                                                       FontFamily="Segoe UI Variable" />
+                                        </StackPanel>
+                                    </Grid>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <Separator Background="#E0E8E8" Height="1" />
+
+                            <!-- Permissions -->
+                            <StackPanel Spacing="15">
+                                <TextBlock Text="Права доступу"
+                                           FontSize="13"
+                                           FontWeight="SemiBold"
+                                           Foreground="{StaticResource DarkTeal}"
+                                           FontFamily="Segoe UI Variable" />
+
+                                <!-- Permission Items -->
+                                <StackPanel Spacing="10">
+                                    
+                                    <Grid ColumnDefinitions="Auto,*,Auto">
+                                        <ui:IconSourceElement Grid.Column="0" 
+                                                              IconSource="View" 
+                                                              Width="18" 
+                                                              Height="18" 
+                                                              Foreground="{StaticResource LightTeal}" 
+                                                              Margin="0,0,10,0" />
+                                        <TextBlock Grid.Column="1" 
+                                                   Text="Перегляд" 
+                                                   FontSize="13" 
+                                                   VerticalAlignment="Center" 
+                                                   Foreground="{StaticResource DarkTeal}" 
+                                                   FontFamily="Segoe UI Variable" />
+                                        <CheckBox Grid.Column="2" 
+                                                  IsChecked="{Binding CanViewData}" 
+                                                  IsHitTestVisible="False" />
+                                    </Grid>
+                                    
+                                    <Grid ColumnDefinitions="Auto,*,Auto">
+                                        <ui:IconSourceElement Grid.Column="0" 
+                                                              IconSource="Edit" 
+                                                              Width="18" 
+                                                              Height="18" 
+                                                              Foreground="{StaticResource LightTeal}" 
+                                                              Margin="0,0,10,0" />
+                                        <TextBlock Grid.Column="1" 
+                                                   Text="Редагування" 
+                                                   FontSize="13" 
+                                                   VerticalAlignment="Center" 
+                                                   Foreground="{StaticResource DarkTeal}" 
+                                                   FontFamily="Segoe UI Variable" />
+                                        <CheckBox Grid.Column="2" 
+                                                  IsChecked="{Binding CanEditData}" 
+                                                  IsHitTestVisible="False" />
+                                    </Grid>
+                                    
+                                    <Grid ColumnDefinitions="Auto,*,Auto">
+                                        <ui:IconSourceElement Grid.Column="0" 
+                                                              IconSource="Delete" 
+                                                              Width="18" 
+                                                              Height="18" 
+                                                              Foreground="#D98880" 
+                                                              Margin="0,0,10,0" />
+                                        <TextBlock Grid.Column="1" 
+                                                   Text="Видалення" 
+                                                   FontSize="13" 
+                                                   VerticalAlignment="Center" 
+                                                   Foreground="{StaticResource DarkTeal}" 
+                                                   FontFamily="Segoe UI Variable" />
+                                        <CheckBox Grid.Column="2" 
+                                                  IsChecked="{Binding CanDeleteData}" 
+                                                  IsHitTestVisible="False" />
+                                    </Grid>
+                                    
+                                    <Grid ColumnDefinitions="Auto,*,Auto">
+                                        <ui:IconSourceElement Grid.Column="0" 
+                                                              IconSource="Library" 
+                                                              Width="18" 
+                                                              Height="18" 
+                                                              Foreground="{StaticResource LightTeal}" 
+                                                              Margin="0,0,10,0" />
+                                        <TextBlock Grid.Column="1" 
+                                                   Text="Звіти" 
+                                                   FontSize="13" 
+                                                   VerticalAlignment="Center" 
+                                                   Foreground="{StaticResource DarkTeal}" 
+                                                   FontFamily="Segoe UI Variable" />
+                                        <CheckBox Grid.Column="2" 
+                                                  IsChecked="{Binding CanRunAggregations}" 
+                                                  IsHitTestVisible="False" />
+                                    </Grid>
+                                    
+                                    <Grid ColumnDefinitions="Auto,*,Auto">
+                                        <ui:IconSourceElement Grid.Column="0" 
+                                                              IconSource="People" 
+                                                              Width="18" 
+                                                              Height="18" 
+                                                              Foreground="{StaticResource LightTeal}" 
+                                                              Margin="0,0,10,0" />
+                                        <TextBlock Grid.Column="1" 
+                                                   Text="Адміністрування" 
+                                                   FontSize="13" 
+                                                   VerticalAlignment="Center" 
+                                                   Foreground="{StaticResource DarkTeal}" 
+                                                   FontFamily="Segoe UI Variable" />
+                                        <CheckBox Grid.Column="2" 
+                                                  IsChecked="{Binding CanManageUsers}" 
+                                                  IsHitTestVisible="False" />
+                                    </Grid>
+                                    
+                                    <Grid ColumnDefinitions="Auto,*,Auto">
+                                        <ui:IconSourceElement Grid.Column="0" 
+                                                              IconSource="Document" 
+                                                              Width="18" 
+                                                              Height="18" 
+                                                              Foreground="{StaticResource LightTeal}" 
+                                                              Margin="0,0,10,0" />
+                                        <TextBlock Grid.Column="1" 
+                                                   Text="Довідки" 
+                                                   FontSize="13" 
+                                                   VerticalAlignment="Center" 
+                                                   Foreground="{StaticResource DarkTeal}" 
+                                                   FontFamily="Segoe UI Variable" />
+                                        <CheckBox Grid.Column="2" 
+                                                  IsChecked="{Binding CanIssueСertificates}" 
+                                                  IsHitTestVisible="False" />
+                                    </Grid>
+                                    
+                                </StackPanel>
+                            </StackPanel>
+
+                        </StackPanel>
+                    </Border>
+
+                </StackPanel>
+
+            </Grid>
+
+        </StackPanel>
+    </ScrollViewer>
+
+</UserControl>

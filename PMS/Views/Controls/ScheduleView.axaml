@@ -1,0 +1,243 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+             xmlns:vm="clr-namespace:PMS.ViewModels"
+             xmlns:enums="clr-namespace:PMS.Core.Enums.General"
+             x:Class="PMS.Views.Controls.ScheduleView"
+             x:DataType="vm:ScheduleViewModel"
+             Name="SchedView"
+             x:CompileBindings="True">
+
+    <UserControl.Resources>
+        
+        <SolidColorBrush x:Key="PrimaryTeal" Color="#3A5F5F" />
+        <SolidColorBrush x:Key="DarkTeal" Color="#2F4F4F" />
+        <SolidColorBrush x:Key="LightTeal" Color="#5F7F7F" />
+        <SolidColorBrush x:Key="BorderTeal" Color="#4A6F6F" />
+        <SolidColorBrush x:Key="BackgroundLight" Color="#F8FAFA" />
+        <SolidColorBrush x:Key="CardBackground" Color="#FFFFFF" />
+
+        <LinearGradientBrush x:Key="HeaderGradient" StartPoint="0%,0%" EndPoint="0%,100%">
+            <GradientStop Color="#3A5F5F" Offset="0" />
+            <GradientStop Color="#2F4F4F" Offset="1" />
+        </LinearGradientBrush>
+    </UserControl.Resources>
+
+    <ScrollViewer Background="#F5F5F5">
+        <StackPanel Margin="40,30" Spacing="25" MaxWidth="1800">
+
+            <Border Background="{StaticResource HeaderGradient}"
+                    BorderBrush="{StaticResource BorderTeal}"
+                    BorderThickness="1"
+                    CornerRadius="12"
+                    Padding="30,25">
+                <Grid ColumnDefinitions="*,Auto">
+                    <StackPanel Grid.Column="0" Spacing="6">
+                        <TextBlock Text="Графік роботи лікаря"
+                                   FontSize="32"
+                                   FontWeight="Light"
+                                   Foreground="White"
+                                   FontFamily="Segoe UI Variable" />
+                        <TextBlock Text="Перегляд розкладу прийому"
+                                   FontSize="15"
+                                   Foreground="#E0E8E8"
+                                   FontFamily="Segoe UI Variable" />
+                    </StackPanel>
+
+                    <Button Grid.Column="1"
+                            Command="{Binding SelectDoctorCommand}"
+                            Background="White"
+                            Foreground="{StaticResource DarkTeal}"
+                            Height="44"
+                            MinWidth="180"
+                            CornerRadius="8"
+                            VerticalAlignment="Center">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <ui:SymbolIcon Symbol="ContactInfo" FontSize="18"/>
+                            <TextBlock Text="Вибрати лікаря" VerticalAlignment="Center" FontWeight="Medium"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+            </Border>
+
+            <Border Background="{StaticResource CardBackground}"
+                    BorderBrush="#E0E8E8"
+                    BorderThickness="1"
+                    CornerRadius="10"
+                    Padding="20"
+                    IsVisible="{Binding IsDoctorSelected}">
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="15">
+                    <ui:SymbolIcon Grid.Column="0"
+                                   Symbol="ContactInfo"
+                                   FontSize="32"
+                                   Foreground="{StaticResource PrimaryTeal}"
+                                   VerticalAlignment="Center"/>
+                    <StackPanel Grid.Column="1" Spacing="4">
+                        <TextBlock Text="{Binding DoctorDisplayText}"
+                                   FontSize="18"
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource DarkTeal}"/>
+                        <TextBlock Text="Обраний лікар для перегляду розкладу"
+                                   FontSize="12"
+                                   Foreground="{StaticResource LightTeal}"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <Border Background="{StaticResource CardBackground}"
+                    BorderBrush="#E0E8E8"
+                    BorderThickness="1"
+                    CornerRadius="10"
+                    Padding="20"
+                    IsVisible="{Binding IsDoctorSelected}">
+                <Grid RowDefinitions="Auto,15,Auto">
+
+                    <StackPanel Grid.Row="0" Spacing="10">
+                        <TextBlock Text="Режим перегляду"
+                                   FontSize="12"
+                                   Foreground="{StaticResource LightTeal}"/>
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <RadioButton GroupName="ViewMode"
+                                         IsChecked="{Binding IsDayMode}"
+                                         Command="{Binding ChangeModeCommand}"
+                                         CommandParameter="{x:Static enums:ViewMode.Day}">
+                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                    <ui:SymbolIcon Symbol="CalendarDay" FontSize="16"/>
+                                    <TextBlock Text="День" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </RadioButton>
+
+                            <RadioButton GroupName="ViewMode"
+                                         IsChecked="{Binding IsWeekMode}"
+                                         Command="{Binding ChangeModeCommand}"
+                                         CommandParameter="{x:Static enums:ViewMode.Week}">
+                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                    <ui:SymbolIcon Symbol="CalendarWeek" FontSize="16"/>
+                                    <TextBlock Text="Тиждень" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </RadioButton>
+
+                            <RadioButton GroupName="ViewMode"
+                                         IsChecked="{Binding IsMonthMode}"
+                                         Command="{Binding ChangeModeCommand}"
+                                         CommandParameter="{x:Static enums:ViewMode.Month}">
+                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                    <ui:SymbolIcon Symbol="Calendar" FontSize="16"/>
+                                    <TextBlock Text="Місяць" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </RadioButton>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <Grid Grid.Row="2" ColumnDefinitions="Auto,*,Auto">
+                        <Button Grid.Column="0"
+                                Command="{Binding PrevPeriodCommand}"
+                                Classes="WButton"
+                                Width="40" Height="40"
+                                CornerRadius="8">
+                            <ui:SymbolIcon Symbol="ChevronLeft" FontSize="16"/>
+                        </Button>
+
+                        <TextBlock Grid.Column="1"
+                                   Text="{Binding PeriodDisplayText}"
+                                   FontSize="16"
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource DarkTeal}"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+
+                        <Button Grid.Column="2"
+                                Command="{Binding NextPeriodCommand}"
+                                Classes="WButton"
+                                Width="40" Height="40"
+                                CornerRadius="8">
+                            <ui:SymbolIcon Symbol="ChevronRight" FontSize="16"/>
+                        </Button>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <Border Background="{StaticResource CardBackground}"
+                    BorderBrush="#E0E8E8"
+                    BorderThickness="1"
+                    CornerRadius="10"
+                    Padding="40"
+                    IsVisible="{Binding IsLoading}">
+                <StackPanel Spacing="15" HorizontalAlignment="Center">
+                    <ui:ProgressRing Width="40" Height="40" IsIndeterminate="True" Foreground="{StaticResource LightTeal}"/>
+                    <TextBlock Text="Завантаження розкладу..."
+                               FontSize="14"
+                               Foreground="{StaticResource LightTeal}"
+                               HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Border>
+
+            <Border Background="{StaticResource CardBackground}"
+                    BorderBrush="#E0E8E8"
+                    BorderThickness="1"
+                    CornerRadius="10"
+                    ClipToBounds="True"
+                    IsVisible="{Binding IsDoctorSelected}">
+                <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                             VerticalScrollBarVisibility="Auto"
+                             MaxHeight="800">
+                    <DataGrid Name="ScheduleDataGrid"
+                              ItemsSource="{Binding GridRows}"
+                              AutoGenerateColumns="False"
+                              CanUserReorderColumns="False"
+                              CanUserResizeColumns="True"
+                              CanUserSortColumns="False"
+                              IsReadOnly="True"
+                              GridLinesVisibility="All"
+                              HeadersVisibility="Column"
+                              RowHeight="60"
+                              BorderThickness="0">
+
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="Час"
+                                                    Width="80"
+                                                    IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Border Background="#F5F5F5"
+                                                Padding="8,0">
+                                            <TextBlock Text="{Binding RowHeader}"
+                                                       FontWeight="SemiBold"
+                                                       FontSize="11"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"/>
+                                        </Border>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </ScrollViewer>
+            </Border>
+
+            <Border Background="{StaticResource CardBackground}"
+                    BorderBrush="#E0E8E8"
+                    BorderThickness="1"
+                    CornerRadius="10"
+                    Padding="60,40"
+                    IsVisible="{Binding !IsDoctorSelected}">
+                <StackPanel Spacing="15" HorizontalAlignment="Center">
+                    <ui:SymbolIcon Symbol="ContactInfo"
+                                   FontSize="64"
+                                   Foreground="{StaticResource LightTeal}"/>
+                    <TextBlock Text="Оберіть лікаря для перегляду графіка"
+                               FontSize="18"
+                               FontWeight="Medium"
+                               Foreground="{StaticResource DarkTeal}"
+                               HorizontalAlignment="Center"/>
+                    <TextBlock Text="Натисніть кнопку 'Вибрати лікаря' вгорі"
+                               FontSize="13"
+                               Foreground="{StaticResource LightTeal}"
+                               HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

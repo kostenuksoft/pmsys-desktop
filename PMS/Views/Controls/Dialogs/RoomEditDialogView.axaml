@@ -1,0 +1,161 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+             xmlns:vm="using:PMS.ViewModels.Dialogs"
+             xmlns:general="clr-namespace:PMS.Core.Enums.General"
+             x:Class="PMS.Views.Controls.Dialogs.RoomEditDialogView"
+             x:DataType="vm:RoomEditDialogViewModel"
+             MinWidth="450"
+             x:CompileBindings="True">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+        <StackPanel Spacing="16" Margin="0,0,0,20">
+
+            <!-- Room Number -->
+            <StackPanel Spacing="4">
+                <TextBlock Text="Номер кабінету *" 
+                           FontSize="12" 
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                <TextBox Text="{Binding RoomNumber}"
+                         Tag="101, 202, А-5..."
+                         MaxLength="10" />
+                <TextBlock Text="Вкажіть унікальний номер кабінету" 
+                           FontSize="10" 
+                           FontStyle="Italic"
+                           Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+            </StackPanel>
+
+            <!-- Room Information -->
+            <Border Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}"
+                    CornerRadius="8"
+                    Padding="16">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="Інформація про кабінет"
+                               FontWeight="SemiBold"
+                               FontSize="14" />
+
+                    <!-- Room Type -->
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="Тип кабінету *"
+                                   FontSize="12"
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                        <ComboBox SelectedItem="{Binding SelectedRoomType}"
+                                  HorizontalAlignment="Stretch">
+                            <general:RoomType>DoctorOffice</general:RoomType>
+                            <general:RoomType>Consultation</general:RoomType>
+                            <general:RoomType>Procedure</general:RoomType>
+                            <general:RoomType>PhysicalTherapy</general:RoomType>
+                            <general:RoomType>Diagnostic</general:RoomType>
+                            <general:RoomType>Vaccination</general:RoomType>
+                            <general:RoomType>Ultrasound</general:RoomType>
+                            <general:RoomType>Laboratory</general:RoomType>
+                            <general:RoomType>Reception</general:RoomType>
+                            <general:RoomType>Administrative</general:RoomType>
+                        </ComboBox>
+                    </StackPanel>
+
+                    <!-- Floor -->
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="Поверх *"
+                                   FontSize="12"
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                        <NumericUpDown Value="{Binding Floor}"
+                                       Minimum="-1"
+                                       Maximum="6"
+                                       Increment="1"
+                                       FormatString="0"
+                                       AllowSpin="True"
+                                       HorizontalAlignment="Stretch" />
+                        <TextBlock Text="-1 = підвал, 0 = партер, 1-6 = поверхи"
+                                   FontSize="10"
+                                   FontStyle="Italic"
+                                   Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+                    </StackPanel>
+
+                    <!-- Capacity -->
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="Місткість (кількість робочих місць) *" 
+                                   FontSize="12" 
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                        <NumericUpDown Value="{Binding Capacity}"
+                                       Minimum="1"
+                                       Maximum="50"
+                                       Increment="1"
+                                       FormatString="0"
+                                       AllowSpin="True"
+                                       HorizontalAlignment="Stretch" />
+                    </StackPanel>
+
+                </StackPanel>
+            </Border>
+
+            <!-- Equipment -->
+            <Border Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}"
+                    CornerRadius="8"
+                    Padding="16">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="Обладнання"
+                               FontWeight="SemiBold"
+                               FontSize="14" />
+
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="Обладнання (кожне з нового рядка)" 
+                                   FontSize="12" 
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                        <TextBox Text="{Binding EquipmentText}"
+                                 Watermark="ЕКГ&#x0a;Тонометр&#x0a;Стетоскоп..."
+                                 AcceptsReturn="True"
+                                 TextWrapping="Wrap"
+                                 Height="120"
+                                 VerticalContentAlignment="Top" />
+                        <TextBlock Text="Вказуйте кожен елемент обладнання з нового рядка" 
+                                   FontSize="10" 
+                                   FontStyle="Italic"
+                                   Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+                    </StackPanel>
+
+                </StackPanel>
+            </Border>
+
+            <!-- Active Status -->
+            <CheckBox IsChecked="{Binding IsActive}"
+                      Content="Активний кабінет"
+                      Margin="0,8,0,0" />
+
+            <!-- Required Fields Note -->
+            <Border Background="{DynamicResource SystemFillColorAttentionBackgroundBrush}"
+                    CornerRadius="4"
+                    Padding="12,8">
+                <TextBlock FontSize="11" 
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}">
+                    <Run Text="*" FontWeight="Bold" />
+                    <Run Text="— обов'язкові поля для заповнення" />
+                </TextBlock>
+            </Border>
+<!--
+            --><!-- Validation Errors Display --><!--
+            <ItemsControl ItemsSource="{Binding ValidationContext.Validations}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Background="{DynamicResource SystemFillColorCriticalBackgroundBrush}"
+                                CornerRadius="4"
+                                Padding="8,6"
+                                Margin="0,2">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <ui:SymbolIcon Symbol="Important" 
+                                               FontSize="14"
+                                               Foreground="{DynamicResource SystemFillColorCriticalBrush}" />
+                                <TextBlock Text="{Binding   }" 
+                                           FontSize="11"
+                                           TextWrapping="Wrap"
+                                           Foreground="{DynamicResource SystemFillColorCriticalBrush}" />
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>-->
+
+        </StackPanel>
+    </ScrollViewer>
+
+</UserControl>
+

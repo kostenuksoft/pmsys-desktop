@@ -1,0 +1,63 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:dialogs="clr-namespace:PMS.ViewModels.Dialogs"
+             mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="450"
+             x:Class="PMS.Core.Views.Dialogs.WizardDialogView"
+             x:DataType="dialogs:WizardDialogViewModel">
+    
+    <Grid RowDefinitions="Auto,*,Auto">
+        <!-- Header with Progress -->
+        <Border Grid.Row="0" 
+                Background="{DynamicResource CardBackgroundFillColorDefault}"
+                BorderBrush="{DynamicResource CardStrokeColorDefault}"
+                BorderThickness="0,0,0,1"
+                Padding="20,15">
+            <StackPanel Spacing="10">
+                <TextBlock Text="{Binding CurrentPage.Title}"
+                           Theme="{StaticResource SubtitleTextBlockStyle}"/>
+                <TextBlock Text="{Binding CurrentPage.Description}"
+                          IsVisible="{Binding CurrentPage.Description, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                          Foreground="{DynamicResource TextFillColorSecondary}"
+                          TextWrapping="Wrap"/>
+                <ProgressBar Value="{Binding CurrentPageIndex}"
+                            Maximum="{Binding PageCount}"
+                            Height="4"/>
+            </StackPanel>
+        </Border>
+        
+        <!-- Content Area -->
+        <ScrollViewer Grid.Row="1" 
+                     VerticalScrollBarVisibility="Auto"
+                     Padding="20">
+            <ContentPresenter Content="{Binding CurrentPage.Content}"/>
+        </ScrollViewer>
+        
+        <!-- Navigation Footer -->
+        <Border Grid.Row="2"
+                Background="{DynamicResource CardBackgroundFillColorDefault}"
+                BorderBrush="{DynamicResource CardStrokeColorDefault}"
+                BorderThickness="0,1,0,0"
+                Padding="20,15">
+            <Grid ColumnDefinitions="*,Auto,Auto,Auto">
+                <Button Grid.Column="1"
+                       Content="Back"
+                       Command="{Binding GoBackCommand}"
+                       IsEnabled="{Binding CanGoBack}"
+                       Margin="0,0,10,0"/>
+                
+                <Button Grid.Column="2"
+                       Content="Skip"
+                       Command="{Binding SkipCommand}"
+                       IsVisible="{Binding CurrentPage.AllowSkip}"
+                       Margin="0,0,10,0"/>
+                
+                <Button Grid.Column="3"
+                       Content="{Binding NextButtonText}"
+                       Command="{Binding GoNextCommand}"
+                       />
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

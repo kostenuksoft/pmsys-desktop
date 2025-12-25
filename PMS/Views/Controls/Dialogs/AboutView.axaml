@@ -1,0 +1,106 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:dialogs="clr-namespace:PMS.ViewModels.Dialogs"
+             mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="400"
+             x:Class="PMS.Views.Other.AboutView"
+             x:DataType="dialogs:AboutInfoViewModel">
+
+
+  <Grid RowDefinitions="Auto,Auto,Auto" MaxWidth="500" Background="#FEFEFE">
+
+    <Border Grid.Row="0" 
+            Padding="20,16" 
+            CornerRadius="8,8,0,0"
+      
+            Background="DarkSlateGray">
+
+            <StackPanel Spacing="10" HorizontalAlignment="Center">
+        <Grid HorizontalAlignment="Center" Height="45" Width="290">
+          <Border CornerRadius="8"
+                  BoxShadow="0 2 8 0 #50000000" Background="White"
+                  HorizontalAlignment="Left">
+            <Image Source="avares://PMS/Assets/fa.png" Width="64" Height="32" Margin="4"/>
+          </Border>
+          <Border CornerRadius="8"
+                  BoxShadow="0 2 8 0 #50000000" Background="White"
+                  HorizontalAlignment="Center">
+            <Image Source="avares://PMS/Assets/avlui.png" Width="128" Height="64" Margin="4"/>
+          </Border>
+
+            <Border CornerRadius="8"
+                    BoxShadow="0 2 8 0 #50000000" Background="White"
+                    HorizontalAlignment="Right">
+                <Image Source="avares://PMS/Assets/rui.png" Width="64" Height="32" Margin="4"/>
+            </Border>
+        </Grid>
+
+        <StackPanel Spacing="4">
+          <TextBlock Text="{Binding AppName}" FontSize="20" FontWeight="SemiBold"
+                     Foreground="White" HorizontalAlignment="Center" FontFamily="Segoe UI Variable"/>
+          <TextBlock Text="{Binding Version, StringFormat='ver. {0} '}" FontSize="11"
+                     Foreground="#B0CFCF" HorizontalAlignment="Center" FontFamily="Segoe UI Variable"/>
+        </StackPanel>
+      </StackPanel>
+    </Border>
+
+    <StackPanel Grid.Row="1" Spacing="12" Margin="20,16,20,20" >
+
+      <Border IsVisible="{Binding Description, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+              Background="#F5F8F8" CornerRadius="6" Padding="12"
+              BorderBrush="#E0E8E8" BorderThickness="1">
+        <TextBlock Text="{Binding Description}" TextWrapping="Wrap" FontSize="12"
+                   Foreground="#2F4F4F" LineHeight="18" FontFamily="Segoe UI Variable"/>
+      </Border>
+
+      <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="16" RowSpacing="10">
+
+        <StackPanel Grid.Column="0" Grid.Row="1" Spacing="4"
+                    IsVisible="{Binding GitHub, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+          <TextBlock Text="Ресурси" FontWeight="SemiBold" FontSize="11"
+                     Foreground="#3A5F5F" FontFamily="Segoe UI Variable"/>
+          <StackPanel Spacing="3">
+            <HyperlinkButton Content="GitHub" NavigateUri="{Binding GitHub}"
+                            Padding="0" FontSize="11" Foreground="#2F4F4F" FontFamily="Segoe UI Variable"/>
+            <HyperlinkButton Content="Avalonia" NavigateUri="{Binding Avalonia}"
+                            Padding="0" FontSize="11" Foreground="#2F4F4F" FontFamily="Segoe UI Variable"/>
+            <HyperlinkButton Content="FluentAvalonia" NavigateUri="{Binding FluentAvaloniaDocs}"
+                            Padding="0" FontSize="11" Foreground="#2F4F4F" FontFamily="Segoe UI Variable"/>
+
+            <HyperlinkButton Content="ReactiveUI" NavigateUri="{Binding FluentAvaloniaDocs}"
+                             Padding="0" FontSize="11" Foreground="#2F4F4F" FontFamily="Segoe UI Variable"/>
+          </StackPanel>
+        </StackPanel>
+
+        <ItemsControl Grid.Column="1" Grid.Row="1"
+                      ItemsSource="{Binding AdditionalInfo}"
+                      IsVisible="{Binding AdditionalInfo.Count, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+          <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+              <WrapPanel Orientation="Horizontal"/>
+            </ItemsPanelTemplate>
+          </ItemsControl.ItemsPanel>
+          <ItemsControl.ItemTemplate>
+            <DataTemplate>
+              <StackPanel Spacing="3" Margin="0,0,16,8" MaxWidth="220">
+                <TextBlock Text="{Binding Key}" FontWeight="SemiBold" FontSize="11"
+                           Foreground="#3A5F5F" FontFamily="Segoe UI Variable"/>
+                <TextBlock Text="{Binding Value}" TextWrapping="Wrap" Foreground="#5F7F7F"
+                           FontSize="11" LineHeight="16" FontFamily="Segoe UI Variable"/>
+              </StackPanel>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </Grid>
+
+    </StackPanel>
+
+    <Border Grid.Row="2" 
+            Padding="0,26" 
+            CornerRadius="0,0,8,8"
+            Background="DarkSlateGray"/>
+
+  </Grid>
+
+</UserControl>

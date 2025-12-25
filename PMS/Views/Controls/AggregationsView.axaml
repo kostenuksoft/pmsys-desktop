@@ -1,0 +1,408 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:PMS.ViewModels"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+             xmlns:converters1="clr-namespace:PMS.Core.Extensions.Converters"
+             x:Class="PMS.Views.Controls.AggregationsView"
+             x:DataType="vm:AggregationsViewModel"
+             x:CompileBindings="True">
+
+    <UserControl.Resources>
+        <converters1:IntToBoolConverter x:Key="IntToBoolConverter" />
+        
+        <SolidColorBrush x:Key="PrimaryTeal" Color="#3A5F5F"/>
+        <SolidColorBrush x:Key="DarkTeal" Color="#2F4F4F"/>
+        <SolidColorBrush x:Key="LightTeal" Color="#5F7F7F"/>
+        <SolidColorBrush x:Key="BorderTeal" Color="#4A6F6F"/>
+        <SolidColorBrush x:Key="BackgroundLight" Color="#F8FAFA"/>
+        <SolidColorBrush x:Key="CardBackground" Color="#FFFFFF"/>
+        
+        <LinearGradientBrush x:Key="HeaderGradient" StartPoint="0%,0%" EndPoint="0%,100%">
+            <GradientStop Color="#3A5F5F" Offset="0"/>
+            <GradientStop Color="#2F4F4F" Offset="1"/>
+        </LinearGradientBrush>
+    </UserControl.Resources>
+
+    <UserControl.Styles>
+        <Style Selector="TextBlock.section-title">
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Foreground" Value="{StaticResource DarkTeal}"/>
+            <Setter Property="Margin" Value="0,0,0,12"/>
+        </Style>
+
+        <Style Selector="Border.card-section">
+            <Setter Property="Background" Value="{StaticResource CardBackground}"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="BoxShadow" Value="0 2 8 0 #10000000"/>
+        </Style>
+    </UserControl.Styles>
+
+    <Grid RowDefinitions="Auto,*">
+        
+        <ui:CommandBar Grid.Row="0" 
+                       DefaultLabelPosition="Right"
+                       Background="{StaticResource HeaderGradient}"
+                       Foreground="White">
+            <ui:CommandBar.Styles>
+                <Style Selector="ui|CommandBarButton">
+                    <Setter Property="Foreground" Value="White" />
+                </Style>
+                <Style Selector="ui|CommandBarButton:pointerover">
+                    <Setter Property="Foreground" Value="White" />
+                </Style>
+            </ui:CommandBar.Styles>
+            
+            <ui:CommandBar.PrimaryCommands>
+                
+                <ui:CommandBarElementContainer>
+                    <StackPanel Orientation="Horizontal" Spacing="8" Margin="8,0">
+                        <ui:SymbolIcon Symbol="Library" 
+                                       FontSize="18" 
+                                       Foreground="White"
+                                       VerticalAlignment="Center" />
+                        <TextBlock Text="Колекція:"
+                                   FontSize="13"
+                                   FontWeight="Medium"
+                                   Foreground="White"
+                                   VerticalAlignment="Center" />
+                        <ComboBox ItemsSource="{Binding Collections}"
+                                  SelectedItem="{Binding SelectedCollection}"
+                                  Width="200"
+                                  PlaceholderText="Оберіть колекцію..."
+                                  VerticalAlignment="Center" />
+                    </StackPanel>
+                </ui:CommandBarElementContainer>
+
+                <ui:CommandBarSeparator />
+
+                <ui:CommandBarButton
+                    Label="Виконати"
+                    Command="{Binding ExecuteQueryCommand}"
+                    IconSource="Play"
+                    IsEnabled="{Binding !IsBusy}" />
+
+                <ui:CommandBarButton
+                    Label="Валідувати"
+                    Command="{Binding ValidatePipelineCommand}"
+                    IconSource="Accept"
+                    IsEnabled="{Binding !IsBusy}" />
+
+                <ui:CommandBarButton
+                    Label="Редагувати"
+                    Command="{Binding TogglePipelineEditCommand}"
+                    IconSource="Edit" />
+
+                <ui:CommandBarSeparator />
+
+                <ui:CommandBarButton
+                    Label="Очистити"
+                    Command="{Binding ClearCommand}"
+                    IconSource="Delete" />
+
+                <ui:CommandBarSeparator />
+
+                <ui:CommandBarButton
+                    Label="JSON"
+                    Command="{Binding ExportToJsonCommand}"
+                    IconSource="Document"
+                    IsEnabled="{Binding ResultsCount, Converter={StaticResource IntToBoolConverter}}" />
+
+                <ui:CommandBarButton
+                    Label="CSV"
+                    Command="{Binding ExportToCsvCommand}"
+                    IconSource="ContactInfo"
+                    IsEnabled="{Binding ResultsCount, Converter={StaticResource IntToBoolConverter}}" />
+
+            </ui:CommandBar.PrimaryCommands>
+        </ui:CommandBar>
+
+        <Grid Grid.Row="1" 
+              ColumnDefinitions="250,8,*,8,*"
+              Background="{StaticResource BackgroundLight}">
+
+            <Border Grid.Column="0" 
+                    Classes="card-section"
+                    Margin="12,12,0,12"
+                    Padding="16"
+                    MaxHeight="800"
+                    MinWidth="230">
+                <Grid RowDefinitions="Auto,Auto,*">
+
+                    <StackPanel Grid.Row="0" Spacing="8" Margin="0,0,0,16">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <ui:SymbolIcon Symbol="Library" 
+                                           FontSize="20" 
+                                           Foreground="{StaticResource PrimaryTeal}" />
+                            <TextBlock Text="Шаблони запитів"
+                                       Classes="section-title"
+                                       Margin="0" />
+                        </StackPanel>
+                        <TextBlock Text="Оберіть готовий запит"
+                                   FontSize="12"
+                                   Foreground="{StaticResource LightTeal}"
+                                   TextWrapping="Wrap" />
+                    </StackPanel>
+
+                    <Border Grid.Row="1"
+                            Background="{StaticResource PrimaryTeal}"
+                            CornerRadius="6"
+                            Padding="10,6"
+                            Margin="0,0,0,16">
+                        <TextBlock HorizontalAlignment="Center"
+                                   FontSize="13"
+                                   Foreground="White"
+                                   FontWeight="SemiBold">
+                            <Run Text="Доступно: " />
+                            <Run Text="{Binding FilteredTemplates.Count}"
+                                 FontWeight="Bold" />
+                        </TextBlock>
+                    </Border>
+
+                    <ScrollViewer Grid.Row="2" 
+                                  VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Disabled"
+                                  MaxHeight="650">
+                        <ItemsControl ItemsSource="{Binding FilteredTemplates}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Button HorizontalAlignment="Stretch"
+                                            HorizontalContentAlignment="Stretch"
+                                            Margin="0,0,0,10"
+                                            Padding="12"
+                                            Background="Transparent"
+                                            BorderBrush="{StaticResource BorderTeal}"
+                                            BorderThickness="1"
+                                            CornerRadius="6"
+                                            Command="{Binding $parent[ItemsControl].((vm:AggregationsViewModel)DataContext).SelectTemplateCommand}"
+                                            CommandParameter="{Binding}">
+                                        <Button.Styles>
+                                            <Style Selector="Button:pointerover">
+                                                <Setter Property="Background" Value="{StaticResource BackgroundLight}" />
+                                                <Setter Property="BorderBrush" Value="{StaticResource PrimaryTeal}" />
+                                            </Style>
+                                            <Style Selector="Button:pressed">
+                                                <Setter Property="Background" Value="{StaticResource LightTeal}" />
+                                            </Style>
+                                        </Button.Styles>
+
+                                        <Grid RowDefinitions="Auto,Auto,Auto">
+                                            <Border Grid.Row="0"
+                                                    Background="{StaticResource PrimaryTeal}"
+                                                    CornerRadius="4"
+                                                    Padding="8,3"
+                                                    HorizontalAlignment="Left"
+                                                    Margin="0,0,0,8">
+                                                <TextBlock Text="{Binding Category}"
+                                                           FontSize="10"
+                                                           Foreground="White"
+                                                           FontWeight="SemiBold" />
+                                            </Border>
+
+                                            <TextBlock Grid.Row="1"
+                                                       Text="{Binding Name}"
+                                                       FontSize="13"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="{StaticResource DarkTeal}"
+                                                       TextWrapping="Wrap"
+                                                       Margin="0,0,0,6" />
+
+                                            <TextBlock Grid.Row="2"
+                                                       Text="{Binding Description}"
+                                                       FontSize="11"
+                                                       Foreground="{StaticResource LightTeal}"
+                                                       TextWrapping="Wrap"
+                                                       MaxLines="2" />
+                                        </Grid>
+                                    </Button>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+
+                </Grid>
+            </Border>
+
+            <GridSplitter Grid.Column="1" 
+                          Width="0"
+                          CornerRadius="50"
+                          Height="700"
+                          Margin="5"
+                          Background="{StaticResource BorderTeal}"
+                          ResizeDirection="Columns" />
+
+            <Border Grid.Column="2" 
+                    Classes="card-section"
+                    Margin="0,12,0,12"
+                    Padding="0"
+                    MaxHeight="800">
+                <Grid RowDefinitions="Auto,*">
+
+                    <Border Grid.Row="0"
+                            Background="{StaticResource HeaderGradient}"
+                            CornerRadius="8,8,0,0"
+                            Height="48"
+                            Padding="16,12">
+                        <Grid ColumnDefinitions="Auto,*,Auto">
+                            <StackPanel Grid.Column="0" 
+                                        Orientation="Horizontal" 
+                                        Spacing="10">
+                                <ui:SymbolIcon Symbol="Code" 
+                                               FontSize="18" 
+                                               Foreground="White" />
+                                <TextBlock Text="Pipeline"
+                                           FontSize="14"
+                                           FontWeight="SemiBold"
+                                           Foreground="White"
+                                           VerticalAlignment="Center" />
+                            </StackPanel>
+
+                            <TextBlock Grid.Column="1"
+                                       Text="{Binding SelectedTemplate.Name, StringFormat='({0})'}"
+                                       FontSize="12"
+                                       Foreground="#E0E8E8"
+                                       VerticalAlignment="Center"
+                                       Margin="12,0,0,0"
+                                       IsVisible="{Binding SelectedTemplate, Converter={x:Static ObjectConverters.IsNotNull}}" />
+
+                            <Border Grid.Column="2" 
+                                    Background="#5F9EA0"
+                                    CornerRadius="12"
+                                    Padding="10,4"
+                                    IsVisible="{Binding IsPipelineEditable}">
+                                <TextBlock Text="Редагування"
+                                           FontSize="11"
+                                           Foreground="White"
+                                           FontWeight="SemiBold" />
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    <ScrollViewer Grid.Row="1"
+                                  HorizontalScrollBarVisibility="Auto"
+                                  VerticalScrollBarVisibility="Auto"
+                                  Background="{StaticResource CardBackground}"
+                                  Padding="16"
+                                  MaxHeight="720">
+                        <TextBox Text="{Binding PipelineJson}"
+                                 AcceptsReturn="True"
+                                 IsReadOnly="{Binding !IsPipelineEditable}"
+                                 FontFamily="Consolas, Courier New"
+                                 FontSize="12"
+                                 TextWrapping="NoWrap"
+                                 BorderThickness="0"
+                                 Background="Transparent"
+                                 Watermark="Оберіть шаблон або введіть власний pipeline..." />
+                    </ScrollViewer>
+
+                </Grid>
+            </Border>
+
+            <GridSplitter Grid.Column="3" 
+                          Width="0"
+                          CornerRadius="50"
+                          Margin="5"
+                          Height="700"
+                          Background="{StaticResource BorderTeal}"
+                          ResizeDirection="Columns" />
+
+            <Border Grid.Column="4" 
+                    Classes="card-section"
+                    Margin="0,12,12,12"
+                    Padding="0"
+                    MaxHeight="800">
+                <Grid RowDefinitions="Auto,*">
+
+                    <Border Grid.Row="0"
+                            Background="{StaticResource HeaderGradient}"
+                            CornerRadius="8,8,0,0"
+                            Padding="16,12">
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                            <ui:SymbolIcon Symbol="Page" 
+                                           FontSize="18" 
+                                           Foreground="White" />
+                            <TextBlock Text="Результати"
+                                       FontSize="14"
+                                       FontWeight="SemiBold"
+                                       Foreground="White"
+                                       VerticalAlignment="Center" />
+                            <Border Background="#5F9EA0"
+                                    CornerRadius="12"
+                                    Padding="8,3"
+                                    IsVisible="{Binding ResultsCount, Converter={StaticResource IntToBoolConverter}}">
+                                <TextBlock Text="{Binding ResultsCount}"
+                                           FontSize="11"
+                                           Foreground="White"
+                                           FontWeight="Bold" />
+                            </Border>
+                        </StackPanel>
+                    </Border>
+
+                    <ui:TabView Grid.Row="1"
+                                TabWidthMode="Equal"
+                                CanDragTabs="False"
+                                CanReorderTabs="True"
+                                IsAddTabButtonVisible="False"
+                                Background="{StaticResource CardBackground}"
+                                MaxHeight="720">
+
+                        <ui:TabViewItem Header="Таблиця" IsClosable="False" IsVisible="False">
+                            <ui:TabViewItem.IconSource>
+                                <ui:SymbolIconSource Symbol="List" />
+                            </ui:TabViewItem.IconSource>
+                            
+                            <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                                          VerticalScrollBarVisibility="Auto"
+                                          Background="{StaticResource CardBackground}"
+                                          Padding="12"
+                                          MaxHeight="660">
+                                <DataGrid ItemsSource="{Binding Results}"
+                                          AutoGenerateColumns="True"
+                                          IsReadOnly="True"
+                                          GridLinesVisibility="All"
+                                          CanUserReorderColumns="True"
+                                          CanUserResizeColumns="True"
+                                          CanUserSortColumns="True"
+                                          SelectionMode="Extended"
+                                          HorizontalScrollBarVisibility="Visible"
+                                          VerticalScrollBarVisibility="Visible"
+                                          ColumnWidth="Auto"
+                                          MinColumnWidth="120"
+                                          MaxColumnWidth="400"
+                                          HeadersVisibility="Column">
+                                    <DataGrid.Columns>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </ScrollViewer>
+                        </ui:TabViewItem>
+
+                        <ui:TabViewItem Header="JSON" IsClosable="False">
+                            <ui:TabViewItem.IconSource>
+                                <ui:SymbolIconSource Symbol="Code" />
+                            </ui:TabViewItem.IconSource>
+                            
+                            <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                                          VerticalScrollBarVisibility="Auto"
+                                          Background="{StaticResource CardBackground}"
+                                          Padding="16"
+                                          MaxHeight="660">
+                                <TextBox Text="{Binding ResultsJson}"
+                                         AcceptsReturn="True"
+                                         IsReadOnly="True"
+                                         FontFamily="Consolas, Courier New"
+                                         FontSize="12"
+                                         TextWrapping="Wrap"
+                                         BorderThickness="0"
+                                         Background="Transparent"
+                                         Watermark="Результати відобразяться тут після виконання..." />
+                            </ScrollViewer>
+                        </ui:TabViewItem>
+
+                    </ui:TabView>
+
+                </Grid>
+            </Border>
+        </Grid>
+
+    </Grid>
+</UserControl>

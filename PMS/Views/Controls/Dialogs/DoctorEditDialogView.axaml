@@ -1,0 +1,303 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+             xmlns:vm="using:PMS.ViewModels.Dialogs"
+             x:Class="PMS.Views.Controls.Dialogs.DoctorEditDialogView"
+             x:DataType="vm:DoctorEditDialogViewModel"
+             MinWidth="450"
+             x:CompileBindings="True">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+        <StackPanel Spacing="16" Margin="0,0,0,20">
+
+            <!-- Employee Number -->
+            <StackPanel Spacing="4">
+                <TextBlock Text="Табельний номер *" 
+                           FontSize="12" 
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                <TextBox Text="{Binding EmployeeNumber}"
+                         Watermark="D00001"
+                         MaxLength="6"
+                         IsReadOnly="True" />
+                <TextBlock Text="Формат: D00001 (автоматично генерується)" 
+                           FontSize="10" 
+                           FontStyle="Italic"
+                           Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+            </StackPanel>
+
+            <!-- Personal Information -->
+            <Border Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}"
+                    CornerRadius="8"
+                    Padding="16">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="Основні дані"
+                               FontWeight="SemiBold"
+                               FontSize="14" />
+
+                    <!-- Full Name -->
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="Прізвище Ім'я По батькові *" 
+                                   FontSize="12" 
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                        <TextBox Text="{Binding FullName}"
+                                 Watermark="Іванов Іван Іванович"
+                                 MaxLength="200" />
+                    </StackPanel>
+
+                    <!-- Date of Birth -->
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="Дата народження" 
+                                   FontSize="12" 
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                        <CalendarDatePicker SelectedDate="{Binding BirthDate}"
+                                            HorizontalAlignment="Stretch" />
+                    </StackPanel>
+
+                    <!-- Phone -->
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="Телефон *" 
+                                   FontSize="12" 
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                        <TextBox Text="{Binding Phone}"
+                                 Watermark="+380501234567"
+                                 MaxLength="20" />
+                    </StackPanel>
+
+                    <!-- Email -->
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="Email" 
+                                   FontSize="12" 
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                        <TextBox Text="{Binding Email}"
+                                 Watermark="doctor@clinic.com"
+                                 MaxLength="100" />
+                    </StackPanel>
+
+                </StackPanel>
+            </Border>
+
+            <!-- Professional Information -->
+            <Border Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}"
+                    CornerRadius="8"
+                    Padding="16">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="Професійні дані"
+                               FontWeight="SemiBold"
+                               FontSize="14" />
+
+                    <!-- Specialty -->
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="Спеціальність *" 
+                                   FontSize="12" 
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                        <ComboBox SelectedItem="{Binding SelectedSpecialty}"
+                                  ItemsSource="{Binding AvailableSpecialties}"
+                                  HorizontalAlignment="Stretch"
+                                  PlaceholderText="Оберіть спеціальність...">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Spacing="2">
+                                        <TextBlock Text="{Binding Name}" FontWeight="SemiBold" />
+                                        <TextBlock Text="{Binding Code}" 
+                                                   FontSize="10"
+                                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </StackPanel>
+
+                    <!-- Category -->
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="Категорія" 
+                                   FontSize="12" 
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                        <ComboBox SelectedItem="{Binding SelectedCategory}"
+                                  ItemsSource="{Binding DoctorCategories}"
+                                  HorizontalAlignment="Stretch" />
+                    </StackPanel>
+
+                    <!-- Hire Date -->
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="Дата прийняття на роботу *" 
+                                   FontSize="12" 
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                        <CalendarDatePicker SelectedDate="{Binding HireDate}"
+                                            HorizontalAlignment="Stretch" />
+                    </StackPanel>
+
+                    <!-- Experience Years -->
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="Років досвіду" 
+                                   FontSize="12" 
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                        <NumericUpDown Value="{Binding ExperienceYears}"
+                                       Minimum="0"
+                                       Maximum="50"
+                                       Increment="1"
+                                       FormatString="0"
+                                       AllowSpin="True"
+                                       HorizontalAlignment="Stretch" />
+                    </StackPanel>
+
+                    <!-- Room -->
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="Кабінет" 
+                                   FontSize="12" 
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                        <ComboBox SelectedItem="{Binding SelectedRoom}"
+                                  ItemsSource="{Binding AvailableRooms}"
+                                  HorizontalAlignment="Stretch"
+                                  PlaceholderText="Оберіть кабінет...">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Spacing="2">
+                                        <TextBlock Text="{Binding RoomNumber}" FontWeight="SemiBold" />
+                                        <TextBlock Text="{Binding RoomType}" 
+                                                   FontSize="10"
+                                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </StackPanel>
+
+                </StackPanel>
+            </Border>
+
+            <!-- District Doctor Information -->
+            <Border Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}"
+                    CornerRadius="8"
+                    Padding="16">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="Дільничний лікар"
+                               FontWeight="SemiBold"
+                               FontSize="14" />
+
+                    <!-- Is District Doctor Checkbox -->
+                    <CheckBox IsChecked="{Binding IsDistrictDoctor}"
+                              Content="Дільничний лікар" />
+
+                    <!-- District Area (visible only if IsDistrictDoctor) -->
+                    <StackPanel Spacing="4" IsVisible="{Binding IsDistrictDoctor}">
+                        <TextBlock Text="Дільнична територія *" 
+                                   FontSize="12" 
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                        <TextBox Text="{Binding DistrictArea}"
+                                 Watermark="вул. Шевченка 1-50, вул. Франка 1-30..."
+                                 MaxLength="200"
+                                 AcceptsReturn="True"
+                                 TextWrapping="Wrap"
+                                 Height="60" />
+                        <TextBlock Text=" Вкажіть територію обслуговування" 
+                                   FontSize="10" 
+                                   FontStyle="Italic"
+                                   Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+                    </StackPanel>
+
+                </StackPanel>
+            </Border>
+
+            <!-- Certifications -->
+            <Border Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}"
+                    CornerRadius="8"
+                    Padding="16">
+                <StackPanel Spacing="12">
+                    <Grid ColumnDefinitions="*,Auto,Auto">
+                        <TextBlock Grid.Column="0"
+                                   Text="Сертифікати"
+                                   FontWeight="SemiBold"
+                                   FontSize="14"
+                                   VerticalAlignment="Center" />
+                        <Button Grid.Column="1"
+                                Content="Додати"
+                                Command="{Binding AddCertificationCommand}"
+                                Padding="10,6"
+                                FontSize="11"
+                                Margin="0,0,8,0" />
+                        <Button Grid.Column="2"
+                                Content="Видалити"
+                                Command="{Binding RemoveCertificationCommand}"
+                                Padding="10,6"
+                                FontSize="11" />
+                    </Grid>
+
+                    <Border BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                            BorderThickness="1"
+                            CornerRadius="4"
+                            MinHeight="100"
+                            MaxHeight="200">
+                        <ListBox ItemsSource="{Binding Certifications}"
+                                 SelectedItem="{Binding SelectedCertification}"
+                                 Background="Transparent">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                                            CornerRadius="4">
+                                        <StackPanel Spacing="4">
+                                            <TextBlock Text="{Binding Name}" 
+                                                       FontWeight="SemiBold"
+                                                       FontSize="12" />
+                                            <TextBlock FontSize="11" 
+                                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}">
+                                                <Run Text="Видано:" />
+                                                <Run Text="{Binding IssueDate, StringFormat='dd.MM.yyyy'}" FontWeight="SemiBold" />
+                                                <Run Text=" • Діє до:" />
+                                                <Run Text="{Binding ExpiryDate, StringFormat='dd.MM.yyyy'}" FontWeight="SemiBold" />
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Border>
+
+                    <TextBlock Text=" Додайте всі професійні сертифікати лікаря" 
+                               FontSize="10" 
+                               FontStyle="Italic"
+                               Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+
+                </StackPanel>
+            </Border>
+
+            <!-- Active Status -->
+            <CheckBox IsChecked="{Binding IsActive}"
+                      Content="Активний лікар"
+                      Margin="0,8,0,0" />
+
+            <!-- Required Fields Note -->
+            <Border Background="{DynamicResource SystemFillColorAttentionBackgroundBrush}"
+                    CornerRadius="4"
+                    Padding="12,8">
+                <TextBlock FontSize="11" 
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}">
+                    <Run Text="*" FontWeight="Bold" />
+                    <Run Text="— обов'язкові поля для заповнення" />
+                </TextBlock>
+            </Border>
+
+            <!-- Validation Errors Display -->
+            <ItemsControl ItemsSource="{Binding ValidationContext.Validations}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Background="{DynamicResource SystemFillColorCriticalBackgroundBrush}"
+                                CornerRadius="4"
+                                Padding="8,6"
+                                Margin="0,2">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <ui:SymbolIcon Symbol="Important" 
+                                               FontSize="14"
+                                               Foreground="{DynamicResource SystemFillColorCriticalBrush}" />
+                       <!--         <TextBlock Text="{Binding  }" 
+                                           FontSize="11"
+                                           TextWrapping="Wrap"
+                                           Foreground="{DynamicResource SystemFillColorCriticalBrush}" />-->
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+        </StackPanel>
+    </ScrollViewer>
+
+</UserControl>

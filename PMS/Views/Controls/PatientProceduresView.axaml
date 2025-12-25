@@ -1,0 +1,300 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:PMS.ViewModels"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+             mc:Ignorable="d" d:DesignWidth="1400" d:DesignHeight="800"
+             x:Class="PMS.Views.Controls.PatientProceduresView"
+             x:DataType="vm:PatientProceduresViewModel"
+             x:CompileBindings="True">
+
+    <Grid RowDefinitions="Auto,Auto,*">
+
+        <Grid Grid.Row="0" RowDefinitions="Auto,Auto">
+            <Grid Grid.Row="0" ColumnDefinitions="Auto,Auto" HorizontalAlignment="Center">
+                <ui:SymbolIcon
+                    Symbol="Find"
+                    FontSize="25"
+                    Margin="10,0"
+                    VerticalAlignment="Center" />
+                <TextBox Grid.Column="1"
+                         Tag="Пошук за пацієнтом, процедурою, лікарем..."
+                         Foreground="Black"
+                         MinWidth="500"
+                         MaxWidth="500"
+                         Text="{Binding SearchText}"
+                         Margin="0,10,0,12"
+                         Name="SearchBox" />
+            </Grid>
+
+            <StackPanel Grid.Row="1"
+                        Orientation="Horizontal"
+                        Spacing="12"
+                        HorizontalAlignment="Center"
+                        Margin="0,0,0,12">
+
+                <StackPanel Spacing="4">
+                    <TextBlock Text="Статус процедури" 
+                               FontSize="11" 
+                               Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    <ComboBox MinWidth="140"
+                              ItemsSource="{Binding StatusFilterOptions}"
+                              SelectedItem="{Binding StatusFilter}"
+                              HorizontalAlignment="Stretch">
+                    </ComboBox>
+                </StackPanel>
+
+                <StackPanel Spacing="4">
+                    <TextBlock Text="Фільтр за пацієнтом" 
+                               FontSize="11" 
+                               Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    <TextBox MinWidth="180"
+                             Text="{Binding PatientFilter}"
+                             Watermark="Ім'я пацієнта..."
+                             HorizontalAlignment="Stretch" />
+                </StackPanel>
+
+                <StackPanel Spacing="4">
+                    <TextBlock Text="Фільтр за лікарем" 
+                               FontSize="11" 
+                               Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    <TextBox MinWidth="180"
+                             Text="{Binding DoctorFilter}"
+                             Watermark="Ім'я лікаря..."
+                             HorizontalAlignment="Stretch" />
+                </StackPanel>
+
+                <StackPanel Spacing="4">
+                    <TextBlock Text="Період" 
+                               FontSize="11" 
+                               Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    <Button Command="{Binding SelectDateRangeCommand}"
+                            MinWidth="200"
+                            HorizontalContentAlignment="Left"
+                            ToolTip.Tip="Натисніть для вибору діапазону дат">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <ui:SymbolIcon Symbol="Calendar" FontSize="14" />
+                            <TextBlock Text="{Binding DateRangeDisplay}" 
+                                       VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Row="1" ColumnDefinitions="*,Auto,Auto">
+
+            <ui:CommandBar DefaultLabelPosition="Right"
+                           Margin="8" Background="#FAFAFA">
+                <ui:CommandBar.PrimaryCommands>
+                    <ui:CommandBarButton
+                        Label="Додати процедуру"
+                        Command="{Binding AddPatientProcedureCommand}"
+                        IconSource="Add" />
+
+                    <ui:CommandBarButton 
+                        Label="Редагувати"
+                        Command="{Binding EditPatientProcedureCommand}"
+                        CommandParameter="{Binding SelectedPatientProcedure}"
+                        IconSource="Edit"
+                        IsEnabled="{Binding SelectedPatientProcedure, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+
+                    <ui:CommandBarButton 
+                        Label="Видалити"
+                        Command="{Binding DeletePatientProcedureCommand}"
+                        CommandParameter="{Binding SelectedPatientProcedure}"
+                        IconSource="Delete"
+                        IsEnabled="{Binding SelectedPatientProcedure, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+
+                    <ui:CommandBarSeparator />
+                    
+                    <ui:CommandBarButton
+                        Label="Оновити"
+                        Command="{Binding RefreshCommand}"
+                        IconSource="Refresh" />
+                </ui:CommandBar.PrimaryCommands>
+
+                <ui:CommandBar.SecondaryCommands>
+                    <ui:CommandBarButton 
+                        Label="Експорт у JSON"
+                        Command="{Binding ExportToJsonCommand}"
+                        IconSource="Document" />
+                    <ui:CommandBarButton 
+                        Label="Експорт у CSV"
+                        Command="{Binding ExportToCsvCommand}"
+                        IconSource="ContactInfo" />
+                    <ui:CommandBarButton 
+                        Label="Експорт у Excel"
+                        Command="{Binding ExportToExcelCommand}"
+                        IconSource="Page" />
+                </ui:CommandBar.SecondaryCommands>
+            </ui:CommandBar>
+
+            <Button Grid.Column="1"
+                    Command="{Binding ClearFiltersCommand}"
+                    VerticalAlignment="Center"
+                    Margin="0,8,8,8"
+                    ToolTip.Tip="Очистити всі фільтри">
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                    <ui:SymbolIcon Symbol="Clear" FontSize="14" />
+                    <TextBlock Text="Очистити фільтри" FontSize="12" />
+                </StackPanel>
+            </Button>
+
+            <StackPanel Grid.Column="2"
+                        Orientation="Horizontal"
+                        Spacing="6"
+                        VerticalAlignment="Center"
+                        Margin="0,8,25,8">
+                <Button Command="{Binding PrevPageCommand}"
+                        Padding="8,5"
+                        MinWidth="32"
+                        ToolTip.Tip="Попередня сторінка">
+                    <ui:SymbolIcon Symbol="ChevronLeft" FontSize="12" />
+                </Button>
+
+                <Border Background="{DynamicResource SubtleFillColorSecondaryBrush}"
+                        CornerRadius="4"
+                        Padding="10,5"
+                        MinWidth="60"
+                        VerticalAlignment="Center">
+                    <TextBlock VerticalAlignment="Center"
+                               FontSize="12"
+                               HorizontalAlignment="Center">
+                        <Run Text="{Binding CurrentPage}" FontWeight="SemiBold" />
+                        <Run Text="/" />
+                        <Run Text="{Binding TotalPages}" />
+                    </TextBlock>
+                </Border>
+
+                <Button Command="{Binding NextPageCommand}"
+                        Padding="8,5"
+                        MinWidth="32"
+                        ToolTip.Tip="Наступна сторінка">
+                    <ui:SymbolIcon Symbol="ChevronRight" FontSize="12" />
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Row="2" Margin="8,0,8,8">
+
+            <Border BorderThickness="1"
+                    BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                    CornerRadius="4"
+                    ClipToBounds="True">
+                <DataGrid Name="PatientProceduresGrid"
+                          ItemsSource="{Binding PatientProcedures}"
+                          SelectedItem="{Binding SelectedPatientProcedure}"
+                          AutoGenerateColumns="False"
+                          IsReadOnly="True"
+                          GridLinesVisibility="Horizontal"
+                          CanUserReorderColumns="True"
+                          CanUserResizeColumns="True"
+                          CanUserSortColumns="True"
+                          SelectionMode="Single"
+                          HorizontalScrollBarVisibility="Auto"
+                          VerticalScrollBarVisibility="Auto">
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Пацієнт" 
+                                            Binding="{Binding PatientName}" 
+                                            Width="Auto"
+                                            CanUserSort="True"/>
+
+                        <DataGridTextColumn Header="Мед.картка" 
+                                            Binding="{Binding PatientMedicalRecordNumber}" 
+                                            Width="Auto"
+                                            CanUserSort="True"/>
+
+                        <DataGridTextColumn Header="Процедура" 
+                                            Binding="{Binding ProcedureName}" 
+                                            Width="Auto"
+                                            CanUserSort="True"/>
+
+                        <DataGridTextColumn Header="Код" 
+                                            Binding="{Binding ProcedureCode}" 
+                                            Width="Auto"
+                                            CanUserSort="True"/>
+
+                        <DataGridTextColumn Header="Вартість" 
+                                            Binding="{Binding CostDisplay}" 
+                                            Width="Auto"
+                                            CanUserSort="True"/>
+                        <DataGridTextColumn Header="Призначив" 
+                                            Binding="{Binding PrescribedByName}" 
+                                            Width="Auto"
+                                            CanUserSort="True"/>
+
+                        <DataGridTextColumn Header="Дата призначення" 
+                                            Binding="{Binding PrescribedDateDisplay}" 
+                                            Width="Auto"
+                                            CanUserSort="True"/>
+
+                        <DataGridTextColumn Header="Виконав" 
+                                            Binding="{Binding PerformedByName}" 
+                                            Width="Auto"
+                                            CanUserSort="True"/>
+
+                        <DataGridTextColumn Header="Дата виконання" 
+                                            Binding="{Binding PerformedDateDisplay}" 
+                                            Width="Auto"
+                                            CanUserSort="True"/>
+
+                        <DataGridTextColumn Header="Кабінет" 
+                                            Binding="{Binding RoomNumber}" 
+                                            Width="Auto"
+                                            CanUserSort="True"/>
+
+                        <DataGridTemplateColumn Header="Статус" Width="Auto" CanUserSort="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Border CornerRadius="4" 
+                                            Padding="8,4" 
+                                            HorizontalAlignment="Center">
+                                        <!--<Border.Background >
+                                            <SolidColorBrush>
+                                                <SolidColorBrush.Color>
+                                                    <MultiBinding Converter="{StaticResource ProcedureStatusToColorConverter}">
+                                                        <Binding Path="Status"/>
+                                                    </MultiBinding>
+                                                </SolidColorBrush.Color>
+                                            </SolidColorBrush>
+                                        </Border.Background>-->
+                                        <TextBlock Text="{Binding StatusDisplay}" 
+                                                   FontSize="12"
+                                                   FontWeight="Medium"
+                                                   HorizontalAlignment="Center"/>
+                                    </Border>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTemplateColumn Header="Дії" Width="Auto">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" Spacing="4" HorizontalAlignment="Center">
+                                        <Button Classes="WButton"
+                                                Command="{Binding $parent[DataGrid].((vm:PatientProceduresViewModel)DataContext).EditPatientProcedureCommand}"
+                                                CommandParameter="{Binding}"
+                                                ToolTip.Tip="Редагувати">
+                                            <ui:SymbolIcon Symbol="Edit" FontSize="14"/>
+                                        </Button>
+                                        <Button Classes="WButton danger"
+                                                Command="{Binding $parent[DataGrid].((vm:PatientProceduresViewModel)DataContext).DeletePatientProcedureCommand}"
+                                                CommandParameter="{Binding}"
+                                                ToolTip.Tip="Видалити">
+                                            <ui:SymbolIcon Symbol="Delete" FontSize="14"/>
+                                        </Button>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
+        </Grid>
+
+    </Grid>
+</UserControl>

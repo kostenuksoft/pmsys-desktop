@@ -1,0 +1,405 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:PMS.ViewModels"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+             xmlns:system="clr-namespace:System;assembly=System.Runtime"
+             x:Class="PMS.Views.Controls.AppointmentFormView"
+             x:DataType="vm:AppointmentFormViewModel"
+             HorizontalAlignment="Stretch"
+             VerticalAlignment="Stretch">
+
+    <UserControl.Styles>
+        <Style Selector="TextBlock.section-title">
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#2F4F4F"/>
+        </Style>
+
+        <Style Selector="TextBlock.field-label">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Foreground" Value="#4A6F6F"/>
+            <Setter Property="Margin" Value="0,0,0,4"/>
+        </Style>
+
+        <Style Selector="Border.form-section">
+            <Setter Property="Background" Value="#FAFAFA"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="Margin" Value="0,0,0,16"/>
+        </Style>
+
+        <!-- Time slot item styles -->
+        <Style Selector="ListBoxItem.time-slot">
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="Margin" Value="0,0,0,4"/>
+        </Style>
+
+        <Style Selector="ListBoxItem.time-slot:disabled">
+            <Setter Property="Opacity" Value="0.5"/>
+        </Style>
+    </UserControl.Styles>
+
+    <Grid RowDefinitions="Auto,*,Auto"
+          HorizontalAlignment="Stretch"
+          VerticalAlignment="Stretch">
+        <!-- Header -->
+        <Border Grid.Row="0"
+                Background="{DynamicResource WindowGradient}"
+                Padding="24,16"
+                CornerRadius="8,8,0,0">
+            <Grid ColumnDefinitions="Auto,*,Auto">
+                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="12">
+                    <ui:SymbolIcon Symbol="New" FontSize="24" />
+                    <TextBlock Text="Новий запис на прийом"
+                               FontSize="18"
+                               FontWeight="SemiBold"
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Content -->
+        <ScrollViewer Grid.Row="1" Padding="24">
+            <StackPanel Spacing="0" MaxWidth="1100">
+
+                <!-- Patient Section -->
+                <Border Classes="form-section">
+                    <StackPanel Spacing="14">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <ui:SymbolIcon Symbol="Contact" FontSize="16" Foreground="#5F9EA0"/>
+                            <TextBlock Classes="section-title" Text="Пацієнт" Margin="0"/>
+                        </StackPanel>
+
+                        <Grid ColumnDefinitions="*,Auto">
+                            <StackPanel Grid.Column="0" Spacing="6">
+                                <TextBlock Classes="field-label" Text="Оберіть пацієнта *"/>
+                                <TextBox Text="{Binding SelectedPatient.FullName, Mode=OneWay}"
+                                         Watermark="Пошук пацієнта..."
+                                         IsReadOnly="True"
+                                         Height="36"/>
+                            </StackPanel>
+
+                            <Button Grid.Column="1"
+                                    Content="Пошук"
+                                    Command="{Binding SearchPatientCommand}"
+                                    VerticalAlignment="Bottom"
+                                    Classes="WButton"
+                                    Height="36"
+                                    Margin="12,0,0,0"
+                                    MinWidth="100"/>
+                        </Grid>
+
+                        <!-- Patient Info Display -->
+                        <Border Background="#F0F8F8"
+                                BorderBrush="#5F9EA0"
+                                BorderThickness="1"
+                                CornerRadius="4"
+                                Padding="12"
+                                IsVisible="{Binding SelectedPatient, Converter={x:Static ObjectConverters.IsNotNull}}">
+                            <Grid ColumnDefinitions="Auto,Auto,*,Auto,Auto,*" RowDefinitions="Auto" ColumnSpacing="8">
+                                <ui:SymbolIcon Grid.Column="0" Symbol="Contact" FontSize="14" Foreground="#5F9EA0"/>
+                                <TextBlock Grid.Column="1" Text="Медична картка:" FontWeight="Medium" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="2" Text="{Binding SelectedPatient.MedicalRecordNumber}" VerticalAlignment="Center"/>
+                                
+                                <ui:SymbolIcon Grid.Column="3" Symbol="Phone" FontSize="14" Foreground="#5F9EA0" Margin="12,0,0,0"/>
+                                <TextBlock Grid.Column="4" Text="Телефон:" FontWeight="Medium" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="5" Text="{Binding SelectedPatient.Phone}" VerticalAlignment="Center"/>
+                            </Grid>
+                        </Border>
+                    </StackPanel>
+                </Border>
+
+                <!-- Doctor Selection Section -->
+                <Border Classes="form-section">
+                    <StackPanel Spacing="14">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <ui:SymbolIcon Symbol="Contact2" FontSize="16" Foreground="#5F9EA0"/>
+                            <TextBlock Classes="section-title" Text="Вибір лікаря" Margin="0"/>
+                        </StackPanel>
+
+                        <Grid ColumnDefinitions="*,16,*" RowDefinitions="Auto,Auto">
+                            <!-- Specialty -->
+                            <StackPanel Grid.Column="0" Spacing="6">
+                                <TextBlock Classes="field-label" Text="Спеціальність"/>
+                                <ComboBox ItemsSource="{Binding Specialties}"
+                                          SelectedItem="{Binding SelectedSpecialty}"
+                                          DisplayMemberBinding="{Binding Name}"
+                                          HorizontalAlignment="Stretch"
+                                          Height="36"/>
+                            </StackPanel>
+
+                            <!-- Doctor -->
+                            <StackPanel Grid.Row="0" Grid.Column="2" Spacing="6">
+                                <TextBlock Classes="field-label" Text="Лікар *"/>
+                                <ComboBox ItemsSource="{Binding FilteredDoctors}"
+                                          SelectedItem="{Binding SelectedDoctor}"
+                                          HorizontalAlignment="Stretch"
+                                          Height="36">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding FullName}" FontWeight="Medium" FontSize="13"/>
+                                                <TextBlock Text="{Binding SpecialtyName}" FontSize="11" Foreground="#999999"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- Date, Room and Time Section -->
+                <Border Classes="form-section">
+                    <StackPanel Spacing="14">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <ui:SymbolIcon Symbol="Clock" FontSize="16" Foreground="#5F9EA0"/>
+                            <TextBlock Classes="section-title" Text="Дата, кабінет і час" Margin="0"/>
+                        </StackPanel>
+
+                        <Grid ColumnDefinitions="320,16,*,16,*" RowDefinitions="Auto">
+                            <!-- Calendar -->
+                            <StackPanel Grid.Column="0" Spacing="6">
+                                <TextBlock Classes="field-label" Text="Оберіть дату *"/>
+                                <Calendar x:Name="AppointmentCalendar"
+                                         SelectedDate="{Binding AppointmentDate}"
+                                         DisplayDateStart="{Binding CalendarDisplayDateStart}"
+                                         DisplayDateEnd="{Binding CalendarDisplayDateEnd}"
+                                         IsTodayHighlighted="True"
+                                         SelectionMode="SingleDate"
+                                         HorizontalAlignment="Stretch">
+                                    <Calendar.BlackoutDates>
+        
+                                        <CalendarDateRange>
+                                            <x:Arguments>
+                                                <system:DateTime>2025-11-25</system:DateTime>
+                                                <system:DateTime>2025-11-28</system:DateTime>
+                                            </x:Arguments>
+                                        </CalendarDateRange>
+
+                                        <CalendarDateRange>
+                                            <x:Arguments>
+                                                <system:DateTime>2025-12-05</system:DateTime>
+                                            </x:Arguments>
+                                        </CalendarDateRange>
+
+                                    </Calendar.BlackoutDates>
+                                </Calendar>
+                               <!-- <StackPanel Orientation="Horizontal" Spacing="6">
+                                    <ui:SymbolIcon Symbol="ImportantFilled" FontSize="11" Foreground="#5F9EA0"/>
+                                    <TextBlock Text=""
+                                              FontSize="12"
+                                              FontStyle="Italic"
+                                              Foreground="{DynamicResource TextFillColorTertiaryBrush}"/>
+                                </StackPanel>-->
+                            </StackPanel>
+
+                            <!-- Room Selection -->
+                            <StackPanel Grid.Column="2" Spacing="6">
+                                <TextBlock Classes="field-label" Text="Оберіть кабінет *"/>
+                                <Border BorderThickness="1"
+                                       BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                                       CornerRadius="4"
+                                       Height="280"
+                                       IsEnabled="{Binding IsRoomSelectionEnabled}">
+                                    <ListBox ItemsSource="{Binding AvailableRooms}"
+                                            SelectedItem="{Binding SelectedRoom}"
+                                            Background="Transparent"
+                                            BorderThickness="0">
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Padding="8,6" CornerRadius="4">
+                                                    <StackPanel>
+                                                        <TextBlock Text="{Binding RoomNumber}"
+                                                                  FontWeight="SemiBold"
+                                                                  FontSize="13"/>
+                                                        <TextBlock Text="{Binding RoomType}"
+                                                                  FontSize="11"
+                                                                  Foreground="#666666"/>
+                                                    </StackPanel>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                </Border>
+                                
+                                <!-- Room Empty State -->
+                                <StackPanel Orientation="Horizontal" 
+                                           Spacing="6"
+                                           HorizontalAlignment="Center"
+                                           IsVisible="{Binding !IsRoomSelectionEnabled}">
+                                    <ui:SymbolIcon Symbol="Alert" FontSize="12" Foreground="#FF9800"/>
+                                    <TextBlock Text="Оберіть лікаря та дату"
+                                              Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                              FontSize="11"
+                                              FontStyle="Italic"/>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <!-- Time Slots -->
+                           <StackPanel Grid.Column="4" Spacing="6">
+                                <TextBlock Classes="field-label" Text="Оберіть час *"/>
+                                <Border BorderThickness="1"
+                                       BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                                       CornerRadius="4"
+                                       Height="280"
+                                       ClipToBounds="True">
+                                    <Grid>
+                                        <!-- ListBox with time slots -->
+                                        <ListBox ItemsSource="{Binding AvailableTimeSlots}"
+                                                SelectedValue="{Binding SelectedTimeSlot}"
+                                                SelectedValueBinding="{Binding Time}"
+                                                Background="Transparent"
+                                                BorderThickness="0"
+                                                IsVisible="{Binding HasAvailableTimeSlots}">
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Border Padding="10,6"
+                                                            CornerRadius="4"
+                                                            Background="{Binding IsAvailable, Converter={StaticResource BoolToBackgroundConverter}}"
+                                                            IsEnabled="{Binding IsAvailable}">
+                                                        <Grid ColumnDefinitions="Auto,*,Auto">
+                                                            <ui:SymbolIcon Grid.Column="0"
+                                                                          Symbol="Clock"
+                                                                          FontSize="14"
+                                                                          Foreground="#5F9EA0"
+                                                                          VerticalAlignment="Center"
+                                                                          Margin="0,0,8,0"/>
+                                                            <TextBlock Grid.Column="1"
+                                                                      Text="{Binding Time}"
+                                                                      FontWeight="SemiBold"
+                                                                      FontSize="13"
+                                                                      VerticalAlignment="Center"/>
+                                                            <TextBlock Grid.Column="2"
+                                                                      Text="{Binding Status}"
+                                                                      FontSize="10"
+                                                                      Foreground="#666666"
+                                                                      VerticalAlignment="Center"/>
+                                                        </Grid>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                            <ListBox.Styles>
+                                                <Style Selector="ListBoxItem">
+                                                    <Setter Property="Padding" Value="0"/>
+                                                    <Setter Property="Margin" Value="4,0,4,4"/>
+                                                </Style>
+                                            </ListBox.Styles>
+                                        </ListBox>
+
+                                        <!-- Empty State Overlay -->
+                                        <TextBlock Text="Немає вільних слотів"
+                                                  HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center"
+                                                  Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                  FontSize="13"
+                                                  FontStyle="Italic"
+                                                  IsVisible="{Binding !HasAvailableTimeSlots}"
+                                                  ZIndex="1"/>
+                                    </Grid>
+                                </Border>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- Additional Information Section -->
+                <Border Classes="form-section">
+                    <StackPanel Spacing="14">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <ui:SymbolIcon Symbol="Document" FontSize="16" Foreground="#5F9EA0"/>
+                            <TextBlock Classes="section-title" Text="Додаткова інформація" Margin="0"/>
+                        </StackPanel>
+
+                        <Grid ColumnDefinitions="*,16,*" RowDefinitions="Auto,12,Auto">
+                            <!-- Appointment Type -->
+                            <StackPanel Grid.Column="0" Grid.Row="0" Spacing="6">
+                                <TextBlock Classes="field-label" Text="Тип прийому *"/>
+                                <ComboBox ItemsSource="{Binding AppointmentTypeItems}"
+                                         SelectedValue="{Binding SelectedAppointmentType}"
+                                         DisplayMemberBinding="{Binding DisplayName}"
+                                         SelectedValueBinding="{Binding Type}"
+                                         HorizontalAlignment="Stretch"
+                                         Height="36"/>
+                            </StackPanel>
+
+                            <!-- Complaints -->
+                            <StackPanel Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="2" Spacing="6">
+                                <TextBlock Classes="field-label" Text="Скарги пацієнта"/>
+                                <TextBox Text="{Binding Complaints}"
+                                        Tag="Опишіть скарги пацієнта..."
+                                        AcceptsReturn="True"
+                                        TextWrapping="Wrap"
+                                        Height="80"
+                                        VerticalContentAlignment="Top"/>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Footer Actions -->
+        <Border Grid.Row="2"
+                Background="#F5F5F5"
+                BorderBrush="#E0E0E0"
+                BorderThickness="0,1,0,0"
+                Padding="24,16">
+            <Grid ColumnDefinitions="*,Auto">
+                <!-- Validation Summary (Left) -->
+                <StackPanel Grid.Column="0"
+                            Spacing="6"
+                            VerticalAlignment="Center"
+                            IsVisible="{Binding HasValidationErrors}">
+
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <ui:SymbolIcon Symbol="AlertFilled" FontSize="14" Foreground="#D32F2F"/>
+                        <TextBlock Text="Помилки валідації:"
+                                   FontWeight="SemiBold"
+                                   FontSize="12"
+                                   Foreground="#D32F2F"/>
+                    </StackPanel>
+
+                    <ItemsControl ItemsSource="{Binding ValidationErrors}" Margin="20,0,0,0">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" Spacing="6" Margin="0,0,0,3">
+                                    <Ellipse Width="4" Height="4" Fill="#D32F2F" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{Binding}"
+                                               Foreground="#D32F2F"
+                                               FontSize="11"
+                                               TextWrapping="Wrap"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+
+                <!-- Buttons (Right) -->
+                <StackPanel Grid.Column="1"
+                           Orientation="Horizontal"
+                           Spacing="12"
+                           HorizontalAlignment="Right">
+                    <Button Content="Скасувати"
+                            IsVisible="False"
+                            Command="{Binding CancelCommand}"
+                            Height="36"
+                            MinWidth="120"
+                            Classes="WButton"/>
+
+                    <Button Content="Зберегти запис"
+                            Command="{Binding SaveCommand}"
+                            Height="36"
+                            MinWidth="140"
+                            Classes="WButton accent"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

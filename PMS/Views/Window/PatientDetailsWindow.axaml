@@ -1,0 +1,912 @@
+﻿<windowing:AppWindow xmlns="https://github.com/avaloniaui"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:ui="using:FluentAvalonia.UI.Controls"
+                     xmlns:windowing="clr-namespace:FluentAvalonia.UI.Windowing;assembly=FluentAvalonia"
+                     xmlns:vm="clr-namespace:PMS.ViewModels.Dialogs"
+                     x:Class="PMS.Views.Window.PatientDetailsWindow"
+                     x:DataType="vm:PatientDetailsWindowViewModel"
+                     Title="{Binding WindowTitle}"
+                     Width="1200"
+                     Height="800"
+                     MinWidth="900"
+                     MinHeight="600"
+                     CanResize="True"
+                     Topmost="True"
+                     WindowStartupLocation="CenterScreen"
+                     SystemDecorations="BorderOnly"
+                     CornerRadius="12">
+
+
+    <Window.Background>
+        <SolidColorBrush Color="#F5F5F5" />
+    </Window.Background>
+
+    <Window.Resources>
+        <LinearGradientBrush x:Key="WindowGradient" StartPoint="0%,0%" EndPoint="0%,100%">
+            <GradientStop Color="#FFFFFF" Offset="0" />
+            <GradientStop Color="#F8FAFA" Offset="1" />
+        </LinearGradientBrush>
+    </Window.Resources>
+
+    <DockPanel>
+        <Border Background="{DynamicResource WindowGradient}"
+                BorderBrush="#4A6F6F"
+                BorderThickness="1"
+                CornerRadius="12">
+
+            <Grid RowDefinitions="Auto,Auto,*,Auto,Auto">
+
+                <!-- Header -->
+                <Border Grid.Row="0"
+                        Height="40"
+                        Padding="15,0">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+                            <GradientStop Color="#3A5F5F" Offset="0" />
+                            <GradientStop Color="#2F4F4F" Offset="1" />
+                        </LinearGradientBrush>
+                    </Border.Background>
+
+                    <Grid ColumnDefinitions="Auto,*,Auto">
+                        <ui:SymbolIcon Grid.Column="0"
+                                       Symbol="Contact"
+                                       FontSize="20"
+                                       Foreground="White"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,10,0" />
+
+                        <TextBlock Grid.Column="1"
+                                   Text="{Binding PatientInfo}"
+                                   Foreground="White"
+                                   FontSize="14"
+                                   FontWeight="SemiBold"
+                                   VerticalAlignment="Center"
+                                   FontFamily="Segoe UI Variable" />
+
+                        <Button Grid.Column="2"
+                                Command="{Binding RefreshCommand}"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                VerticalAlignment="Center"
+                                Padding="5"
+                                Margin="0,0,125,0"
+                                Cursor="Hand"
+                                ToolTip.Tip="Оновити дані">
+                            <ui:SymbolIcon Symbol="Refresh"
+                                           FontSize="18"
+                                           Foreground="White" />
+                        </Button>
+                    </Grid>
+                </Border>
+
+                <!-- Filters Bar - Procedures (Tab 0) -->
+                <Border Grid.Row="1"
+                        Background="White"
+                        BorderThickness="0,1,0,1"
+                        BorderBrush="#E0E8E8"
+                        Padding="15,8"
+                        IsVisible="{Binding SelectedTabIndex, Converter={StaticResource EqualConverter}, ConverterParameter=0}">
+                    <Grid ColumnDefinitions="Auto,*,Auto,Auto,Auto">
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="8">
+                            <ui:SymbolIcon Symbol="Find" FontSize="16" VerticalAlignment="Center" Foreground="#3A5F5F" />
+                            <TextBox MinWidth="300"
+                                     Text="{Binding ProceduresSearch}"
+                                     VerticalContentAlignment="Center"
+                                     Tag="Пошук процедур..."
+                                     FontSize="12" />
+                        </StackPanel>
+
+                        <Button Grid.Column="2"
+                                Command="{Binding SelectDateFilterCommand}"
+                                Padding="10,6"
+                                Margin="8,0">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <ui:SymbolIcon Symbol="Calendar" FontSize="14" />
+                                <TextBlock Text="{Binding ProceduresDateFilterDisplay}" FontSize="11" />
+                            </StackPanel>
+                        </Button>
+
+                        <Button Grid.Column="3"
+                                Command="{Binding ClearCurrentTabFiltersCommand}"
+                                Padding="10,6"
+                                Margin="0,0,8,0">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <ui:SymbolIcon Symbol="Clear" FontSize="14" />
+                                <TextBlock Text="Очистити" FontSize="11" />
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+                </Border>
+
+                <!-- Filters Bar - Examinations (Tab 1) -->
+                <Border Grid.Row="1"
+                        Background="White"
+                        BorderThickness="0,1,0,1"
+                        BorderBrush="#E0E8E8"
+                        Padding="15,8"
+                        IsVisible="{Binding SelectedTabIndex, Converter={StaticResource EqualConverter}, ConverterParameter=1}">
+                    <Grid ColumnDefinitions="Auto,*,Auto,Auto">
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="8">
+                            <ui:SymbolIcon Symbol="Find" FontSize="16" VerticalAlignment="Center" Foreground="#3A5F5F" />
+                            <TextBox MinWidth="300"
+                                     Text="{Binding ExaminationsSearch}"
+                                     Tag="Пошук обстежень..."
+                                     VerticalContentAlignment="Center"
+                                     FontSize="12" />
+                        </StackPanel>
+
+                        <Button Grid.Column="2"
+                                Command="{Binding SelectDateFilterCommand}"
+                                Padding="10,6"
+                                Margin="8,0">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <ui:SymbolIcon Symbol="Calendar" FontSize="14" />
+                                <TextBlock Text="{Binding ExaminationsDateFilterDisplay}" FontSize="11" />
+                            </StackPanel>
+                        </Button>
+
+                        <Button Grid.Column="3"
+                                Command="{Binding ClearCurrentTabFiltersCommand}"
+                                Padding="10,6">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <ui:SymbolIcon Symbol="Clear" FontSize="14" />
+                                <TextBlock Text="Очистити" FontSize="11" />
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+                </Border>
+
+                <!-- Filters Bar - Diagnoses (Tab 2) -->
+                <Border Grid.Row="1"
+                        Background="White"
+                        BorderThickness="0,1,0,1"
+                        BorderBrush="#E0E8E8"
+                        Padding="15,8"
+                        IsVisible="{Binding SelectedTabIndex, Converter={StaticResource EqualConverter}, ConverterParameter=2}">
+                    <Grid ColumnDefinitions="Auto,*,Auto">
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="8">
+                            <ui:SymbolIcon Symbol="Find" FontSize="16" VerticalAlignment="Center" Foreground="#3A5F5F" />
+                            <TextBox MinWidth="300"
+                                     Text="{Binding DiagnosesSearch}"
+                                     VerticalContentAlignment="Center"
+                                     Tag="Пошук діагнозів..."
+                                     FontSize="12" />
+                        </StackPanel>
+
+                        <Button Grid.Column="2"
+                                Command="{Binding ClearCurrentTabFiltersCommand}"
+                                Padding="10,6"
+                                Margin="8,0,0,0">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <ui:SymbolIcon Symbol="Clear" FontSize="14" />
+                                <TextBlock Text="Очистити" FontSize="11" />
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+                </Border>
+
+                <!-- Filters Bar - Appointments (Tab 3) -->
+                <Border Grid.Row="1"
+                        Background="White"
+                        BorderThickness="0,1,0,1"
+                        BorderBrush="#E0E8E8"
+                        Padding="15,8"
+                        IsVisible="{Binding SelectedTabIndex, Converter={StaticResource EqualConverter}, ConverterParameter=3}">
+                    <Grid ColumnDefinitions="Auto,*,Auto,Auto">
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="8">
+                            <ui:SymbolIcon Symbol="Find" FontSize="16" VerticalAlignment="Center" Foreground="#3A5F5F" />
+                            <TextBox MinWidth="300"
+                                     Text="{Binding AppointmentsSearch}"
+                                     VerticalContentAlignment="Center"
+                                     Tag="Пошук записів..."
+                                     FontSize="12" />
+                        </StackPanel>
+
+                        <Button Grid.Column="2"
+                                Command="{Binding SelectDateFilterCommand}"
+                                Padding="10,6"
+                                Margin="8,0">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <ui:SymbolIcon Symbol="Calendar" FontSize="14" />
+                                <TextBlock Text="{Binding AppointmentsDateFilterDisplay}" FontSize="11" />
+                            </StackPanel>
+                        </Button>
+
+                        <Button Grid.Column="3"
+                                Command="{Binding ClearCurrentTabFiltersCommand}"
+                                Padding="10,6">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <ui:SymbolIcon Symbol="Clear" FontSize="14" />
+                                <TextBlock Text="Очистити" FontSize="11" />
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+                </Border>
+
+                <!-- Filters Bar - Home Visits (Tab 4) -->
+                <Border Grid.Row="1"
+                        Background="White"
+                        BorderThickness="0,1,0,1"
+                        BorderBrush="#E0E8E8"
+                        Padding="15,8"
+                        IsVisible="{Binding SelectedTabIndex, Converter={StaticResource EqualConverter}, ConverterParameter=4}">
+                    <Grid ColumnDefinitions="Auto,*,Auto,Auto">
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="8">
+                            <ui:SymbolIcon Symbol="Find" FontSize="16" VerticalAlignment="Center" Foreground="#3A5F5F" />
+                            <TextBox MinWidth="300"
+                                     Text="{Binding HomeVisitsSearch}"
+                                     VerticalContentAlignment="Center"
+                                     Tag="Пошук викликів..."
+                                     FontSize="12" />
+                        </StackPanel>
+
+                        <Button Grid.Column="2"
+                                Command="{Binding SelectDateFilterCommand}"
+                                Padding="10,6"
+                                Margin="8,0">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <ui:SymbolIcon Symbol="Calendar" FontSize="14" />
+                                <TextBlock Text="{Binding HomeVisitsDateFilterDisplay}" FontSize="11" />
+                            </StackPanel>
+                        </Button>
+
+                        <Button Grid.Column="3"
+                                Command="{Binding ClearCurrentTabFiltersCommand}"
+                                Padding="10,6">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <ui:SymbolIcon Symbol="Clear" FontSize="14" />
+                                <TextBlock Text="Очистити" FontSize="11" />
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+                </Border>
+
+                <!-- Filters Bar - Vaccinations (Tab 5) -->
+                <Border Grid.Row="1"
+                        Background="White"
+                        BorderThickness="0,1,0,1"
+                        BorderBrush="#E0E8E8"
+                        Padding="15,8"
+                        IsVisible="{Binding SelectedTabIndex, Converter={StaticResource EqualConverter}, ConverterParameter=5}">
+                    <Grid ColumnDefinitions="Auto,*,Auto,Auto">
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="8">
+                            <ui:SymbolIcon Symbol="Find" FontSize="16" VerticalAlignment="Center" Foreground="#3A5F5F" />
+                            <TextBox MinWidth="300"
+                                     Text="{Binding VaccinationsSearch}"
+                                     VerticalContentAlignment="Center"
+                                     Tag="Пошук вакцинацій..."
+                                     FontSize="12" />
+                        </StackPanel>
+
+                        <Button Grid.Column="2"
+                                Command="{Binding SelectDateFilterCommand}"
+                                Padding="10,6"
+                                Margin="8,0">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <ui:SymbolIcon Symbol="Calendar" FontSize="14" />
+                                <TextBlock Text="{Binding VaccinationsDateFilterDisplay}" FontSize="11" />
+                            </StackPanel>
+                        </Button>
+
+                        <Button Grid.Column="3"
+                                Command="{Binding ClearCurrentTabFiltersCommand}"
+                                Padding="10,6">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <ui:SymbolIcon Symbol="Clear" FontSize="14" />
+                                <TextBlock Text="Очистити" FontSize="11" />
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+                </Border>
+
+                <!-- Main Content - TabView -->
+                <ui:TabView Grid.Row="2"
+                            SelectedIndex="{Binding SelectedTabIndex}"
+                            TabWidthMode="Equal"
+                            CanReorderTabs="False"
+                             
+                            IsAddTabButtonVisible="False"
+                            Margin="10">
+
+                   
+                    <ui:TabViewItem Header="Процедури" IsClosable="False">
+                        <ui:TabViewItem.IconSource>
+                            <ui:SymbolIconSource Symbol="Mail" />
+                        </ui:TabViewItem.IconSource>
+
+                        <Border Background="White" CornerRadius="8" Margin="5" BoxShadow="0 2 8 0 #20000000">
+                            <Grid RowDefinitions="Auto,*,Auto">
+
+                                <!-- Header with Pagination -->
+                                <Border Grid.Row="0" Background="#F8FAFA" Padding="15,10" BorderThickness="0,0,0,1"
+                                        BorderBrush="#E0E8E8">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="10">
+                                            <ui:SymbolIcon Symbol="Mail" FontSize="18" VerticalAlignment="Center" />
+                                            <TextBlock Text="Призначені процедури" FontSize="14" FontWeight="SemiBold"
+                                                       VerticalAlignment="Center" />
+                                            <Border Background="#3A5F5F" CornerRadius="10" Padding="8,2"
+                                                    VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding Procedures.Count}" Foreground="White"
+                                                           FontSize="11" FontWeight="SemiBold" />
+                                            </Border>
+                                        </StackPanel>
+
+                                        <!-- Pagination -->
+                                        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6">
+                                            <Button Command="{Binding ProceduresPrevPageCommand}" Padding="6,4"
+                                                    MinWidth="28">
+                                                <ui:SymbolIcon Symbol="ChevronLeft" FontSize="12" />
+                                            </Button>
+                                            <Border Background="#E0E8E8" CornerRadius="4" Padding="8,4"
+                                                    VerticalAlignment="Center">
+                                                <TextBlock FontSize="11">
+                                                    <Run Text="{Binding ProceduresCurrentPage}" FontWeight="SemiBold" />
+                                                    <Run Text="/" />
+                                                    <Run Text="{Binding ProceduresTotalPages}" />
+                                                </TextBlock>
+                                            </Border>
+                                            <Button Command="{Binding ProceduresNextPageCommand}" Padding="6,4"
+                                                    MinWidth="28">
+                                                <ui:SymbolIcon Symbol="ChevronRight" FontSize="12" />
+                                            </Button>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+
+                                <!-- DataGrid -->
+                                <DataGrid Grid.Row="1" ItemsSource="{Binding Procedures}" AutoGenerateColumns="False"
+                                          IsReadOnly="True"
+                                          GridLinesVisibility="Horizontal" CanUserReorderColumns="True"
+                                          CanUserResizeColumns="True"
+                                          CanUserSortColumns="True" SelectionMode="Single" Margin="5">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Процедура" Binding="{Binding ProcedureName}"
+                                                            Width="Auto" MinWidth="150" />
+                                        <DataGridTextColumn Header="Код" Binding="{Binding ProcedureCode}" Width="Auto" />
+                                        <DataGridTextColumn Header="Призначив" Binding="{Binding PrescribedByName}"
+                                                            Width="Auto" MinWidth="120" />
+                                        <DataGridTextColumn Header="Дата призначення"
+                                                            Binding="{Binding PrescribedDate, StringFormat='dd.MM.yyyy'}"
+                                                            Width="Auto" />
+                                        <DataGridTextColumn Header="Виконав" Binding="{Binding PerformedByName}"
+                                                            Width="Auto" MinWidth="120" />
+                                        <DataGridTextColumn Header="Дата виконання"
+                                                            Binding="{Binding PerformedDate, StringFormat='dd.MM.yyyy'}"
+                                                            Width="Auto" />
+                                        <DataGridTextColumn Header="Статус" Binding="{Binding StatusDisplay}"
+                                                            Width="Auto" />
+                                        <DataGridTextColumn Header="Вартість"
+                                                            Binding="{Binding ProcedureCost, StringFormat='₴ {0:N2}'}"
+                                                            Width="Auto" />
+                                    </DataGrid.Columns>
+                                </DataGrid>
+
+                                <!-- Footer Info -->
+                                <Border Grid.Row="2" Background="#F8FAFA" Padding="12,8" BorderThickness="0,1,0,0"
+                                        BorderBrush="#E0E8E8">
+                                    <TextBlock FontSize="11" Foreground="#5F7F7F">
+                                        <Run Text="Показано:" />
+                                        <Run Text="{Binding Procedures.Count}" FontWeight="SemiBold" />
+                                        <Run Text="записів" />
+                                    </TextBlock>
+                                </Border>
+                            </Grid>
+                        </Border>
+                    </ui:TabViewItem>
+
+                    <!-- Tab 2: Examinations -->
+                    <ui:TabViewItem Header="Обстеження" IsClosable="False">
+                        <ui:TabViewItem.IconSource>
+                            <ui:SymbolIconSource Symbol="Document" />
+                        </ui:TabViewItem.IconSource>
+
+                        <Border Background="White" CornerRadius="8" Margin="5" BoxShadow="0 2 8 0 #20000000">
+                            <Grid RowDefinitions="Auto,*,Auto">
+
+                                <!-- Header with Pagination -->
+                                <Border Grid.Row="0" Background="#F8FAFA" Padding="15,10" BorderThickness="0,0,0,1"
+                                        BorderBrush="#E0E8E8">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="10">
+                                            <ui:SymbolIcon Symbol="Document" FontSize="18" VerticalAlignment="Center" />
+                                            <TextBlock Text="Історія обстежень" FontSize="14" FontWeight="SemiBold"
+                                                       VerticalAlignment="Center" />
+                                            <Border Background="#3A5F5F" CornerRadius="10" Padding="8,2"
+                                                    VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding Examinations.Count}" Foreground="White"
+                                                           FontSize="11" FontWeight="SemiBold" />
+                                            </Border>
+                                        </StackPanel>
+
+                                        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6">
+                                            <Button Command="{Binding ExaminationsPrevPageCommand}" Padding="6,4"
+                                                    MinWidth="28">
+                                                <ui:SymbolIcon Symbol="ChevronLeft" FontSize="12" />
+                                            </Button>
+                                            <Border Background="#E0E8E8" CornerRadius="4" Padding="8,4"
+                                                    VerticalAlignment="Center">
+                                                <TextBlock FontSize="11">
+                                                    <Run Text="{Binding ExaminationsCurrentPage}" FontWeight="SemiBold" />
+                                                    <Run Text="/" />
+                                                    <Run Text="{Binding ExaminationsTotalPages}" />
+                                                </TextBlock>
+                                            </Border>
+                                            <Button Command="{Binding ExaminationsNextPageCommand}" Padding="6,4"
+                                                    MinWidth="28">
+                                                <ui:SymbolIcon Symbol="ChevronRight" FontSize="12" />
+                                            </Button>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+
+                                <!-- ScrollViewer for Cards -->
+                                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="10">
+                                    <ItemsControl ItemsSource="{Binding Examinations}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Background="#F8FAFA" BorderBrush="#E0E8E8" BorderThickness="1"
+                                                        CornerRadius="8" Padding="15" Margin="0,0,0,10">
+                                                    <StackPanel Spacing="10">
+
+                                                        <!-- Header -->
+                                                        <Grid ColumnDefinitions="*,Auto">
+                                                            <StackPanel Grid.Column="0" Spacing="4">
+                                                                <TextBlock FontSize="14" FontWeight="SemiBold">
+                                                                    <Run Text="{Binding DoctorName}" />
+                                                                    <Run Text=" • " Foreground="#5F7F7F" />
+                                                                    <Run Text="{Binding DoctorSpecialty}"
+                                                                         Foreground="#5F7F7F" />
+                                                                </TextBlock>
+                                                                <TextBlock
+                                                                    Text="{Binding ExaminationDate, StringFormat='dd MMMM yyyy'}"
+                                                                    FontSize="12" Foreground="#5F7F7F" />
+                                                            </StackPanel>
+                                                        </Grid>
+
+                                                        <!-- Anamnesis -->
+                                                        <StackPanel Spacing="4" IsVisible="{Binding !!Anamnesis}">
+                                                            <TextBlock Text="📋 Анамнез:" FontSize="12"
+                                                                       FontWeight="SemiBold" Foreground="#2F4F4F" />
+                                                            <TextBlock Text="{Binding Anamnesis}" FontSize="12"
+                                                                       TextWrapping="Wrap" Foreground="#3F5F5F" />
+                                                        </StackPanel>
+
+                                                        <!-- Objective Status -->
+                                                        <StackPanel Spacing="4" IsVisible="{Binding !!ObjectiveStatus}">
+                                                            <TextBlock Text="🔍 Об'єктивний стан:" FontSize="12"
+                                                                       FontWeight="SemiBold" Foreground="#2F4F4F" />
+                                                            <TextBlock Text="{Binding ObjectiveStatus}" FontSize="12"
+                                                                       TextWrapping="Wrap" Foreground="#3F5F5F" />
+                                                        </StackPanel>
+
+                                                        <!-- Diagnoses -->
+                                                        <StackPanel Spacing="4" IsVisible="{Binding !!Diagnoses.Count}">
+                                                            <TextBlock Text="🩺 Діагнози:" FontSize="12"
+                                                                       FontWeight="SemiBold" Foreground="#2F4F4F" />
+                                                            <ItemsControl ItemsSource="{Binding Diagnoses}">
+                                                                <ItemsControl.ItemTemplate>
+                                                                    <DataTemplate>
+                                                                        <Border Background="White" CornerRadius="4"
+                                                                            Padding="8,4" Margin="0,2">
+                                                                            <TextBlock FontSize="11">
+                                                                                <Run Text="{Binding IcdCode}"
+                                                                                    FontWeight="SemiBold" />
+                                                                                <Run Text=" — " />
+                                                                                <Run Text="{Binding Name}" />
+                                                                            </TextBlock>
+                                                                        </Border>
+                                                                    </DataTemplate>
+                                                                </ItemsControl.ItemTemplate>
+                                                            </ItemsControl>
+                                                        </StackPanel>
+
+                                                        <!-- Recommendations -->
+                                                        <StackPanel Spacing="4" IsVisible="{Binding !!Recommendations}">
+                                                            <TextBlock Text="💊 Рекомендації:" FontSize="12"
+                                                                       FontWeight="SemiBold" Foreground="#2F4F4F" />
+                                                            <TextBlock Text="{Binding Recommendations}" FontSize="12"
+                                                                       TextWrapping="Wrap" Foreground="#3F5F5F" />
+                                                        </StackPanel>
+
+                                                        <!-- Footer Info -->
+                                                        <Border Background="White" CornerRadius="4" Padding="10,6"
+                                                                Margin="0,5,0,0">
+                                                            <Grid ColumnDefinitions="*,*">
+                                                                <StackPanel Grid.Column="0" Spacing="2">
+                                                                    <TextBlock Text="Лікарняний" FontSize="10"
+                                                                               Foreground="#5F7F7F" />
+                                                                    <TextBlock Text="{Binding SickLeavePeriod}"
+                                                                               FontSize="11" FontWeight="SemiBold" />
+                                                                </StackPanel>
+                                                                <StackPanel Grid.Column="1" Spacing="2">
+                                                                    <TextBlock Text="Повторний візит" FontSize="10"
+                                                                               Foreground="#5F7F7F" />
+                                                                    <TextBlock Text="{Binding FollowUpDateDisplay}"
+                                                                               FontSize="11" FontWeight="SemiBold" />
+                                                                </StackPanel>
+                                                            </Grid>
+                                                        </Border>
+
+                                                    </StackPanel>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </ScrollViewer>
+
+                                <!-- Footer -->
+                                <Border Grid.Row="2" Background="#F8FAFA" Padding="12,8" BorderThickness="0,1,0,0"
+                                        BorderBrush="#E0E8E8">
+                                    <TextBlock FontSize="11" Foreground="#5F7F7F">
+                                        <Run Text="Показано:" />
+                                        <Run Text="{Binding Examinations.Count}" FontWeight="SemiBold" />
+                                        <Run Text="записів" />
+                                    </TextBlock>
+                                </Border>
+                            </Grid>
+                        </Border>
+                    </ui:TabViewItem>
+
+                    <!-- Tab 3: Diagnoses -->
+                    <ui:TabViewItem Header="Діагнози" IsClosable="False">
+                        <ui:TabViewItem.IconSource>
+                            <ui:SymbolIconSource Symbol="Target" />
+                        </ui:TabViewItem.IconSource>
+
+                        <Border Background="White" CornerRadius="8" Margin="5" BoxShadow="0 2 8 0 #20000000">
+                            <Grid RowDefinitions="Auto,*,Auto">
+
+                                <Border Grid.Row="0" Background="#F8FAFA" Padding="15,10" BorderThickness="0,0,0,1"
+                                        BorderBrush="#E0E8E8">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="10">
+                                            <ui:SymbolIcon Symbol="Target" FontSize="18"
+                                                           VerticalAlignment="Center" />
+                                            <TextBlock Text="Усі діагнози пацієнта" FontSize="14" FontWeight="SemiBold"
+                                                       VerticalAlignment="Center" />
+                                            <Border Background="#3A5F5F" CornerRadius="10" Padding="8,2"
+                                                    VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding Diagnoses.Count}" Foreground="White"
+                                                           FontSize="11" FontWeight="SemiBold" />
+                                            </Border>
+                                        </StackPanel>
+
+                                        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6">
+                                            <Button Command="{Binding DiagnosesPrevPageCommand}" Padding="6,4"
+                                                    MinWidth="28">
+                                                <ui:SymbolIcon Symbol="ChevronLeft" FontSize="12" />
+                                            </Button>
+                                            <Border Background="#E0E8E8" CornerRadius="4" Padding="8,4"
+                                                    VerticalAlignment="Center">
+                                                <TextBlock FontSize="11">
+                                                    <Run Text="{Binding DiagnosesCurrentPage}" FontWeight="SemiBold" />
+                                                    <Run Text="/" />
+                                                    <Run Text="{Binding DiagnosesTotalPages}" />
+                                                </TextBlock>
+                                            </Border>
+                                            <Button Command="{Binding DiagnosesNextPageCommand}" Padding="6,4"
+                                                    MinWidth="28">
+                                                <ui:SymbolIcon Symbol="ChevronRight" FontSize="12" />
+                                            </Button>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+
+                                <DataGrid Grid.Row="1" ItemsSource="{Binding Diagnoses}" AutoGenerateColumns="False"
+                                          IsReadOnly="True"
+                                          GridLinesVisibility="Horizontal" CanUserReorderColumns="True"
+                                          CanUserResizeColumns="True"
+                                          CanUserSortColumns="True" SelectionMode="Single" Margin="5">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Код МКХ" Binding="{Binding IcdCode}" Width="Auto" />
+                                        <DataGridTextColumn Header="Назва" Binding="{Binding Name}" Width="Auto"
+                                                            MinWidth="200" />
+                                        <DataGridTextColumn Header="Категорія" Binding="{Binding Category}" Width="Auto"
+                                                            MinWidth="150" />
+                                        <DataGridTextColumn Header="Кількість разів"
+                                                            Binding="{Binding OccurrenceDisplay}" Width="Auto" />
+                                        <DataGridTextColumn Header="Період" Binding="{Binding PeriodDisplay}"
+                                                            Width="Auto" />
+                                        <DataGridTextColumn Header="Лікарі" Binding="{Binding DoctorsDisplay}"
+                                                            Width="Auto" MinWidth="150" />
+                                    </DataGrid.Columns>
+                                </DataGrid>
+
+                                <Border Grid.Row="2" Background="#F8FAFA" Padding="12,8" BorderThickness="0,1,0,0"
+                                        BorderBrush="#E0E8E8">
+                                    <TextBlock FontSize="11" Foreground="#5F7F7F">
+                                        <Run Text="Показано:" />
+                                        <Run Text="{Binding Diagnoses.Count}" FontWeight="SemiBold" />
+                                        <Run Text="записів" />
+                                    </TextBlock>
+                                </Border>
+                            </Grid>
+                        </Border>
+                    </ui:TabViewItem>
+
+                    <!-- Tab 4: Appointments -->
+                    <ui:TabViewItem Header="Записи на прийом" IsClosable="False">
+                        <ui:TabViewItem.IconSource>
+                            <ui:SymbolIconSource Symbol="Calendar" />
+                        </ui:TabViewItem.IconSource>
+
+                        <Border Background="White" CornerRadius="8" Margin="5" BoxShadow="0 2 8 0 #20000000">
+                            <Grid RowDefinitions="Auto,*,Auto">
+
+                                <Border Grid.Row="0" Background="#F8FAFA" Padding="15,10" BorderThickness="0,0,0,1"
+                                        BorderBrush="#E0E8E8">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="10">
+                                            <ui:SymbolIcon Symbol="Calendar" FontSize="18" VerticalAlignment="Center" />
+                                            <TextBlock Text="Історія записів" FontSize="14" FontWeight="SemiBold"
+                                                       VerticalAlignment="Center" />
+                                            <Border Background="#3A5F5F" CornerRadius="10" Padding="8,2"
+                                                    VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding Appointments.Count}" Foreground="White"
+                                                           FontSize="11" FontWeight="SemiBold" />
+                                            </Border>
+                                        </StackPanel>
+
+                                        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6">
+                                            <Button Command="{Binding AppointmentsPrevPageCommand}" Padding="6,4"
+                                                    MinWidth="28">
+                                                <ui:SymbolIcon Symbol="ChevronLeft" FontSize="12" />
+                                            </Button>
+                                            <Border Background="#E0E8E8" CornerRadius="4" Padding="8,4"
+                                                    VerticalAlignment="Center">
+                                                <TextBlock FontSize="11">
+                                                    <Run Text="{Binding AppointmentsCurrentPage}" FontWeight="SemiBold" />
+                                                    <Run Text="/" />
+                                                    <Run Text="{Binding AppointmentsTotalPages}" />
+                                                </TextBlock>
+                                            </Border>
+                                            <Button Command="{Binding AppointmentsNextPageCommand}" Padding="6,4"
+                                                    MinWidth="28">
+                                                <ui:SymbolIcon Symbol="ChevronRight" FontSize="12" />
+                                            </Button>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+
+                                <DataGrid Grid.Row="1" ItemsSource="{Binding Appointments}" AutoGenerateColumns="False"
+                                          IsReadOnly="True"
+                                          GridLinesVisibility="Horizontal" CanUserReorderColumns="True"
+                                          CanUserResizeColumns="True"
+                                          CanUserSortColumns="True" SelectionMode="Single" Margin="5">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Дата і час" Binding="{Binding DateTimeDisplay}"
+                                                            Width="Auto" />
+                                        <DataGridTextColumn Header="Лікар" Binding="{Binding DoctorName}" Width="Auto"
+                                                            MinWidth="150" />
+                                        <DataGridTextColumn Header="Спеціальність" Binding="{Binding DoctorSpecialty}"
+                                                            Width="Auto" MinWidth="120" />
+                                        <DataGridTextColumn Header="Кабінет" Binding="{Binding RoomNumber}"
+                                                            Width="Auto" />
+                                        <DataGridTextColumn Header="Тип" Binding="{Binding TypeDisplay}" Width="Auto" />
+                                        <DataGridTextColumn Header="Статус" Binding="{Binding StatusDisplay}"
+                                                            Width="Auto" />
+                                        <DataGridTextColumn Header="Скарги" Binding="{Binding Complaints}" Width="Auto"
+                                                            MinWidth="150" />
+                                    </DataGrid.Columns>
+                                </DataGrid>
+
+                                <Border Grid.Row="2" Background="#F8FAFA" Padding="12,8" BorderThickness="0,1,0,0"
+                                        BorderBrush="#E0E8E8">
+                                    <TextBlock FontSize="11" Foreground="#5F7F7F">
+                                        <Run Text="Показано:" />
+                                        <Run Text="{Binding Appointments.Count}" FontWeight="SemiBold" />
+                                        <Run Text="записів" />
+                                    </TextBlock>
+                                </Border>
+                            </Grid>
+                        </Border>
+                    </ui:TabViewItem>
+
+                    <!-- Tab 5: Home Visits -->
+                    <ui:TabViewItem Header="Виклики додому" IsClosable="False">
+                        <ui:TabViewItem.IconSource>
+                            <ui:SymbolIconSource Symbol="Home" />
+                        </ui:TabViewItem.IconSource>
+
+                        <Border Background="White" CornerRadius="8" Margin="5" BoxShadow="0 2 8 0 #20000000">
+                            <Grid RowDefinitions="Auto,*,Auto">
+
+                                <Border Grid.Row="0" Background="#F8FAFA" Padding="15,10" BorderThickness="0,0,0,1"
+                                        BorderBrush="#E0E8E8">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="10">
+                                            <ui:SymbolIcon Symbol="Home" FontSize="18" VerticalAlignment="Center" />
+                                            <TextBlock Text="Історія викликів" FontSize="14" FontWeight="SemiBold"
+                                                       VerticalAlignment="Center" />
+                                            <Border Background="#3A5F5F" CornerRadius="10" Padding="8,2"
+                                                    VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding HomeVisits.Count}" Foreground="White"
+                                                           FontSize="11" FontWeight="SemiBold" />
+                                            </Border>
+                                        </StackPanel>
+
+                                        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6">
+                                            <Button Command="{Binding HomeVisitsPrevPageCommand}" Padding="6,4"
+                                                    MinWidth="28">
+                                                <ui:SymbolIcon Symbol="ChevronLeft" FontSize="12" />
+                                            </Button>
+                                            <Border Background="#E0E8E8" CornerRadius="4" Padding="8,4"
+                                                    VerticalAlignment="Center">
+                                                <TextBlock FontSize="11">
+                                                    <Run Text="{Binding HomeVisitsCurrentPage}" FontWeight="SemiBold" />
+                                                    <Run Text="/" />
+                                                    <Run Text="{Binding HomeVisitsTotalPages}" />
+                                                </TextBlock>
+                                            </Border>
+                                            <Button Command="{Binding HomeVisitsNextPageCommand}" Padding="6,4"
+                                                    MinWidth="28">
+                                                <ui:SymbolIcon Symbol="ChevronRight" FontSize="12" />
+                                            </Button>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+
+                                <DataGrid Grid.Row="1" ItemsSource="{Binding HomeVisits}" AutoGenerateColumns="False"
+                                          IsReadOnly="True"
+                                          GridLinesVisibility="Horizontal" CanUserReorderColumns="True"
+                                          CanUserResizeColumns="True"
+                                          CanUserSortColumns="True" SelectionMode="Single" Margin="5">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Дата виклику"
+                                                            Binding="{Binding CallDateTimeDisplay}" Width="Auto" />
+                                        <DataGridTextColumn Header="Терміновість" Binding="{Binding UrgencyDisplay}"
+                                                            Width="Auto" />
+                                        <DataGridTextColumn Header="Симптоми" Binding="{Binding Symptoms}" Width="Auto"
+                                                            MinWidth="200" />
+                                        <DataGridTextColumn Header="Призначений лікар"
+                                                            Binding="{Binding AssignedDoctorName}" Width="Auto"
+                                                            MinWidth="150" />
+                                        <DataGridTextColumn Header="Запланований візит"
+                                                            Binding="{Binding VisitScheduledDisplay}" Width="Auto" />
+                                        <DataGridTextColumn Header="Статус" Binding="{Binding StatusDisplay}"
+                                                            Width="Auto" />
+                                        <DataGridTextColumn Header="Прийняв виклик" Binding="{Binding ReceivedByName}"
+                                                            Width="Auto" MinWidth="120" />
+                                    </DataGrid.Columns>
+                                </DataGrid>
+
+                                <Border Grid.Row="2" Background="#F8FAFA" Padding="12,8" BorderThickness="0,1,0,0"
+                                        BorderBrush="#E0E8E8">
+                                    <TextBlock FontSize="11" Foreground="#5F7F7F">
+                                        <Run Text="Показано:" />
+                                        <Run Text="{Binding HomeVisits.Count}" FontWeight="SemiBold" />
+                                        <Run Text="записів" />
+                                    </TextBlock>
+                                </Border>
+                            </Grid>
+                        </Border>
+                    </ui:TabViewItem>
+
+                    <!-- Tab 6: Vaccinations -->
+                    <ui:TabViewItem Header="Вакцинації" IsClosable="False">
+                        <ui:TabViewItem.IconSource>
+                            <ui:SymbolIconSource Symbol="Important" />
+                        </ui:TabViewItem.IconSource>
+
+                        <Border Background="White" CornerRadius="8" Margin="5" BoxShadow="0 2 8 0 #20000000">
+                            <Grid RowDefinitions="Auto,*,Auto">
+
+                                <Border Grid.Row="0" Background="#F8FAFA" Padding="15,10" BorderThickness="0,0,0,1"
+                                        BorderBrush="#E0E8E8">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="10">
+                                            <ui:SymbolIcon Symbol="Important" FontSize="18" VerticalAlignment="Center" />
+                                            <TextBlock Text="Історія вакцинацій" FontSize="14" FontWeight="SemiBold"
+                                                       VerticalAlignment="Center" />
+                                            <Border Background="#3A5F5F" CornerRadius="10" Padding="8,2"
+                                                    VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding Vaccinations.Count}" Foreground="White"
+                                                           FontSize="11" FontWeight="SemiBold" />
+                                            </Border>
+                                        </StackPanel>
+
+                                        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6">
+                                            <Button Command="{Binding VaccinationsPrevPageCommand}" Padding="6,4"
+                                                    MinWidth="28">
+                                                <ui:SymbolIcon Symbol="ChevronLeft" FontSize="12" />
+                                            </Button>
+                                            <Border Background="#E0E8E8" CornerRadius="4" Padding="8,4"
+                                                    VerticalAlignment="Center">
+                                                <TextBlock FontSize="11">
+                                                    <Run Text="{Binding VaccinationsCurrentPage}" FontWeight="SemiBold" />
+                                                    <Run Text="/" />
+                                                    <Run Text="{Binding VaccinationsTotalPages}" />
+                                                </TextBlock>
+                                            </Border>
+                                            <Button Command="{Binding VaccinationsNextPageCommand}" Padding="6,4"
+                                                    MinWidth="28">
+                                                <ui:SymbolIcon Symbol="ChevronRight" FontSize="12" />
+                                            </Button>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+
+                                <DataGrid Grid.Row="1" ItemsSource="{Binding Vaccinations}" AutoGenerateColumns="False"
+                                          IsReadOnly="True"
+                                          GridLinesVisibility="Horizontal" CanUserReorderColumns="True"
+                                          CanUserResizeColumns="True"
+                                          CanUserSortColumns="True" SelectionMode="Single" Margin="5">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Вакцина" Binding="{Binding VaccineDisplay}"
+                                                            Width="Auto" MinWidth="180" />
+                                        <DataGridTextColumn Header="Серія" Binding="{Binding LotDisplay}" Width="Auto" />
+                                        <DataGridTextColumn Header="Заплановано"
+                                                            Binding="{Binding ScheduledDateDisplay}" Width="Auto" />
+                                        <DataGridTextColumn Header="Введено"
+                                                            Binding="{Binding AdministeredDateDisplay}" Width="Auto" />
+                                        <DataGridTextColumn Header="Хто ввів" Binding="{Binding AdministeredByName}"
+                                                            Width="Auto" MinWidth="150" />
+                                        <DataGridTextColumn Header="Статус" Binding="{Binding StatusDisplay}"
+                                                            Width="Auto" />
+                                        <DataGridTextColumn Header="Примітки" Binding="{Binding Notes}" Width="Auto"
+                                                            MinWidth="150" />
+                                    </DataGrid.Columns>
+                                </DataGrid>
+
+                                <Border Grid.Row="2" Background="#F8FAFA" Padding="12,8" BorderThickness="0,1,0,0"
+                                        BorderBrush="#E0E8E8">
+                                    <TextBlock FontSize="11" Foreground="#5F7F7F">
+                                        <Run Text="Показано:" />
+                                        <Run Text="{Binding Vaccinations.Count}" FontWeight="SemiBold" />
+                                        <Run Text="записів" />
+                                    </TextBlock>
+                                </Border>
+                            </Grid>
+                        </Border>
+                    </ui:TabViewItem>
+
+
+                </ui:TabView>
+
+                <!-- InfoBar -->
+                <Grid Grid.Row="3" Margin="10,0,10,8">
+                    <ui:InfoBar Title="{Binding Title}"
+                                Message="{Binding Message}"
+                                Severity="{Binding MessageSeverity}"
+                                IsOpen="{Binding IsInfoBarVisible}"
+                                IsClosable="True" />
+                </Grid>
+
+                <!-- Footer -->
+                <Border Grid.Row="4"
+                        Background="#F5F8F8"
+                        Padding="20,12"
+                        BorderBrush="#E0E8E8"
+                        BorderThickness="0,1,0,0">
+
+                    <Grid ColumnDefinitions="*,Auto">
+                        <StackPanel Grid.Column="0"
+                                    Orientation="Horizontal"
+                                    Spacing="10"
+                                    IsVisible="{Binding IsBusy}"
+                                    VerticalAlignment="Center">
+                            <ui:ProgressRing Width="18"
+                                             Height="18"
+                                             IsIndeterminate="True" />
+                            <TextBlock Text="{Binding BusyMessage}"
+                                       FontSize="11"
+                                       VerticalAlignment="Center"
+                                       Foreground="#5F7F7F" />
+                        </StackPanel>
+
+                        <Button Grid.Column="1"
+                                Content="Закрити"
+                                MinWidth="110"
+                                Height="32"
+                                Classes="WButton accent"
+                                Cursor="Hand"
+                                Click="CloseButton_Click" />
+                    </Grid>
+                </Border>
+
+            </Grid>
+        </Border>
+    </DockPanel>
+
+</windowing:AppWindow>

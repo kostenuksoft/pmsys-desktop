@@ -1,0 +1,277 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+             xmlns:vm="using:PMS.ViewModels.Dialogs"
+             xmlns:general="clr-namespace:PMS.Core.Enums.General"
+             x:Class="PMS.Views.Controls.Dialogs.ProcedureEditDialogView"
+             x:DataType="vm:ProcedureEditDialogViewModel"
+             MinWidth="500"
+             x:CompileBindings="True">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+        <StackPanel Spacing="16" Margin="0,0,0,20">
+
+            <!-- Procedure Code -->
+            <StackPanel Spacing="4">
+                <TextBlock Text="Код процедури *" 
+                           FontSize="12" 
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                <TextBox Text="{Binding ProcedureCode}"
+                         Watermark="PROC-0001, DIAG-123..."
+                         MaxLength="20"
+                         IsReadOnly="{Binding IsEditMode}" />
+                <TextBlock Text=" Формат: PROC-XXXX (автоматично генерується)" 
+                           FontSize="10" 
+                           FontStyle="Italic"
+                           Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                           IsVisible="{Binding !IsEditMode}" />
+            </StackPanel>
+
+            <!-- Basic Information -->
+            <Border Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}"
+                    CornerRadius="8"
+                    Padding="16">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="Основна інформація"
+                               FontWeight="SemiBold"
+                               FontSize="14" />
+
+                    <!-- Name -->
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="Назва процедури *" 
+                                   FontSize="12" 
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                        <TextBox Text="{Binding Name}"
+                                 Watermark="Наприклад: ЕКГ, УЗД серця..."
+                                 MaxLength="200" />
+                    </StackPanel>
+
+                    <!-- Procedure Type -->
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="Тип процедури *" 
+                                   FontSize="12" 
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                        <ComboBox SelectedItem="{Binding SelectedProcedureType}"
+                                  HorizontalAlignment="Stretch">
+                            <general:ProcedureType>Diagnostic</general:ProcedureType>
+                            <general:ProcedureType>Therapeutic</general:ProcedureType>
+                            <general:ProcedureType>PhysicalTherapy</general:ProcedureType>
+                            <general:ProcedureType>Laboratory</general:ProcedureType>
+                            <general:ProcedureType>Imaging</general:ProcedureType>
+                            <general:ProcedureType>Vaccination</general:ProcedureType>
+                            <general:ProcedureType>Preventive</general:ProcedureType>
+                            <general:ProcedureType>Rehabilitation</general:ProcedureType>
+                            <general:ProcedureType>Emergency</general:ProcedureType>
+                        </ComboBox>
+                    </StackPanel>
+
+                    <!-- Description -->
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="Опис" 
+                                   FontSize="12" 
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                        <TextBox Text="{Binding Description}"
+                                 Watermark="Детальний опис процедури..."
+                                 AcceptsReturn="True"
+                                 TextWrapping="Wrap"
+                                 Height="80"
+                                 VerticalContentAlignment="Top" />
+                    </StackPanel>
+
+                </StackPanel>
+            </Border>
+
+            <!-- Time and Cost -->
+            <Border Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}"
+                    CornerRadius="8"
+                    Padding="16">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="Тривалість та вартість"
+                               FontWeight="SemiBold"
+                               FontSize="14" />
+
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                        <!-- Duration -->
+                        <StackPanel Grid.Column="0" Spacing="4">
+                            <TextBlock Text="Тривалість (хвилин) *" 
+                                       FontSize="12" 
+                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                            <NumericUpDown Value="{Binding DurationMinutes}"
+                                           Minimum="1"
+                                           Maximum="480"
+                                           Increment="5"
+                                           FormatString="0"
+                                           AllowSpin="True"
+                                           HorizontalAlignment="Stretch" />
+                        </StackPanel>
+
+                        <!-- Price -->
+                        <StackPanel Grid.Column="1" Spacing="4">
+                            <TextBlock Text="Ціна (грн) *" 
+                                       FontSize="12" 
+                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                            <NumericUpDown Value="{Binding Price}"
+                                           Minimum="0"
+                                           Maximum="50000"
+                                           Increment="10"
+                                           FormatString="F2"
+                                           AllowSpin="True"
+                                           HorizontalAlignment="Stretch" />
+                        </StackPanel>
+                    </Grid>
+
+                </StackPanel>
+            </Border>
+
+            <!-- Requirements -->
+            <Border Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}"
+                    CornerRadius="8"
+                    Padding="16">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="Вимоги"
+                               FontWeight="SemiBold"
+                               FontSize="14" />
+
+                    <!-- Room Type Required -->
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="Потрібний тип кабінету" 
+                                   FontSize="12" 
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                        <ComboBox SelectedItem="{Binding SelectedRoomTypeRequired}"
+                                  HorizontalAlignment="Stretch"
+                                  PlaceholderText="Не вказано">
+                            <general:RoomType>DoctorOffice</general:RoomType>
+                            <general:RoomType>Procedure</general:RoomType>
+                            <general:RoomType>PhysicalTherapy</general:RoomType>
+                            <general:RoomType>Ultrasound</general:RoomType>
+                            <general:RoomType>Laboratory</general:RoomType>
+                        </ComboBox>
+                    </StackPanel>
+
+                    <!-- Equipment Required -->
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="Необхідне обладнання (кожне з нового рядка)" 
+                                   FontSize="12" 
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                        <TextBox Text="{Binding EquipmentText}"
+                                 Watermark="ЕКГ апарат&#x0a;Тонометр&#x0a;Стетоскоп..."
+                                 AcceptsReturn="True"
+                                 TextWrapping="Wrap"
+                                 Height="80"
+                                 VerticalContentAlignment="Top" />
+                        <TextBlock Text=" Вказуйте кожен елемент обладнання з нового рядка" 
+                                   FontSize="10" 
+                                   FontStyle="Italic"
+                                   Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+                    </StackPanel>
+
+                    <!-- Requires Doctor & Max Per Day -->
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                        <!-- Requires Doctor -->
+                        <StackPanel Grid.Column="0" Spacing="4">
+                            <CheckBox IsChecked="{Binding RequiresDoctor}"
+                                      Content="Потрібен лікар" />
+                        </StackPanel>
+
+                        <!-- Max Per Day -->
+                        <StackPanel Grid.Column="1" Spacing="4">
+                            <TextBlock Text="Максимум на день" 
+                                       FontSize="12" 
+                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                            <NumericUpDown Value="{Binding MaxPerDay}"
+                                           Minimum="1"
+                                           Maximum="100"
+                                           Increment="1"
+                                           FormatString="0"
+                                           AllowSpin="True"
+                                           HorizontalAlignment="Stretch"
+                                           Watermark="Необмежено" />
+                        </StackPanel>
+                    </Grid>
+
+                </StackPanel>
+            </Border>
+
+            <!-- Medical Information -->
+            <Border Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}"
+                    CornerRadius="8"
+                    Padding="16">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="Медична інформація"
+                               FontWeight="SemiBold"
+                               FontSize="14" />
+
+                    <!-- Contraindications -->
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="Протипоказання (кожне з нового рядка)" 
+                                   FontSize="12" 
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                        <TextBox Text="{Binding ContraindicationsText}"
+                                 Watermark="Алергія на препарати&#x0a;Вагітність&#x0a;Гіпертонія..."
+                                 AcceptsReturn="True"
+                                 TextWrapping="Wrap"
+                                 Height="80"
+                                 VerticalContentAlignment="Top" />
+                        <TextBlock Text=" Вказуйте кожне протипоказання з нового рядка" 
+                                   FontSize="10" 
+                                   FontStyle="Italic"
+                                   Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+                    </StackPanel>
+
+                    <!-- Preparation Instructions -->
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="Інструкції з підготовки" 
+                                   FontSize="12" 
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                        <TextBox Text="{Binding PreparationInstructions}"
+                                 Watermark="Прийти натщесерце, не пити за 2 години до процедури..."
+                                 AcceptsReturn="True"
+                                 TextWrapping="Wrap"
+                                 Height="80"
+                                 VerticalContentAlignment="Top" />
+                    </StackPanel>
+
+                </StackPanel>
+            </Border>
+
+            <!-- Active Status -->
+            <CheckBox IsChecked="{Binding IsActive}"
+                      Content=" Активна процедура"
+                      Margin="0,8,0,0" />
+
+            <!-- Required Fields Note -->
+            <Border Background="{DynamicResource SystemFillColorAttentionBackgroundBrush}"
+                    CornerRadius="4"
+                    Padding="12,8">
+                <TextBlock FontSize="11" 
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}">
+                    <Run Text="*" FontWeight="Bold" />
+                    <Run Text="— обов'язкові поля для заповнення" />
+                </TextBlock>
+            </Border>
+
+            <!-- Validation Errors Display -->
+            <ItemsControl ItemsSource="{Binding ValidationContext.Validations}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Background="{DynamicResource SystemFillColorCriticalBackgroundBrush}"
+                                CornerRadius="4"
+                                Padding="8,6"
+                                Margin="0,2">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <ui:SymbolIcon Symbol="Important" 
+                                               FontSize="14"
+                                               Foreground="{DynamicResource SystemFillColorCriticalBrush}" />
+                                <TextBlock Text="{Binding }" 
+                                           FontSize="11"
+                                           TextWrapping="Wrap"
+                                           Foreground="{DynamicResource SystemFillColorCriticalBrush}" />
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+        </StackPanel>
+    </ScrollViewer>
+
+</UserControl>

@@ -1,0 +1,352 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+             xmlns:vm="clr-namespace:PMS.ViewModels.Dialogs"
+             x:Class="PMS.Views.Controls.Dialogs.ScheduleDetailsDialogView"
+             x:DataType="vm:ScheduleDetailsDialogViewModel"
+             x:CompileBindings="True"
+             Width="450"
+             MaxHeight="700">
+
+    <UserControl.Resources>
+        <SolidColorBrush x:Key="PrimaryTeal" Color="#3A5F5F"/>
+        <SolidColorBrush x:Key="DarkTeal" Color="#2F4F4F"/>
+        <SolidColorBrush x:Key="LightTeal" Color="#5F7F7F"/>
+        <SolidColorBrush x:Key="BorderTeal" Color="#4A6F6F"/>
+        <SolidColorBrush x:Key="BackgroundLight" Color="#F8FAFA"/>
+        <SolidColorBrush x:Key="CardBackground" Color="#FFFFFF"/>
+
+        <LinearGradientBrush x:Key="HeaderGradient" StartPoint="0%,0%" EndPoint="0%,100%">
+            <GradientStop Color="#3A5F5F" Offset="0"/>
+            <GradientStop Color="#2F4F4F" Offset="1"/>
+        </LinearGradientBrush>
+    </UserControl.Resources>
+
+    <Border Background="{StaticResource BackgroundLight}"
+            CornerRadius="8">
+        <ScrollViewer>
+            <StackPanel Spacing="15" Margin="20">
+
+                <!-- Header -->
+                <Border Background="{StaticResource HeaderGradient}"
+                        CornerRadius="6"
+                        Padding="15,12">
+                    <Grid ColumnDefinitions="Auto,*">
+                        <ui:SymbolIcon Grid.Column="0"
+                                       Symbol="ContactInfo"
+                                       FontSize="24"
+                                       Foreground="White"
+                                       Margin="0,0,12,0" />
+                        <StackPanel Grid.Column="1" Spacing="2">
+                            <TextBlock Text="{Binding ScheduleCard.DoctorFullName}"
+                                       FontSize="16"
+                                       FontWeight="SemiBold"
+                                       Foreground="White"
+                                       FontFamily="Segoe UI Variable" />
+                            <TextBlock FontSize="12"
+                                       Foreground="#E0E8E8"
+                                       FontFamily="Segoe UI Variable">
+                                <Run Text="{Binding ScheduleCard.DoctorSpecialty}"/>
+                                <Run Text=" • "/>
+                                <Run Text="{Binding ScheduleCard.DoctorCategoryDisplay}"/>
+                            </TextBlock>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- Doctor Info Section -->
+                <Border Background="{StaticResource CardBackground}"
+                        BorderBrush="#E0E8E8"
+                        BorderThickness="1"
+                        CornerRadius="6"
+                        Padding="15">
+                    <StackPanel Spacing="10">
+                        <TextBlock Text="Загальна інформація"
+                                   FontSize="13"
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource DarkTeal}"
+                                   FontFamily="Segoe UI Variable" />
+
+                        <!-- Experience -->
+                        <Grid ColumnDefinitions="Auto,*">
+                            <ui:SymbolIcon Grid.Column="0"
+                                           Symbol="Library"
+                                           FontSize="16"
+                                           Foreground="{StaticResource LightTeal}"
+                                           Margin="0,0,8,0" />
+                            <TextBlock Grid.Column="1"
+                                       FontSize="12"
+                                       Foreground="{StaticResource DarkTeal}"
+                                       FontFamily="Segoe UI Variable">
+                                <Run Text="Стаж:"/>
+                                <Run Text="{Binding ScheduleCard.DoctorExperienceYears}"/>
+                                <Run Text="років"/>
+                            </TextBlock>
+                        </Grid>
+
+                        <!-- Phone -->
+                        <Grid ColumnDefinitions="Auto,*"
+                              IsVisible="{Binding ScheduleCard.DoctorPhone, Converter={x:Static ObjectConverters.IsNotNull}}">
+                            <ui:SymbolIcon Grid.Column="0"
+                                           Symbol="Phone"
+                                           FontSize="16"
+                                           Foreground="{StaticResource LightTeal}"
+                                           Margin="0,0,8,0" />
+                            <TextBlock Grid.Column="1"
+                                       Text="{Binding ScheduleCard.DoctorPhone}"
+                                       FontSize="12"
+                                       Foreground="{StaticResource DarkTeal}"
+                                       FontFamily="Segoe UI Variable" />
+                        </Grid>
+
+                        <!-- Email -->
+                        <Grid ColumnDefinitions="Auto,*"
+                              IsVisible="{Binding ScheduleCard.DoctorEmail, Converter={x:Static ObjectConverters.IsNotNull}}">
+                            <ui:SymbolIcon Grid.Column="0"
+                                           Symbol="Mail"
+                                           FontSize="16"
+                                           Foreground="{StaticResource LightTeal}"
+                                           Margin="0,0,8,0" />
+                            <TextBlock Grid.Column="1"
+                                       Text="{Binding ScheduleCard.DoctorEmail}"
+                                       FontSize="12"
+                                       Foreground="{StaticResource DarkTeal}"
+                                       FontFamily="Segoe UI Variable" />
+                        </Grid>
+
+                        <!-- District Doctor -->
+                        <Grid ColumnDefinitions="Auto,*"
+                              IsVisible="{Binding ScheduleCard.IsDistrictDoctor}">
+                            <ui:SymbolIcon Grid.Column="0"
+                                           Symbol="Home"
+                                           FontSize="16"
+                                           Foreground="{StaticResource LightTeal}"
+                                           Margin="0,0,8,0" />
+                            <TextBlock Grid.Column="1"
+                                       Text="Дільничний лікар"
+                                       FontSize="12"
+                                       Foreground="{StaticResource DarkTeal}"
+                                       FontFamily="Segoe UI Variable" />
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- Schedule Info Section -->
+                <Border Background="{StaticResource CardBackground}"
+                        BorderBrush="#E0E8E8"
+                        BorderThickness="1"
+                        CornerRadius="6"
+                        Padding="15">
+                    <StackPanel Spacing="10">
+                        <TextBlock Text="Розклад роботи"
+                                   FontSize="13"
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource DarkTeal}"
+                                   FontFamily="Segoe UI Variable" />
+
+                        <!-- Day of Week -->
+                        <Grid ColumnDefinitions="Auto,*">
+                            <ui:SymbolIcon Grid.Column="0"
+                                           Symbol="Calendar"
+                                           FontSize="16"
+                                           Foreground="{StaticResource LightTeal}"
+                                           Margin="0,0,8,0" />
+                            <TextBlock Grid.Column="1"
+                                       Text="{Binding ScheduleCard.DayOfWeekDisplay}"
+                                       FontSize="12"
+                                       Foreground="{StaticResource DarkTeal}"
+                                       FontFamily="Segoe UI Variable" />
+                        </Grid>
+
+                        <!-- Working Hours -->
+                        <Grid ColumnDefinitions="Auto,*">
+                            <ui:SymbolIcon Grid.Column="0"
+                                           Symbol="Clock"
+                                           FontSize="16"
+                                           Foreground="{StaticResource LightTeal}"
+                                           Margin="0,0,8,0" />
+                            <TextBlock Grid.Column="1"
+                                       Text="{Binding ScheduleCard.WorkingHoursDisplay}"
+                                       FontSize="12"
+                                       Foreground="{StaticResource DarkTeal}"
+                                       FontFamily="Segoe UI Variable" />
+                        </Grid>
+
+                        <!-- Shift -->
+                        <Grid ColumnDefinitions="Auto,*">
+                            <ui:SymbolIcon Grid.Column="0"
+                                           Symbol="Placeholder"
+                                           FontSize="16"
+                                           Foreground="{StaticResource LightTeal}"
+                                           Margin="0,0,8,0" />
+                            <TextBlock Grid.Column="1"
+                                       Text="{Binding ScheduleCard.ShiftDisplay}"
+                                       FontSize="12"
+                                       Foreground="{StaticResource DarkTeal}"
+                                       FontFamily="Segoe UI Variable" />
+                        </Grid>
+
+                        <!-- Room -->
+                        <Grid ColumnDefinitions="Auto,*"
+                              IsVisible="{Binding ScheduleCard.RoomNumber, Converter={x:Static ObjectConverters.IsNotNull}}">
+                            <ui:SymbolIcon Grid.Column="0"
+                                           Symbol="Placeholder"
+                                           FontSize="16"
+                                           Foreground="{StaticResource LightTeal}"
+                                           Margin="0,0,8,0" />
+                            <TextBlock Grid.Column="1"
+                                       Text="{Binding ScheduleCard.RoomLocationDisplay}"
+                                       FontSize="12"
+                                       Foreground="{StaticResource DarkTeal}"
+                                       FontFamily="Segoe UI Variable" />
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- Appointment Statistics -->
+                <Border Background="{StaticResource CardBackground}"
+                        BorderBrush="#E0E8E8"
+                        BorderThickness="1"
+                        CornerRadius="6"
+                        Padding="15">
+                    <StackPanel Spacing="10">
+                        <TextBlock Text="Статистика записів"
+                                   FontSize="13"
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource DarkTeal}"
+                                   FontFamily="Segoe UI Variable" />
+
+                        <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
+                            <!-- Total Slots -->
+                            <Border Grid.Column="0"
+                                    Background="{StaticResource BackgroundLight}"
+                                    CornerRadius="4"
+                                    Padding="8,6">
+                                <StackPanel Spacing="2">
+                                    <TextBlock Text="Всього"
+                                               FontSize="10"
+                                               Foreground="{StaticResource LightTeal}"
+                                               HorizontalAlignment="Center"
+                                               FontFamily="Segoe UI Variable" />
+                                    <TextBlock Text="{Binding ScheduleCard.TotalSlotsAvailable}"
+                                               FontSize="16"
+                                               FontWeight="Bold"
+                                               Foreground="{StaticResource DarkTeal}"
+                                               HorizontalAlignment="Center"
+                                               FontFamily="Segoe UI Variable" />
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Booked Slots -->
+                            <Border Grid.Column="1"
+                                    Background="#FFF3E0"
+                                    CornerRadius="4"
+                                    Padding="8,6">
+                                <StackPanel Spacing="2">
+                                    <TextBlock Text="Зайнято"
+                                               FontSize="10"
+                                               Foreground="#F57C00"
+                                               HorizontalAlignment="Center"
+                                               FontFamily="Segoe UI Variable" />
+                                    <TextBlock Text="{Binding ScheduleCard.BookedSlotsCount}"
+                                               FontSize="16"
+                                               FontWeight="Bold"
+                                               Foreground="#E65100"
+                                               HorizontalAlignment="Center"
+                                               FontFamily="Segoe UI Variable" />
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Available Slots -->
+                            <Border Grid.Column="2"
+                                    Background="#E8F5E9"
+                                    CornerRadius="4"
+                                    Padding="8,6">
+                                <StackPanel Spacing="2">
+                                    <TextBlock Text="Вільно"
+                                               FontSize="10"
+                                               Foreground="#388E3C"
+                                               HorizontalAlignment="Center"
+                                               FontFamily="Segoe UI Variable" />
+                                    <TextBlock Text="{Binding ScheduleCard.AvailableSlotsCount}"
+                                               FontSize="16"
+                                               FontWeight="Bold"
+                                               Foreground="#1B5E20"
+                                               HorizontalAlignment="Center"
+                                               FontFamily="Segoe UI Variable" />
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- Appointment Slots List -->
+                <Border Background="{StaticResource CardBackground}"
+                        BorderBrush="#E0E8E8"
+                        BorderThickness="1"
+                        CornerRadius="6"
+                        Padding="15"
+                        IsVisible="{Binding AppointmentSlots.Count}">
+                    <StackPanel Spacing="10">
+                        <TextBlock FontSize="13"
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource DarkTeal}"
+                                   FontFamily="Segoe UI Variable">
+                            <Run Text="Слоти на"/>
+                            <Run Text="{Binding SelectedDate}"/>
+                        </TextBlock>
+
+                        <ScrollViewer MaxHeight="200">
+                            <ItemsControl ItemsSource="{Binding AppointmentSlots}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Background="{StaticResource BackgroundLight}"
+                                                BorderBrush="#E0E8E8"
+                                                BorderThickness="1"
+                                                CornerRadius="4"
+                                                Padding="10,6"
+                                                Margin="0,0,0,4">
+                                            <Grid ColumnDefinitions="Auto,*,Auto">
+                                                <ui:SymbolIcon Grid.Column="0"
+                                                               Symbol="Clock"
+                                                               FontSize="14"
+                                                               Foreground="{StaticResource LightTeal}"
+                                                               Margin="0,0,8,0" />
+                                                
+                                                <StackPanel Grid.Column="1" Spacing="2">
+                                                    <TextBlock Text="{Binding TimeSlot}"
+                                                               FontSize="12"
+                                                               FontWeight="SemiBold"
+                                                               Foreground="{StaticResource DarkTeal}"
+                                                               FontFamily="Segoe UI Variable" />
+                                                    <TextBlock Text="{Binding PatientName}"
+                                                               FontSize="11"
+                                                               Foreground="{StaticResource LightTeal}"
+                                                               FontFamily="Segoe UI Variable"
+                                                               IsVisible="{Binding IsBooked}" />
+                                                </StackPanel>
+
+                                                <Border Grid.Column="2"
+                                                        Background="{Binding IsBooked, Converter={StaticResource BoolToBackgroundConverter}}"
+                                                        CornerRadius="3"
+                                                        Padding="8,3">
+                                                    <TextBlock Text="{Binding StatusDisplay}"
+                                                               FontSize="10"
+                                                               FontWeight="SemiBold"
+                                                               Foreground="White"
+                                                               FontFamily="Segoe UI Variable" />
+                                                </Border>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+    </Border>
+
+</UserControl>
+

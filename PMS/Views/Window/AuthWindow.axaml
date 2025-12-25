@@ -1,0 +1,145 @@
+<windowing1:AppWindow xmlns="https://github.com/avaloniaui"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+                      xmlns:windowing1="clr-namespace:FluentAvalonia.UI.Windowing;assembly=FluentAvalonia"
+                      xmlns:converters="clr-namespace:Avalonia.Data.Converters;assembly=Avalonia.Base"
+                      MinWidth="700"
+                      MinHeight="500"
+                      Width="750"
+                      Closed="TopLevel_OnClosed"
+                      SizeToContent="WidthAndHeight"
+                      x:Class="PMS.Views.Window.AuthWindow"
+					  xmlns:vm="clr-namespace:PMS.ViewModels"
+					  x:DataType="vm:AuthViewModel"
+                      Title="{Binding ApplicationTitle}"
+                      WindowStartupLocation="CenterScreen"
+					  x:CompileBindings="True"
+                      Icon="avares://PMS/Assets/al.ico">
+
+	<DockPanel>
+
+        <Grid DockPanel.Dock="Top"
+              Height="40"
+              Background="DarkSlateGray"
+              Name="CustomTitleBar"
+              ColumnDefinitions="Auto,*,Auto,138">
+
+            <StackPanel Grid.Column="0"
+                        Orientation="Horizontal"
+                        VerticalAlignment="Center"
+                        Margin="10,0" Spacing="10">
+
+                <Viewbox Width="25">
+                    <Image Source="avares://PMS/Assets/Ico/keyauth.ico" />
+                </Viewbox>
+
+                <TextBlock Text="{Binding ApplicationTitle}"
+                           Foreground="AliceBlue"
+                           FontWeight="SemiBold"
+                           Padding="0,5"
+                           FontSize="{DynamicResource FontSizeLarge}" />
+            </StackPanel>
+
+
+            <StackPanel Grid.Column="2"
+                        Orientation="Horizontal"
+                        VerticalAlignment="Center"
+                        Margin="5,0">
+
+            </StackPanel>
+        </Grid>
+
+        <controls:NavigationView x:Name="NavView"
+                                 PaneDisplayMode="Left"
+                                 IsSettingsVisible="False"
+                                 IsPaneToggleButtonVisible="True"
+                                 IsBackButtonVisible="True"
+                                 IsBackEnabled="True"
+                                 OpenPaneLength="200"
+                                 BackRequested="OnBackRequested"
+                                 IsPaneOpen="True"
+                                 Background="{DynamicResource NavigationViewExpandedPaneBackground}">
+
+			<controls:NavigationView.MenuItems>
+
+                <controls:NavigationViewItemSeparator/>
+
+                <controls:NavigationViewItem Content="Вхід"
+                                             Tag="Login"
+                                             x:Name="LoginNavItem">
+					<controls:NavigationViewItem.IconSource>
+						<controls:SymbolIconSource Symbol="Contact" />
+					</controls:NavigationViewItem.IconSource>
+
+                    <Interaction.Behaviors>
+                        <EventTriggerBehavior EventName="Tapped">
+                            <InvokeCommandAction Command="{Binding ShowLoginCommand}"/>
+                        </EventTriggerBehavior>
+                    </Interaction.Behaviors>
+				</controls:NavigationViewItem>
+
+
+
+				<controls:NavigationViewItem Content="Реєстрація"
+                                            Tag="Registration"
+                                            x:Name="RegistrationNavItem">
+					<controls:NavigationViewItem.IconSource>
+						<controls:SymbolIconSource Symbol="AddFriend" />
+					</controls:NavigationViewItem.IconSource>
+					<Interaction.Behaviors>
+                        <EventTriggerBehavior EventName="Tapped">
+                            <InvokeCommandAction Command="{Binding ShowRegistrationCommand}"/>
+                        </EventTriggerBehavior>
+                    </Interaction.Behaviors>
+				</controls:NavigationViewItem>
+
+				<controls:NavigationViewItem Content="Перевірка статусу"
+                                            Tag="StatusCheck"
+                                            x:Name="StatusCheckNavItem">
+					<controls:NavigationViewItem.IconSource>
+						<controls:SymbolIconSource Symbol="Sync" />
+					</controls:NavigationViewItem.IconSource>
+
+                    <Interaction.Behaviors>
+                        <EventTriggerBehavior EventName="Tapped">
+                            <InvokeCommandAction Command="{Binding  ShowStatusCheckCommand}"/>
+                        </EventTriggerBehavior>
+                    </Interaction.Behaviors>
+				</controls:NavigationViewItem>
+
+			</controls:NavigationView.MenuItems>
+
+			<ContentControl Name="MainContent"
+                            HorizontalContentAlignment="Stretch"
+                            Background="DarkSlateGray"
+                            VerticalContentAlignment="Stretch"
+                            Margin="3"
+                            CornerRadius="5"
+                            Content="{Binding CurrentView}"/>
+
+			<controls:NavigationView.FooterMenuItems>
+				<controls:NavigationViewItem>
+					<controls:NavigationViewItem.Content>
+                        <Grid>
+                            <controls:FAComboBox x:Name="LanguageSelector"
+                                                 HorizontalAlignment="Stretch"
+                                                 SelectedItem="{Binding SelectedDefaultLanguage}"
+                                                 ItemsSource="{Binding AvailableLanguages}"
+                                                 DisplayMemberBinding="{Binding DisplayName}">
+
+                                <Interaction.Behaviors>
+                                    <EventTriggerBehavior EventName="SelectionChanged">
+                                        <InvokeCommandAction Command="{Binding ChangeLanguageCommand}" />
+                                    </EventTriggerBehavior>
+                                </Interaction.Behaviors>
+                            </controls:FAComboBox>
+                        </Grid>
+					</controls:NavigationViewItem.Content>
+					<controls:NavigationViewItem.IconSource>
+						<controls:SymbolIconSource Symbol="Globe" />
+					</controls:NavigationViewItem.IconSource>
+				</controls:NavigationViewItem>
+			</controls:NavigationView.FooterMenuItems>
+		</controls:NavigationView>
+	</DockPanel>
+</windowing1:AppWindow>
