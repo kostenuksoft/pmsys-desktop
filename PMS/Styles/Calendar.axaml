@@ -1,0 +1,349 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<Design.PreviewWith>
+		<Border Padding="40">
+			<Calendar/>
+		</Border>
+	</Design.PreviewWith>
+
+	<!-- Calendar Main Container -->
+	<Style Selector="Calendar">
+		<Setter Property="Background" Value="#FBFBFB"/>
+		<Setter Property="BorderBrush" Value="#D1D1D1"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="CornerRadius" Value="6"/>
+		<Setter Property="Padding" Value="8"/>
+		<Setter Property="FontFamily" Value="Segoe UI Variable"/>
+	</Style>
+
+	<!-- Calendar Header (Month/Year navigation area) -->
+	<Style Selector="CalendarItem">
+		<Setter Property="Background" Value="Transparent"/>
+		<Setter Property="BorderThickness" Value="0"/>
+	</Style>
+
+	<!-- Navigation Buttons (Previous/Next Month) -->
+	<Style Selector="CalendarItem Button.CalendarNavigationButton">
+		<Setter Property="Background" Value="#FBFBFB"/>
+		<Setter Property="BorderBrush" Value="#D1D1D1"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="CornerRadius" Value="4"/>
+		<Setter Property="Foreground" Value="#000000"/>
+		<Setter Property="Width" Value="28"/>
+		<Setter Property="Height" Value="28"/>
+		<Setter Property="FontSize" Value="14"/>
+	</Style>
+
+	<Style Selector="CalendarItem Button.CalendarNavigationButton:pointerover">
+		<Setter Property="Background">
+			<RadialGradientBrush Center="50%,50%">
+				<GradientStop Color="#F0F8F8" Offset="0"/>
+				<GradientStop Color="#E8F4F4" Offset="0.7"/>
+				<GradientStop Color="#E0F0F0" Offset="1"/>
+			</RadialGradientBrush>
+		</Setter>
+		<Setter Property="BorderBrush" Value="#5F9EA0"/>
+	</Style>
+
+	<Style Selector="CalendarItem Button.CalendarNavigationButton:pressed">
+		<Setter Property="Background">
+			<RadialGradientBrush Center="50%,50%">
+				<GradientStop Color="#D8E8E8" Offset="0"/>
+				<GradientStop Color="#CCE0E0" Offset="0.5"/>
+				<GradientStop Color="#C0D8D8" Offset="1"/>
+			</RadialGradientBrush>
+		</Setter>
+		<Setter Property="BorderBrush" Value="#2F4F4F"/>
+		<Setter Property="RenderTransform">
+			<ScaleTransform ScaleX="0.95" ScaleY="0.95"/>
+		</Setter>
+	</Style>
+
+	<!-- Header Button (Month/Year selector) -->
+	<Style Selector="CalendarItem Button#PART_HeaderButton">
+		<Setter Property="Background" Value="Transparent"/>
+		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="Foreground" Value="#2F4F4F"/>
+		<Setter Property="FontSize" Value="15"/>
+		<Setter Property="FontWeight" Value="SemiBold"/>
+		<Setter Property="Padding" Value="8,4"/>
+		<Setter Property="MinHeight" Value="32"/>
+	</Style>
+
+	<Style Selector="CalendarItem Button#PART_HeaderButton:pointerover">
+		<Setter Property="Background" Value="#F0F8F8"/>
+		<Setter Property="Foreground" Value="#3A5F5F"/>
+	</Style>
+
+	<Style Selector="CalendarItem Button#PART_HeaderButton:pressed">
+		<Setter Property="Background" Value="#E0F0F0"/>
+		<Setter Property="Foreground" Value="#2F4F4F"/>
+	</Style>
+
+	<!-- Day of Week Headers (Mon, Tue, Wed, etc.) -->
+	<Style Selector="CalendarDayButton.CalendarDayOfWeek">
+		<Setter Property="Background" Value="Transparent"/>
+		<Setter Property="Foreground" Value="#5F5F5F"/>
+		<Setter Property="FontSize" Value="12"/>
+		<Setter Property="FontWeight" Value="SemiBold"/>
+		<Setter Property="IsEnabled" Value="False"/>
+		<Setter Property="Padding" Value="0"/>
+		<Setter Property="Margin" Value="2"/>
+	</Style>
+
+	<!-- Individual Day Buttons -->
+	<Style Selector="CalendarDayButton">
+		<Setter Property="Background" Value="Transparent"/>
+		<Setter Property="BorderBrush" Value="Transparent"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="CornerRadius" Value="4"/>
+		<Setter Property="Foreground" Value="#000000"/>
+		<Setter Property="FontSize" Value="13"/>
+		<Setter Property="FontWeight" Value="Normal"/>
+		<Setter Property="Width" Value="40"/>
+		<Setter Property="Height" Value="40"/>
+		<Setter Property="Margin" Value="2"/>
+		<Setter Property="Padding" Value="0"/>
+		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+		<Setter Property="Template">
+			<ControlTemplate>
+				<Border Background="{TemplateBinding Background}"
+						BorderBrush="{TemplateBinding BorderBrush}"
+						BorderThickness="{TemplateBinding BorderThickness}"
+						CornerRadius="{TemplateBinding CornerRadius}">
+					<Border.Transitions>
+						<Transitions>
+							<BrushTransition Property="Background" Duration="0:0:0.15"/>
+							<BrushTransition Property="BorderBrush" Duration="0:0:0.15"/>
+						</Transitions>
+					</Border.Transitions>
+					<ContentPresenter Content="{TemplateBinding Content}"
+									HorizontalAlignment="Center"
+									VerticalAlignment="Center"
+									TextBlock.Foreground="{TemplateBinding Foreground}"
+									TextBlock.FontSize="{TemplateBinding FontSize}"
+									TextBlock.FontWeight="{TemplateBinding FontWeight}"/>
+				</Border>
+			</ControlTemplate>
+		</Setter>
+	</Style>
+
+	<!-- Day Button Hover -->
+	<Style Selector="CalendarDayButton:pointerover /template/ Border">
+		<Setter Property="Background">
+			<RadialGradientBrush Center="50%,50%">
+				<GradientStop Color="#F0F8F8" Offset="0"/>
+				<GradientStop Color="#E8F4F4" Offset="0.7"/>
+				<GradientStop Color="#E0F0F0" Offset="1"/>
+			</RadialGradientBrush>
+		</Setter>
+		<Setter Property="BorderBrush" Value="#5F9EA0"/>
+	</Style>
+
+	<!-- Day Button Pressed -->
+	<Style Selector="CalendarDayButton:pressed /template/ Border">
+		<Setter Property="Background">
+			<RadialGradientBrush Center="50%,50%">
+				<GradientStop Color="#D8E8E8" Offset="0"/>
+				<GradientStop Color="#CCE0E0" Offset="0.5"/>
+				<GradientStop Color="#C0D8D8" Offset="1"/>
+			</RadialGradientBrush>
+		</Setter>
+		<Setter Property="BorderBrush" Value="#2F4F4F"/>
+		<Setter Property="RenderTransform">
+			<ScaleTransform ScaleX="0.95" ScaleY="0.95"/>
+		</Setter>
+	</Style>
+
+	<!-- Today's Date Highlight -->
+	<Style Selector="CalendarDayButton:today /template/ Border">
+		<Setter Property="Background">
+			<LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+				<GradientStop Color="#E8F4F4" Offset="0"/>
+				<GradientStop Color="#D8EDED" Offset="0.5"/>
+				<GradientStop Color="#C8E6E6" Offset="1"/>
+			</LinearGradientBrush>
+		</Setter>
+		<Setter Property="BorderBrush" Value="#5F9EA0"/>
+		<Setter Property="BorderThickness" Value="2"/>
+		<Setter Property="Effect">
+			<DropShadowEffect Color="#305F9EA0" OffsetX="0" OffsetY="2" BlurRadius="6"/>
+		</Setter>
+	</Style>
+
+	<Style Selector="CalendarDayButton:today">
+		<Setter Property="Foreground" Value="#2F4F4F"/>
+		<Setter Property="FontWeight" Value="SemiBold"/>
+	</Style>
+
+	<!-- Today's Date Hover -->
+	<Style Selector="CalendarDayButton:today:pointerover /template/ Border">
+		<Setter Property="Background">
+			<LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+				<GradientStop Color="#D0EBEB" Offset="0"/>
+				<GradientStop Color="#C0E0E0" Offset="0.5"/>
+				<GradientStop Color="#B0D5D5" Offset="1"/>
+			</LinearGradientBrush>
+		</Setter>
+		<Setter Property="BorderBrush" Value="#4A8A8A"/>
+		<Setter Property="Effect">
+			<DropShadowEffect Color="#405F9EA0" OffsetX="0" OffsetY="3" BlurRadius="10"/>
+		</Setter>
+	</Style>
+
+	<!-- Today's Date Pressed -->
+	<Style Selector="CalendarDayButton:today:pressed /template/ Border">
+		<Setter Property="Background">
+			<LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+				<GradientStop Color="#A8CDCD" Offset="0"/>
+				<GradientStop Color="#98C2C2" Offset="0.5"/>
+				<GradientStop Color="#88B7B7" Offset="1"/>
+			</LinearGradientBrush>
+		</Setter>
+		<Setter Property="BorderBrush" Value="#2F4F4F"/>
+		<Setter Property="RenderTransform">
+			<ScaleTransform ScaleX="0.95" ScaleY="0.95"/>
+		</Setter>
+		<Setter Property="Effect">
+			<DropShadowEffect Color="#502F4F4F" OffsetX="0" OffsetY="1" BlurRadius="4"/>
+		</Setter>
+	</Style>
+
+	<!-- Selected Date(s) - Accent Style -->
+	<Style Selector="CalendarDayButton:selected /template/ Border">
+		<Setter Property="Background">
+			<LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+				<GradientStop Color="#3A5F5F" Offset="0"/>
+				<GradientStop Color="#2F4F4F" Offset="0.5"/>
+				<GradientStop Color="#284848" Offset="1"/>
+			</LinearGradientBrush>
+		</Setter>
+		<Setter Property="BorderBrush" Value="#4A6F6F"/>
+		<Setter Property="Effect">
+			<DropShadowEffect Color="#403A5F5F" OffsetX="0" OffsetY="2" BlurRadius="6"/>
+		</Setter>
+	</Style>
+
+	<Style Selector="CalendarDayButton:selected">
+		<Setter Property="Foreground" Value="#FFFFFF"/>
+		<Setter Property="FontWeight" Value="SemiBold"/>
+	</Style>
+
+	<!-- Selected Date Hover -->
+	<Style Selector="CalendarDayButton:selected:pointerover /template/ Border">
+		<Setter Property="Background">
+			<LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+				<GradientStop Color="#4A7A7A" Offset="0"/>
+				<GradientStop Color="#3A6A6A" Offset="0.5"/>
+				<GradientStop Color="#305A5A" Offset="1"/>
+			</LinearGradientBrush>
+		</Setter>
+		<Setter Property="BorderBrush" Value="#5F8F8F"/>
+		<Setter Property="Effect">
+			<DropShadowEffect Color="#504A7A7A" OffsetX="0" OffsetY="3" BlurRadius="10"/>
+		</Setter>
+	</Style>
+
+	<!-- Selected Date Pressed -->
+	<Style Selector="CalendarDayButton:selected:pressed /template/ Border">
+		<Setter Property="Background">
+			<LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+				<GradientStop Color="#253333" Offset="0"/>
+				<GradientStop Color="#1F2D2D" Offset="0.5"/>
+				<GradientStop Color="#1A2828" Offset="1"/>
+			</LinearGradientBrush>
+		</Setter>
+		<Setter Property="BorderBrush" Value="#2A4444"/>
+		<Setter Property="RenderTransform">
+			<ScaleTransform ScaleX="0.93" ScaleY="0.93"/>
+		</Setter>
+	</Style>
+
+	<!-- Inactive Days (from other months) -->
+	<Style Selector="CalendarDayButton:inactive">
+		<Setter Property="Foreground" Value="#B0B0B0"/>
+		<Setter Property="FontWeight" Value="Normal"/>
+	</Style>
+
+	<Style Selector="CalendarDayButton:inactive:pointerover /template/ Border">
+		<Setter Property="Background" Value="#F5F5F5"/>
+		<Setter Property="BorderBrush" Value="#D1D1D1"/>
+	</Style>
+
+	<!-- Disabled Days -->
+	<Style Selector="CalendarDayButton:disabled">
+		<Setter Property="Foreground" Value="#D0D0D0"/>
+		<Setter Property="Background" Value="Transparent"/>
+	</Style>
+
+	<!-- Blackout Days (unavailable dates) -->
+	<Style Selector="CalendarDayButton.CalendarBlackoutDay">
+		<Setter Property="Foreground" Value="#E0E0E0"/>
+		<Setter Property="Background" Value="#F9F9F9"/>
+		<Setter Property="IsEnabled" Value="False"/>
+	</Style>
+
+	<Style Selector="CalendarDayButton.CalendarBlackoutDay /template/ Border">
+		<Setter Property="Background" Value="#F9F9F9"/>
+	</Style>
+
+	<!-- Month/Year Selection Buttons -->
+	<Style Selector="CalendarButton">
+		<Setter Property="Background" Value="Transparent"/>
+		<Setter Property="BorderBrush" Value="Transparent"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="CornerRadius" Value="4"/>
+		<Setter Property="Foreground" Value="#000000"/>
+		<Setter Property="FontSize" Value="13"/>
+		<Setter Property="Padding" Value="8,6"/>
+		<Setter Property="Margin" Value="4"/>
+		<Setter Property="MinWidth" Value="70"/>
+		<Setter Property="MinHeight" Value="40"/>
+	</Style>
+
+	<Style Selector="CalendarButton:pointerover">
+		<Setter Property="Background">
+			<RadialGradientBrush Center="50%,50%">
+				<GradientStop Color="#F0F8F8" Offset="0"/>
+				<GradientStop Color="#E8F4F4" Offset="0.7"/>
+				<GradientStop Color="#E0F0F0" Offset="1"/>
+			</RadialGradientBrush>
+		</Setter>
+		<Setter Property="BorderBrush" Value="#5F9EA0"/>
+	</Style>
+
+	<Style Selector="CalendarButton:pressed">
+		<Setter Property="Background">
+			<RadialGradientBrush Center="50%,50%">
+				<GradientStop Color="#D8E8E8" Offset="0"/>
+				<GradientStop Color="#CCE0E0" Offset="0.5"/>
+				<GradientStop Color="#C0D8D8" Offset="1"/>
+			</RadialGradientBrush>
+		</Setter>
+		<Setter Property="BorderBrush" Value="#2F4F4F"/>
+	</Style>
+
+	<Style Selector="CalendarButton:selected">
+		<Setter Property="Background">
+			<LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+				<GradientStop Color="#3A5F5F" Offset="0"/>
+				<GradientStop Color="#2F4F4F" Offset="0.5"/>
+				<GradientStop Color="#284848" Offset="1"/>
+			</LinearGradientBrush>
+		</Setter>
+		<Setter Property="BorderBrush" Value="#4A6F6F"/>
+		<Setter Property="Foreground" Value="#FFFFFF"/>
+		<Setter Property="FontWeight" Value="SemiBold"/>
+	</Style>
+
+	<Style Selector="CalendarButton:inactive">
+		<Setter Property="Foreground" Value="#B0B0B0"/>
+	</Style>
+
+	<Style Selector="CalendarButton:disabled">
+		<Setter Property="Foreground" Value="#D0D0D0"/>
+		<Setter Property="Background" Value="Transparent"/>
+	</Style>
+
+</Styles>

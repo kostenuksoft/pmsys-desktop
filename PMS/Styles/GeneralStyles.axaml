@@ -1,0 +1,424 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Design.PreviewWith>
+    <Border Padding="50">
+
+		
+
+	</Border>
+  </Design.PreviewWith>
+  
+	<!-- Custom Styles -->
+	<Style Selector="Window">
+		<Setter Property="FontFamily" Value="Segoe UI Variable, Segoe UI, Arial, sans-serif" />
+		<Setter Property="FontSize" Value="14" />
+		<Setter Property="Background" Value="#F3F3F3" />
+	</Style>
+
+
+	<!-- ToggleButton Primary Style -->
+	<Style Selector="ToggleButton.primary">
+		<Setter Property="Background" Value="#FBFBFB"/>
+		<Setter Property="BorderBrush" Value="#D1D1D1"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="CornerRadius" Value="4"/>
+		<Setter Property="Foreground" Value="#000000"/>
+		<Setter Property="Padding" Value="11,5,11,6"/>
+		<Setter Property="MinHeight" Value="32"/>
+		<Setter Property="FontFamily" Value="Segoe UI Variable"/>
+		<Setter Property="FontSize" Value="14"/>
+		<Setter Property="FontWeight" Value="Normal"/>
+		<Setter Property="Template">
+			<ControlTemplate>
+				<Border Background="{TemplateBinding Background}"
+						BorderBrush="{TemplateBinding BorderBrush}"
+						BorderThickness="{TemplateBinding BorderThickness}"
+						CornerRadius="{TemplateBinding CornerRadius}">
+					<Border.Transitions>
+						<Transitions>
+							<BrushTransition Property="Background" Duration="0:0:0.15"/>
+							<BrushTransition Property="BorderBrush" Duration="0:0:0.15"/>
+						</Transitions>
+					</Border.Transitions>
+					<ContentPresenter Content="{TemplateBinding Content}"
+									ContentTemplate="{TemplateBinding ContentTemplate}"
+									HorizontalAlignment="Center"
+									VerticalAlignment="Center"
+									Margin="{TemplateBinding Padding}"
+									TextBlock.Foreground="{TemplateBinding Foreground}"/>
+				</Border>
+			</ControlTemplate>
+		</Setter>
+	</Style>
+
+	<Style Selector="ToggleButton.primary:checked">
+		<Setter Property="Background">
+			<LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+				<GradientStop Color="#0078D4" Offset="0"/>
+				<GradientStop Color="#106EBE" Offset="1"/>
+			</LinearGradientBrush>
+		</Setter>
+		<Setter Property="BorderBrush" Value="#0078D4"/>
+		<Setter Property="Foreground" Value="#FFFFFF"/>
+		<Setter Property="FontWeight" Value="SemiBold"/>
+	</Style>
+
+	<!-- Success Button Style -->
+	<Style Selector="Button.success">
+		<Setter Property="Background">
+			<LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+				<GradientStop Color="#107C10" Offset="0"/>
+				<GradientStop Color="#0E6B0E" Offset="1"/>
+			</LinearGradientBrush>
+		</Setter>
+		<Setter Property="BorderBrush" Value="#107C10"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="CornerRadius" Value="4"/>
+		<Setter Property="Foreground" Value="#FFFFFF"/>
+		<Setter Property="Padding" Value="11,5,11,6"/>
+		<Setter Property="MinHeight" Value="32"/>
+		<Setter Property="FontFamily" Value="Segoe UI Variable"/>
+		<Setter Property="FontSize" Value="14"/>
+		<Setter Property="FontWeight" Value="SemiBold"/>
+		<Setter Property="Effect">
+			<DropShadowEffect Color="#30107C10" OffsetX="0" OffsetY="2" BlurRadius="6"/>
+		</Setter>
+	</Style>
+
+	<!-- Danger Button Style -->
+	<Style Selector="Button.danger">
+		<Setter Property="Background">
+			<LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+				<GradientStop Color="#D13438" Offset="0"/>
+				<GradientStop Color="#B52D30" Offset="1"/>
+			</LinearGradientBrush>
+		</Setter>
+		<Setter Property="BorderBrush" Value="#D13438"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="CornerRadius" Value="4"/>
+		<Setter Property="Foreground" Value="#FFFFFF"/>
+		<Setter Property="Padding" Value="11,5,11,6"/>
+		<Setter Property="MinHeight" Value="32"/>
+		<Setter Property="FontFamily" Value="Segoe UI Variable"/>
+		<Setter Property="FontSize" Value="14"/>
+		<Setter Property="FontWeight" Value="SemiBold"/>
+		<Setter Property="Effect">
+			<DropShadowEffect Color="#30D13438" OffsetX="0" OffsetY="2" BlurRadius="6"/>
+		</Setter>
+	</Style>
+
+	<!-- DataGrid Styles -->
+	<Style Selector="DataGrid">
+		<Setter Property="BorderBrush" Value="#E5E5E5"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="Background" Value="#FFFFFF"/>
+		<Setter Property="CornerRadius" Value="8"/>
+		<Setter Property="Effect">
+			<DropShadowEffect Color="#10000000" OffsetX="0" OffsetY="2" BlurRadius="8"/>
+		</Setter>
+	</Style>
+
+	<Style Selector="DataGridRow:selected">
+		<Setter Property="Background">
+			<LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+				<GradientStop Color="#E6F3FF" Offset="0"/>
+				<GradientStop Color="#CCE7FF" Offset="1"/>
+			</LinearGradientBrush>
+		</Setter>
+	</Style>
+
+	<Style Selector="DataGridRow:pointerover">
+		<Setter Property="Background">
+			<RadialGradientBrush Center="50%,50%">
+				<GradientStop Color="#F5F5F5" Offset="0"/>
+				<GradientStop Color="#EEEEEE" Offset="1"/>
+			</RadialGradientBrush>
+		</Setter>
+	</Style>
+
+	<!-- TextBox Styles -->
+	<Style Selector="TextBox">
+		<Setter Property="BorderBrush" Value="#D1D1D1"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="CornerRadius" Value="4"/>
+		<Setter Property="Padding" Value="8,6"/>
+		<Setter Property="MinHeight" Value="32"/>
+		<Setter Property="Background" Value="#FFFFFF"/>
+		<Setter Property="FontFamily" Value="Segoe UI Variable"/>
+		<Setter Property="FontSize" Value="14"/>
+		<Setter Property="Effect">
+			<DropShadowEffect Color="#10000000" OffsetX="0" OffsetY="1" BlurRadius="2"/>
+		</Setter>
+		<Setter Property="Template">
+			<ControlTemplate>
+				<Border Background="{TemplateBinding Background}"
+						BorderBrush="{TemplateBinding BorderBrush}"
+						BorderThickness="{TemplateBinding BorderThickness}"
+						CornerRadius="{TemplateBinding CornerRadius}">
+					<Border.Transitions>
+						<Transitions>
+							<BrushTransition Property="BorderBrush" Duration="0:0:0.15"/>
+							<ThicknessTransition Property="BorderThickness" Duration="0:0:0.15"/>
+						</Transitions>
+					</Border.Transitions>
+					<TextPresenter Name="PART_TextPresenter"
+								  Text="{TemplateBinding Text}"
+								  CaretIndex="{TemplateBinding CaretIndex}"
+								  SelectionStart="{TemplateBinding SelectionStart}"
+								  SelectionEnd="{TemplateBinding SelectionEnd}"
+								  TextAlignment="{TemplateBinding TextAlignment}"
+								  TextWrapping="{TemplateBinding TextWrapping}"
+								  PasswordChar="{TemplateBinding PasswordChar}"
+								  RevealPassword="{TemplateBinding RevealPassword}"
+								  SelectionBrush="{TemplateBinding SelectionBrush}"
+								  SelectionForegroundBrush="{TemplateBinding SelectionForegroundBrush}"
+								  CaretBrush="{TemplateBinding CaretBrush}"
+								  Margin="{TemplateBinding Padding}"
+								  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+								  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+				</Border>
+			</ControlTemplate>
+		</Setter>
+	</Style>
+
+	<Style Selector="TextBox:focus">
+		<Setter Property="BorderBrush" Value="#0078D4"/>
+		<Setter Property="BorderThickness" Value="2"/>
+		<Setter Property="Effect">
+			<DropShadowEffect Color="#300078D4" OffsetX="0" OffsetY="0" BlurRadius="8"/>
+		</Setter>
+	</Style>
+
+	<Style Selector="TextBox:disabled">
+		<Setter Property="Background" Value="#F9F9F9"/>
+		<Setter Property="BorderBrush" Value="#E0E0E0"/>
+		<Setter Property="Foreground" Value="#A6A6A6"/>
+	</Style>
+
+	<!-- ComboBox Styles -->
+	<Style Selector="ComboBox">
+		<Setter Property="BorderBrush" Value="#D1D1D1"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="CornerRadius" Value="4"/>
+		<Setter Property="Padding" Value="8,6"/>
+		<Setter Property="MinHeight" Value="32"/>
+		<Setter Property="Background" Value="#FFFFFF"/>
+		<Setter Property="FontFamily" Value="Segoe UI Variable"/>
+		<Setter Property="FontSize" Value="14"/>
+		<Setter Property="Effect">
+			<DropShadowEffect Color="#10000000" OffsetX="0" OffsetY="1" BlurRadius="2"/>
+		</Setter>
+	</Style>
+
+	<Style Selector="ComboBox:focus">
+		<Setter Property="BorderBrush" Value="#0078D4"/>
+		<Setter Property="BorderThickness" Value="2"/>
+		<Setter Property="Effect">
+			<DropShadowEffect Color="#300078D4" OffsetX="0" OffsetY="0" BlurRadius="8"/>
+		</Setter>
+	</Style>
+
+	<!-- Menu Styles -->
+	<Style Selector="Menu">
+		<Setter Property="Background">
+			<LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+				<GradientStop Color="#FAFAFA" Offset="0"/>
+				<GradientStop Color="#F0F0F0" Offset="1"/>
+			</LinearGradientBrush>
+		</Setter>
+		<Setter Property="Height" Value="32"/>
+		<Setter Property="BorderThickness" Value="0,0,0,1"/>
+		<Setter Property="BorderBrush" Value="#E5E5E5"/>
+		<Setter Property="Effect">
+			<DropShadowEffect Color="#10000000" OffsetX="0" OffsetY="1" BlurRadius="4"/>
+		</Setter>
+	</Style>
+
+	<Style Selector="MenuItem">
+		<Setter Property="Padding" Value="12,8"/>
+		<Setter Property="FontFamily" Value="Segoe UI Variable"/>
+		<Setter Property="FontSize" Value="14"/>
+		<Setter Property="CornerRadius" Value="4"/>
+		<Setter Property="Margin" Value="4,2"/>
+	</Style>
+
+	<Style Selector="MenuItem:pointerover">
+		<Setter Property="Background">
+			<RadialGradientBrush Center="50%,50%">
+				<GradientStop Color="#F0F7FF" Offset="0"/>
+				<GradientStop Color="#E8F4FF" Offset="1"/>
+			</RadialGradientBrush>
+		</Setter>
+	</Style>
+
+	<!-- Expander Styles -->
+	<Style Selector="Expander">
+		<Setter Property="BorderBrush" Value="#E5E5E5"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="CornerRadius" Value="8"/>
+		<Setter Property="Margin" Value="0,4"/>
+		<Setter Property="Background" Value="#FFFFFF"/>
+		<Setter Property="Effect">
+			<DropShadowEffect Color="#10000000" OffsetX="0" OffsetY="2" BlurRadius="8"/>
+		</Setter>
+	</Style>
+
+	<Style Selector="Expander /template/ ToggleButton#PART_toggle">
+		<Setter Property="Background">
+			<LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+				<GradientStop Color="#F8F8F8" Offset="0"/>
+				<GradientStop Color="#F0F0F0" Offset="1"/>
+			</LinearGradientBrush>
+		</Setter>
+		<Setter Property="Padding" Value="12,8"/>
+		<Setter Property="CornerRadius" Value="8,8,0,0"/>
+		<Setter Property="FontFamily" Value="Segoe UI Variable"/>
+		<Setter Property="FontWeight" Value="SemiBold"/>
+	</Style>
+
+	<!-- TabControl Styles -->
+	<Style Selector="TabControl">
+		<Setter Property="Background" Value="#FFFFFF"/>
+		<Setter Property="BorderBrush" Value="#E5E5E5"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="CornerRadius" Value="8"/>
+		<Setter Property="Effect">
+			<DropShadowEffect Color="#10000000" OffsetX="0" OffsetY="2" BlurRadius="8"/>
+		</Setter>
+	</Style>
+
+	<Style Selector="TabItem">
+		<Setter Property="Padding" Value="16,8"/>
+		<Setter Property="FontFamily" Value="Segoe UI Variable"/>
+		<Setter Property="FontWeight" Value="Normal"/>
+		<Setter Property="FontSize" Value="14"/>
+		<Setter Property="CornerRadius" Value="4,4,0,0"/>
+		<Setter Property="Margin" Value="2,0"/>
+	</Style>
+
+	<Style Selector="TabItem:selected">
+		<Setter Property="Background">
+			<LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+				<GradientStop Color="#FFFFFF" Offset="0"/>
+				<GradientStop Color="#F8F8F8" Offset="1"/>
+			</LinearGradientBrush>
+		</Setter>
+		<Setter Property="Foreground" Value="#0078D4"/>
+		<Setter Property="FontWeight" Value="SemiBold"/>
+		<Setter Property="BorderThickness" Value="0,0,0,2"/>
+		<Setter Property="BorderBrush" Value="#0078D4"/>
+	</Style>
+
+	<Style Selector="TabItem:pointerover">
+		<Setter Property="Background">
+			<RadialGradientBrush Center="50%,50%">
+				<GradientStop Color="#F0F7FF" Offset="0"/>
+				<GradientStop Color="#E8F4FF" Offset="1"/>
+			</RadialGradientBrush>
+		</Setter>
+	</Style>
+
+	<!-- Calendar Styles -->
+	<Style Selector="CalendarDatePicker">
+		<Setter Property="BorderBrush" Value="#D1D1D1"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="CornerRadius" Value="4"/>
+		<Setter Property="MinHeight" Value="32"/>
+		<Setter Property="Background" Value="#FFFFFF"/>
+		<Setter Property="FontFamily" Value="Segoe UI Variable"/>
+		<Setter Property="FontSize" Value="14"/>
+		<Setter Property="Effect">
+			<DropShadowEffect Color="#10000000" OffsetX="0" OffsetY="1" BlurRadius="2"/>
+		</Setter>
+	</Style>
+
+	<!-- ScrollViewer Styles -->
+	<Style Selector="ScrollViewer">
+		<Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+		<Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
+		<Setter Property="Background" Value="Transparent"/>
+	</Style>
+
+	<!-- ToolTip Styles -->
+	<Style Selector="ToolTip">
+		<Setter Property="Background">
+			<LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+				<GradientStop Color="#2D2D2D" Offset="0"/>
+				<GradientStop Color="#1F1F1F" Offset="1"/>
+			</LinearGradientBrush>
+		</Setter>
+		<Setter Property="Foreground" Value="#FFFFFF"/>
+		<Setter Property="Padding" Value="12,8"/>
+		<Setter Property="CornerRadius" Value="4"/>
+		<Setter Property="FontFamily" Value="Segoe UI Variable"/>
+		<Setter Property="FontSize" Value="12"/>
+		<Setter Property="Effect">
+			<DropShadowEffect Color="#40000000" OffsetX="0" OffsetY="4" BlurRadius="12"/>
+		</Setter>
+	</Style>
+
+	<!-- Status Messages -->
+	<Style Selector="Border.status-info">
+		<Setter Property="Background">
+			<LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+				<GradientStop Color="#E6F3FF" Offset="0"/>
+				<GradientStop Color="#CCE7FF" Offset="1"/>
+			</LinearGradientBrush>
+		</Setter>
+		<Setter Property="BorderBrush" Value="#0078D4"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="CornerRadius" Value="6"/>
+		<Setter Property="Padding" Value="12,8"/>
+		<Setter Property="Effect">
+			<DropShadowEffect Color="#200078D4" OffsetX="0" OffsetY="2" BlurRadius="6"/>
+		</Setter>
+	</Style>
+
+	<Style Selector="Border.status-warning">
+		<Setter Property="Background">
+			<LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+				<GradientStop Color="#FFF8E1" Offset="0"/>
+				<GradientStop Color="#FFECB3" Offset="1"/>
+			</LinearGradientBrush>
+		</Setter>
+		<Setter Property="BorderBrush" Value="#FF8F00"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="CornerRadius" Value="6"/>
+		<Setter Property="Padding" Value="12,8"/>
+		<Setter Property="Effect">
+			<DropShadowEffect Color="#20FF8F00" OffsetX="0" OffsetY="2" BlurRadius="6"/>
+		</Setter>
+	</Style>
+
+	<Style Selector="Border.status-error">
+		<Setter Property="Background">
+			<LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+				<GradientStop Color="#FFE6E6" Offset="0"/>
+				<GradientStop Color="#FFCCCC" Offset="1"/>
+			</LinearGradientBrush>
+		</Setter>
+		<Setter Property="BorderBrush" Value="#D13438"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="CornerRadius" Value="6"/>
+		<Setter Property="Padding" Value="12,8"/>
+		<Setter Property="Effect">
+			<DropShadowEffect Color="#20D13438" OffsetX="0" OffsetY="2" BlurRadius="6"/>
+		</Setter>
+	</Style>
+
+	<Style Selector="Border.status-success">
+		<Setter Property="Background">
+			<LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+				<GradientStop Color="#E8F5E8" Offset="0"/>
+				<GradientStop Color="#C8E6C8" Offset="1"/>
+			</LinearGradientBrush>
+		</Setter>
+		<Setter Property="BorderBrush" Value="#107C10"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="CornerRadius" Value="6"/>
+		<Setter Property="Padding" Value="12,8"/>
+		<Setter Property="Effect">
+			<DropShadowEffect Color="#20107C10" OffsetX="0" OffsetY="2" BlurRadius="6"/>
+		</Setter>
+	</Style>
+</Styles>

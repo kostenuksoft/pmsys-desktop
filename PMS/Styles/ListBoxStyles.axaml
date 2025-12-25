@@ -1,0 +1,54 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<Design.PreviewWith>
+		<Border Padding="40" Background="#F5F5F5">
+			<ListBox Width="300" Height="400">
+				<ListBoxItem>Item 1</ListBoxItem>
+				<ListBoxItem>Item 2</ListBoxItem>
+				<ListBoxItem IsSelected="True">Item 3 (Selected)</ListBoxItem>
+				<ListBoxItem>Item 4</ListBoxItem>
+				<ListBoxItem>Item 5</ListBoxItem>
+			</ListBox>
+		</Border>
+	</Design.PreviewWith>
+
+	<Style Selector="ListBoxItem">
+		<Setter Property="Background" Value="Transparent"/>
+		<Setter Property="Padding" Value="11,5,11,6"/>
+		<Setter Property="MinHeight" Value="32"/>
+		<Setter Property="Margin" Value="2"/>
+		<Setter Property="Template">
+			<ControlTemplate>
+				<Panel>
+					<!-- Selection Indicator Pipe (left side) - DarkSlateGray -->
+					<Border Name="PART_SelectedPipe"
+					        Width="3"
+					        Height="20"
+					        CornerRadius="2"
+					        VerticalAlignment="Center"
+					        HorizontalAlignment="Left"
+					        Background="DarkSlateGray"
+					        IsVisible="False">
+						<Border.Transitions>
+							<Transitions>
+								
+							</Transitions>
+						</Border.Transitions>
+					</Border>
+					
+					<!-- Main Content -->
+					<ContentPresenter Name="PART_ContentPresenter"
+					                  Content="{TemplateBinding Content}"
+					                  ContentTemplate="{TemplateBinding ContentTemplate}"
+					                  Padding="{TemplateBinding Padding}"
+					                  Margin="6,0,0,0"/>
+				</Panel>
+			</ControlTemplate>
+		</Setter>
+	</Style>
+	
+	<!-- Show pipe when selected -->
+	<Style Selector="ListBoxItem:selected /template/ Border#PART_SelectedPipe">
+		<Setter Property="IsVisible" Value="True"/>
+	</Style>
+</Styles>

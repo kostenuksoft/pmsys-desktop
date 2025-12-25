@@ -1,0 +1,326 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Design.PreviewWith>
+        <Border Padding="40" Background="#F5F5F5">
+            <DataGrid Width="800" Height="400">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Name" Width="200"/>
+                    <DataGridTextColumn Header="Age" Width="100"/>
+                    <DataGridTextColumn Header="Email" Width="300"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+    </Design.PreviewWith>
+
+    <!-- DataGrid Base Style -->
+    <Style Selector="DataGrid">
+        <Setter Property="Background" Value="#FFFFFF"/>
+        <Setter Property="BorderBrush" Value="#D1D1D1"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="4"/>
+        <Setter Property="RowBackground" Value="#FFFFFF"/>
+        <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+        <Setter Property="HorizontalGridLinesBrush" Value="#E8E8E8"/>
+        <Setter Property="VerticalGridLinesBrush" Value="#E8E8E8"/>
+        <Setter Property="FontFamily" Value="Segoe UI Variable"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Foreground" Value="#000000"/>
+    </Style>
+
+    <!-- DataGridColumnHeader Styles -->
+    <Style Selector="DataGridColumnHeader">
+        <Setter Property="Background">
+            <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+                <GradientStop Color="#FCFCFC" Offset="0"/>
+                <GradientStop Color="#F5F5F5" Offset="1"/>
+            </LinearGradientBrush>
+        </Setter>
+        <Setter Property="Foreground" Value="#2F4F4F"/>
+        <Setter Property="BorderBrush" Value="#D1D1D1"/>
+        <Setter Property="BorderThickness" Value="0,0,1,1"/>
+        <Setter Property="Padding" Value="12,8"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="MinHeight" Value="36"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+
+    <Style Selector="DataGridColumnHeader:pointerover">
+        <Setter Property="Background">
+            <RadialGradientBrush Center="50%,50%">
+                <GradientStop Color="#F8FAFA" Offset="0"/>
+                <GradientStop Color="#F0F4F4" Offset="0.7"/>
+                <GradientStop Color="#E8F0F0" Offset="1"/>
+            </RadialGradientBrush>
+        </Setter>
+        <Setter Property="Foreground" Value="#1F3F3F"/>
+    </Style>
+
+    <Style Selector="DataGridColumnHeader:pressed">
+        <Setter Property="Background">
+            <RadialGradientBrush Center="50%,50%">
+                <GradientStop Color="#E8EDED" Offset="0"/>
+                <GradientStop Color="#DCE5E5" Offset="0.5"/>
+                <GradientStop Color="#D0DADA" Offset="1"/>
+            </RadialGradientBrush>
+        </Setter>
+    </Style>
+
+    <!-- DataGridRow Styles -->
+    <Style Selector="DataGridRow">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="MinHeight" Value="40"/>
+    </Style>
+
+    <Style Selector="DataGridRow:pointerover /template/ Border">
+        <Setter Property="Background">
+            <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
+                <GradientStop Color="#F5FAFA" Offset="0"/>
+                <GradientStop Color="#F0F8F8" Offset="0.5"/>
+                <GradientStop Color="#EBF5F5" Offset="1"/>
+            </LinearGradientBrush>
+        </Setter>
+    </Style>
+
+    <Style Selector="DataGridRow:selected /template/ Border">
+        <Setter Property="Background">
+            <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
+                <GradientStop Color="#E3F2FD" Offset="0"/>
+                <GradientStop Color="#D0EBEB" Offset="0.5"/>
+                <GradientStop Color="#BDE5E5" Offset="1"/>
+            </LinearGradientBrush>
+        </Setter>
+    </Style>
+
+    <Style Selector="DataGridRow:selected:pointerover /template/ Border">
+        <Setter Property="Background">
+            <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
+                <GradientStop Color="#D0E8F5" Offset="0"/>
+                <GradientStop Color="#BDDEDE" Offset="0.5"/>
+                <GradientStop Color="#AAD8D8" Offset="1"/>
+            </LinearGradientBrush>
+        </Setter>
+    </Style>
+
+    <!-- Alternate Row Background -->
+    <Style Selector="DataGridRow:nth-child(2n) /template/ Border">
+        <Setter Property="Background" Value="#FAFAFA"/>
+    </Style>
+
+    <!-- DataGridCell Styles -->
+    <Style Selector="DataGridCell">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding" Value="12,8"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Foreground" Value="#000000"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        Padding="{TemplateBinding Padding}">
+                    <Border.Transitions>
+                        <Transitions>
+                            <BrushTransition Property="Background" Duration="0:0:0.1"/>
+                        </Transitions>
+                    </Border.Transitions>
+                    <ContentPresenter Content="{TemplateBinding Content}"
+                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+
+    <Style Selector="DataGridCell:focus /template/ Border">
+        <Setter Property="BorderBrush" Value="#5F9EA0"/>
+        <Setter Property="BorderThickness" Value="2"/>
+    </Style>
+
+    <Style Selector="DataGridCell:current /template/ Border">
+        <Setter Property="BorderBrush" Value="#2F4F4F"/>
+        <Setter Property="BorderThickness" Value="1"/>
+    </Style>
+
+    <!-- DataGridRowHeader Styles -->
+    <Style Selector="DataGridRowHeader">
+        <Setter Property="Background">
+            <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
+                <GradientStop Color="#FCFCFC" Offset="0"/>
+                <GradientStop Color="#F5F5F5" Offset="1"/>
+            </LinearGradientBrush>
+        </Setter>
+        <Setter Property="BorderBrush" Value="#D1D1D1"/>
+        <Setter Property="BorderThickness" Value="0,0,1,0"/>
+        <Setter Property="Width" Value="32"/>
+        <Setter Property="MinWidth" Value="32"/>
+    </Style>
+
+    <Style Selector="DataGridRowHeader:pointerover">
+        <Setter Property="Background">
+            <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
+                <GradientStop Color="#F8FAFA" Offset="0"/>
+                <GradientStop Color="#F0F4F4" Offset="1"/>
+            </LinearGradientBrush>
+        </Setter>
+    </Style>
+
+    <Style Selector="DataGridRowHeader:pressed">
+        <Setter Property="Background">
+            <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
+                <GradientStop Color="#E8EDED" Offset="0"/>
+                <GradientStop Color="#DCE5E5" Offset="1"/>
+            </LinearGradientBrush>
+        </Setter>
+    </Style>
+
+    <!-- Selected Row Header -->
+    <Style Selector="DataGridRow:selected DataGridRowHeader">
+        <Setter Property="Background">
+            <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
+                <GradientStop Color="#5F9EA0" Offset="0"/>
+                <GradientStop Color="#4A8A8C" Offset="1"/>
+            </LinearGradientBrush>
+        </Setter>
+    </Style>
+
+    <!-- ScrollBar Styles for DataGrid -->
+    <Style Selector="DataGrid ScrollBar">
+        <Setter Property="Background" Value="#F5F5F5"/>
+    </Style>
+
+    <Style Selector="DataGrid ScrollBar:vertical">
+        <Setter Property="Width" Value="12"/>
+        <Setter Property="BorderBrush" Value="#D1D1D1"/>
+        <Setter Property="BorderThickness" Value="1,0,0,0"/>
+    </Style>
+
+    <Style Selector="DataGrid ScrollBar:horizontal">
+        <Setter Property="Height" Value="12"/>
+        <Setter Property="BorderBrush" Value="#D1D1D1"/>
+        <Setter Property="BorderThickness" Value="0,1,0,0"/>
+    </Style>
+
+    <Style Selector="DataGrid ScrollBar /template/ Thumb">
+        <Setter Property="Background" Value="#C0C0C0"/>
+        <Setter Property="CornerRadius" Value="6"/>
+    </Style>
+
+    <Style Selector="DataGrid ScrollBar /template/ Thumb:pointerover">
+        <Setter Property="Background" Value="#5F9EA0"/>
+    </Style>
+
+    <Style Selector="DataGrid ScrollBar /template/ Thumb:pressed">
+        <Setter Property="Background" Value="#2F4F4F"/>
+    </Style>
+
+    <!-- Column Separator -->
+    <Style Selector="DataGridColumnHeader /template/ Rectangle#VerticalSeparator">
+        <Setter Property="Fill" Value="#D1D1D1"/>
+        <Setter Property="Width" Value="1"/>
+    </Style>
+
+    <!-- Sort Indicator -->
+    <Style Selector="DataGridColumnHeader /template/ Path#SortIcon">
+        <Setter Property="Fill" Value="#2F4F4F"/>
+    </Style>
+
+    <!-- DataGrid Focus State -->
+    <Style Selector="DataGrid:focus">
+        <Setter Property="BorderBrush" Value="#5F9EA0"/>
+        <Setter Property="BorderThickness" Value="2"/>
+    </Style>
+
+    <!-- Invalid State -->
+    <Style Selector="DataGrid:invalid">
+        <Setter Property="BorderBrush" Value="#D32F2F"/>
+        <Setter Property="BorderThickness" Value="2"/>
+    </Style>
+
+    <Style Selector="DataGridCell:invalid /template/ Border">
+        <Setter Property="BorderBrush" Value="#D32F2F"/>
+        <Setter Property="BorderThickness" Value="2"/>
+    </Style>
+
+    <!-- Editing State -->
+    <Style Selector="DataGridCell:editing /template/ Border">
+        <Setter Property="Background" Value="#FFFEF5"/>
+        <Setter Property="BorderBrush" Value="#5F9EA0"/>
+        <Setter Property="BorderThickness" Value="2"/>
+    </Style>
+
+    <!-- Empty DataGrid -->
+    <Style Selector="DataGrid:empty-rows">
+        <Setter Property="Background" Value="#FAFAFA"/>
+    </Style>
+
+    <!-- Disabled State -->
+    <Style Selector="DataGrid:disabled">
+        <Setter Property="Opacity" Value="0.6"/>
+    </Style>
+
+    <Style Selector="DataGridColumnHeader:disabled">
+        <Setter Property="Foreground" Value="#A6A6A6"/>
+    </Style>
+
+    <Style Selector="DataGridCell:disabled">
+        <Setter Property="Foreground" Value="#A6A6A6"/>
+    </Style>
+
+    <!-- Row Group Headers -->
+    <Style Selector="DataGridRowGroupHeader">
+        <Setter Property="Background">
+            <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+                <GradientStop Color="#F0F8F8" Offset="0"/>
+                <GradientStop Color="#E5F3F3" Offset="1"/>
+            </LinearGradientBrush>
+        </Setter>
+        <Setter Property="Foreground" Value="#2F4F4F"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="BorderBrush" Value="#D1D1D1"/>
+        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+        <Setter Property="MinHeight" Value="36"/>
+        <Setter Property="Padding" Value="8,6"/>
+    </Style>
+
+    <Style Selector="DataGridRowGroupHeader:pointerover">
+        <Setter Property="Background">
+            <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+                <GradientStop Color="#E8F4F4" Offset="0"/>
+                <GradientStop Color="#DCE8E8" Offset="1"/>
+            </LinearGradientBrush>
+        </Setter>
+    </Style>
+
+    <Style Selector="DataGridRowGroupHeader:pressed">
+        <Setter Property="Background">
+            <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+                <GradientStop Color="#D8E8E8" Offset="0"/>
+                <GradientStop Color="#CCE0E0" Offset="1"/>
+            </LinearGradientBrush>
+        </Setter>
+    </Style>
+
+    <!-- CheckBox in DataGrid -->
+    <Style Selector="DataGridCell CheckBox">
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+
+    <!-- TextBox in editing mode -->
+    <Style Selector="DataGridCell TextBox">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding" Value="0"/>
+    </Style>
+
+    <Style Selector="DataGridCell TextBox:focus">
+        <Setter Property="Background" Value="#FFFEF5"/>
+    </Style>
+</Styles>

@@ -1,0 +1,66 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Design.PreviewWith>
+        <Border Padding="20">
+            <StackPanel Spacing="10">
+                <ToggleSwitch/>
+                <ToggleSwitch IsChecked="True"/>
+                <ToggleSwitch IsEnabled="False"/>
+            </StackPanel>
+        </Border>
+    </Design.PreviewWith>
+    
+    <Style Selector="ToggleSwitch">
+        <Style.Resources>
+            <SolidColorBrush x:Key="ToggleSwitchFillOff" Color="LightGray"/>
+            <SolidColorBrush x:Key="ToggleSwitchFillOffPointerOver" Color="DarkGray"/>
+            <SolidColorBrush x:Key="ToggleSwitchFillOffPressed" Color="LightGray"/>
+            <SolidColorBrush x:Key="ToggleSwitchFillOn" Color="DarkSlateGray"/>
+            <SolidColorBrush x:Key="ToggleSwitchFillOnPointerOver" Color="CadetBlue"/>
+            <SolidColorBrush x:Key="ToggleSwitchFillOnPressed" Color="#1E3A3A"/>
+            <SolidColorBrush x:Key="ToggleSwitchFillDragging" Color="SlateGray"/>
+            <SolidColorBrush x:Key="ToggleSwitchKnobFill" Color="White"/>
+            <SolidColorBrush x:Key="ToggleSwitchKnobFillPressed" Color="WhiteSmoke"/>
+        </Style.Resources>
+    </Style>
+    
+    <Style Selector="ToggleSwitch /template/ Border#SwitchKnobBounds">
+        <Setter Property="Background" Value="{DynamicResource ToggleSwitchFillOff}"/>
+    </Style>
+    
+    <Style Selector="ToggleSwitch:pointerover /template/ Border#SwitchKnobBounds">
+        <Setter Property="Background" Value="{DynamicResource ToggleSwitchFillOffPointerOver}"/>
+    </Style>
+    
+    <Style Selector="ToggleSwitch:pressed /template/ Border#SwitchKnobBounds">
+        <Setter Property="Background" Value="{DynamicResource ToggleSwitchFillOffPressed}"/>
+    </Style>
+    
+    <Style Selector="ToggleSwitch:checked /template/ Border#SwitchKnobBounds">
+        <Setter Property="Background" Value="{DynamicResource ToggleSwitchFillOn}"/>
+    </Style>
+    
+    <Style Selector="ToggleSwitch:checked:pointerover /template/ Border#SwitchKnobBounds">
+        <Setter Property="Background" Value="{DynamicResource ToggleSwitchFillOnPointerOver}"/>
+    </Style>
+
+    <Style Selector="ToggleSwitch:checked:pressed /template/ Border#SwitchKnobBounds">
+        <Setter Property="Background" Value="{DynamicResource ToggleSwitchFillOnPressed}"/>
+    </Style>
+    
+    <Style Selector="ToggleSwitch:dragging /template/ Border#SwitchKnobBounds">
+        <Setter Property="Background" Value="{DynamicResource ToggleSwitchFillDragging}"/>
+    </Style>
+    
+    <Style Selector="ToggleSwitch /template/ Border#SwitchKnob">
+        <Setter Property="Background" Value="{DynamicResource ToggleSwitchKnobFill}"/>
+    </Style>
+    
+    <Style Selector="ToggleSwitch:pressed /template/ Border#SwitchKnob">
+        <Setter Property="Background" Value="{DynamicResource ToggleSwitchKnobFillPressed}"/>
+    </Style>
+    
+    <Style Selector="ToggleSwitch:disabled /template/ Border#SwitchKnobBounds">
+        <Setter Property="Opacity" Value="0.5"/>
+    </Style>
+</Styles>

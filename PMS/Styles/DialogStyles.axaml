@@ -1,0 +1,58 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ui="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia">
+	<Design.PreviewWith>
+		
+        <Border Padding="20">
+
+        </Border>
+    </Design.PreviewWith>
+
+	<!-- Custom Dialog Window Style -->
+	<Style Selector="Window.dialog">
+		<Setter Property="TransparencyLevelHint" Value="AcrylicBlur"/>
+		<Setter Property="Background" Value="{DynamicResource ApplicationPageBackgroundThemeBrush}"/>
+		<Setter Property="ExtendClientAreaToDecorationsHint" Value="True"/>
+	</Style>
+
+	<!-- Error TextBox Style -->
+	<Style Selector="TextBox.error">
+		<Setter Property="BorderBrush" Value="{DynamicResource SystemErrorTextColor}"/>
+	</Style>
+
+	<!-- Dialog Button Styles -->
+	<Style Selector="Button.dialog-primary">
+		<Setter Property="MinWidth" Value="100"/>
+	</Style>
+
+	<Style Selector="Button.dialog-secondary">
+		<Setter Property="MinWidth" Value="100"/>
+	</Style>
+
+	<!-- Progress Dialog Style -->
+	<Style Selector="ui|ContentDialog.progress-dialog">
+		<Setter Property="MinWidth" Value="400"/>
+	</Style>
+
+	<!-- Toast Notification Styles -->
+	<Style Selector="Border.toast-notification">
+		<Setter Property="Background" Value="{DynamicResource CardBackgroundFillColorDefault}"/>
+		<Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefault}"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="CornerRadius" Value="4"/>
+		<Setter Property="Padding" Value="15"/>
+		<Setter Property="Margin" Value="10"/>
+		<Style.Animations>
+			<Animation Duration="0:0:0.3" FillMode="Both">
+				<KeyFrame Cue="0%">
+					<Setter Property="Opacity" Value="0"/>
+					<Setter Property="TranslateTransform.Y" Value="20"/>
+				</KeyFrame>
+				<KeyFrame Cue="100%">
+					<Setter Property="Opacity" Value="1"/>
+					<Setter Property="TranslateTransform.Y" Value="0"/>
+				</KeyFrame>
+			</Animation>
+		</Style.Animations>
+	</Style>
+</Styles>

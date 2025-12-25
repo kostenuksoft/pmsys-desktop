@@ -1,0 +1,97 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:notifications="using:Avalonia.Controls.Notifications">
+    
+    <Design.PreviewWith>
+        <Border Padding="40">
+            <notifications:NotificationCard NotificationType="Error">
+                <notifications:NotificationCard.Content>
+                  
+                </notifications:NotificationCard.Content>
+            </notifications:NotificationCard>
+        </Border>
+    </Design.PreviewWith>
+    
+    <!-- Base Notification Card Style -->
+    <Style Selector="notifications|NotificationCard">
+        <Setter Property="MinWidth" Value="320"/>
+        <Setter Property="MaxWidth" Value="400"/>
+        <Setter Property="Margin" Value="0 0 0 8"/>
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="BorderBrush" Value="White"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding" Value="16"/>
+        <Setter Property="ClipToBounds" Value="True"/>
+        <Setter Property="Opacity" Value="0"/>
+    </Style>
+
+    <!-- Custom Success Notification -->
+    <Style Selector="notifications|NotificationCard.success">
+        <Setter Property="Background" Value="#FFE7F5EC"/>
+        <Setter Property="BorderBrush" Value="#FF4CAF50"/>
+        <Setter Property="BorderThickness" Value="0 0 0 3"/>
+        <Setter Property="Opacity" Value="1"/>
+    </Style>
+    
+    <Style Selector="notifications|NotificationCard.success /template/ ContentPresenter#PART_HeaderPresenter">
+        <Setter Property="Foreground" Value="#2E7D32"/>
+    </Style>
+
+    <!-- Custom Warning Notification -->
+    <Style Selector="notifications|NotificationCard.warning">
+        <Setter Property="Background" Value="#FFFFF8E1"/>
+        <Setter Property="BorderBrush" Value="#FFFF9800"/>
+        <Setter Property="BorderThickness" Value="0 0 0 3"/>
+        <Setter Property="Opacity" Value="1"/>
+    </Style>
+    
+    <Style Selector="notifications|NotificationCard.warning /template/ ContentPresenter#PART_HeaderPresenter">
+        <Setter Property="Foreground" Value="#F57C00"/>
+    </Style>
+
+    <!-- Custom Error Notification -->
+    <Style Selector="notifications|NotificationCard.error">
+        <Setter Property="Background" Value="#FFFFEBEE"/>
+        <Setter Property="BorderBrush" Value="#123456"/>
+        <Setter Property="BorderThickness" Value="0 0 0 3"/>
+        <Setter Property="Opacity" Value="1"/>
+    </Style>
+    
+    <Style Selector="notifications|NotificationCard.error /template/ ContentPresenter#PART_HeaderPresenter">
+        <Setter Property="Foreground" Value="#C62828"/>
+    </Style>
+
+    <!-- Custom Information Notification -->
+    <Style Selector="notifications|NotificationCard.info">
+        <Setter Property="Background" Value="#FFE3F2FD"/>
+        <Setter Property="BorderBrush" Value="#FF2196F3"/>
+        <Setter Property="BorderThickness" Value="0 0 0 3"/>
+        <Setter Property="Opacity" Value="1"/>
+    </Style>
+    
+    <Style Selector="notifications|NotificationCard.info /template/ ContentPresenter#PART_HeaderPresenter">
+        <Setter Property="Foreground" Value="#1976D2"/>
+    </Style>
+
+    <!-- Compact Style -->
+    <Style Selector="notifications|NotificationCard.compact">
+        <Setter Property="MinWidth" Value="280"/>
+        <Setter Property="Padding" Value="12"/>
+    </Style>
+
+    <!-- Modern Fluent Style -->
+    <Style Selector="notifications|NotificationCard.modern">
+        <Setter Property="Background" Value="{DynamicResource SolidBackgroundFillColorBaseBrush}"/>
+        <Setter Property="CornerRadius" Value="12"/>
+        <Setter Property="Opacity" Value="1"/>
+    </Style>
+
+    <!-- Dark Theme Notification -->
+    <Style Selector="notifications|NotificationCard.dark">
+        <Setter Property="Background" Value="#FF2D2D30"/>
+        <Setter Property="BorderBrush" Value="#FF3E3E42"/>
+        <Setter Property="Foreground" Value="#FFFFFF"/>
+        <Setter Property="Opacity" Value="1"/>
+    </Style>
+</Styles>

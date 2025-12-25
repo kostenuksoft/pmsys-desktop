@@ -1,0 +1,317 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ui="using:FluentAvalonia.UI.Controls">
+    <Design.PreviewWith>
+        <Border Padding="40" Background="#F5F5F5">
+            <StackPanel Spacing="10">
+                <CheckBox Content="Default CheckBox"/>
+                <CheckBox Content="Checked CheckBox" IsChecked="True"/>
+                <CheckBox Content="Disabled CheckBox" IsEnabled="False"/>
+                <CheckBox Content="Disabled Checked" IsChecked="True" IsEnabled="False"/>
+            </StackPanel>
+        </Border>
+    </Design.PreviewWith>
+
+    <!-- Base CheckBox Style -->
+    <Style Selector="CheckBox">
+        <Setter Property="Background" Value="#FFFFFF"/>
+        <Setter Property="BorderBrush" Value="#D1D1D1"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="4"/>
+        <Setter Property="Foreground" Value="#000000"/>
+        <Setter Property="Padding" Value="8,0,0,0"/>
+        <Setter Property="MinHeight" Value="20"/>
+        <Setter Property="FontFamily" Value="Segoe UI Variable"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Border Name="CheckBoxBorder"
+                            Grid.Column="0"
+                            Width="20"
+                            Height="20"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{TemplateBinding CornerRadius}"
+                            VerticalAlignment="Center">
+                        <Border.Effect>
+                            <DropShadowEffect Color="#10000000" OffsetX="0" OffsetY="1" BlurRadius="2"/>
+                        </Border.Effect>
+                        <Border.Transitions>
+                            <Transitions>
+                                <BrushTransition Property="Background" Duration="0:0:0.15"/>
+                                <BrushTransition Property="BorderBrush" Duration="0:0:0.15"/>
+                            </Transitions>
+                        </Border.Transitions>
+
+                        <!-- Check Mark Icon -->
+                        <Panel>
+                            <ui:SymbolIcon Name="CheckMark"
+                                          Symbol="Accept"
+                                          FontSize="12"
+                                          Foreground="#FFFFFF"
+                                          IsVisible="False"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center">
+                                <ui:SymbolIcon.Transitions>
+                                    <Transitions>
+                                        <DoubleTransition Property="Opacity" Duration="0:0:0.1"/>
+                                    </Transitions>
+                                </ui:SymbolIcon.Transitions>
+                            </ui:SymbolIcon>
+
+                            <!-- Indeterminate Mark -->
+                            <ui:SymbolIcon Name="IndeterminateMark"
+                                          Symbol="Remove"
+                                          FontSize="10"
+                                          Foreground="#FFFFFF"
+                                          IsVisible="False"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center">
+                                <ui:SymbolIcon.Transitions>
+                                    <Transitions>
+                                        <DoubleTransition Property="Opacity" Duration="0:0:0.1"/>
+                                    </Transitions>
+                                </ui:SymbolIcon.Transitions>
+                            </ui:SymbolIcon>
+                        </Panel>
+                    </Border>
+
+                    <ContentPresenter Name="PART_ContentPresenter"
+                                    Grid.Column="1"
+                                    Content="{TemplateBinding Content}"
+                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                    Margin="{TemplateBinding Padding}"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    TextBlock.Foreground="{TemplateBinding Foreground}"/>
+                </Grid>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+
+    <!-- CheckBox Hover State -->
+    <Style Selector="CheckBox:pointerover /template/ Border#CheckBoxBorder">
+        <Setter Property="Background">
+            <RadialGradientBrush Center="50%,50%">
+                <GradientStop Color="#F0F8F8" Offset="0"/>
+                <GradientStop Color="#E8F4F4" Offset="0.7"/>
+                <GradientStop Color="#E0F0F0" Offset="1"/>
+            </RadialGradientBrush>
+        </Setter>
+        <Setter Property="BorderBrush" Value="#5F9EA0"/>
+        <Setter Property="Effect">
+            <DropShadowEffect Color="#305F9EA0" OffsetX="0" OffsetY="2" BlurRadius="8"/>
+        </Setter>
+    </Style>
+
+    <!-- CheckBox Pressed State -->
+    <Style Selector="CheckBox:pressed /template/ Border#CheckBoxBorder">
+        <Setter Property="Background">
+            <RadialGradientBrush Center="50%,50%">
+                <GradientStop Color="#D8E8E8" Offset="0"/>
+                <GradientStop Color="#CCE0E0" Offset="0.5"/>
+                <GradientStop Color="#C0D8D8" Offset="1"/>
+            </RadialGradientBrush>
+        </Setter>
+        <Setter Property="BorderBrush" Value="#2F4F4F"/>
+        <Setter Property="RenderTransform">
+            <ScaleTransform ScaleX="0.95" ScaleY="0.95"/>
+        </Setter>
+    </Style>
+
+    <!-- CheckBox Checked State -->
+    <Style Selector="CheckBox:checked /template/ Border#CheckBoxBorder">
+        <Setter Property="Background">
+            <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+                <GradientStop Color="#3A5F5F" Offset="0"/>
+                <GradientStop Color="#2F4F4F" Offset="0.5"/>
+                <GradientStop Color="#284848" Offset="1"/>
+            </LinearGradientBrush>
+        </Setter>
+        <Setter Property="BorderBrush" Value="#4A6F6F"/>
+        <Setter Property="Effect">
+            <DropShadowEffect Color="#403A5F5F" OffsetX="0" OffsetY="2" BlurRadius="6"/>
+        </Setter>
+    </Style>
+
+    <Style Selector="CheckBox:checked /template/ ui|SymbolIcon#CheckMark">
+        <Setter Property="IsVisible" Value="True"/>
+        <Setter Property="Opacity" Value="1"/>
+    </Style>
+
+    <!-- CheckBox Checked Hover State -->
+    <Style Selector="CheckBox:checked:pointerover /template/ Border#CheckBoxBorder">
+        <Setter Property="Background">
+            <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+                <GradientStop Color="#4A7A7A" Offset="0"/>
+                <GradientStop Color="#3A6A6A" Offset="0.5"/>
+                <GradientStop Color="#305A5A" Offset="1"/>
+            </LinearGradientBrush>
+        </Setter>
+        <Setter Property="BorderBrush" Value="#5F8F8F"/>
+        <Setter Property="Effect">
+            <DropShadowEffect Color="#504A7A7A" OffsetX="0" OffsetY="3" BlurRadius="12"/>
+        </Setter>
+    </Style>
+
+    <!-- CheckBox Checked Pressed State -->
+    <Style Selector="CheckBox:checked:pressed /template/ Border#CheckBoxBorder">
+        <Setter Property="Background">
+            <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+                <GradientStop Color="#253333" Offset="0"/>
+                <GradientStop Color="#1F2D2D" Offset="0.5"/>
+                <GradientStop Color="#1A2828" Offset="1"/>
+            </LinearGradientBrush>
+        </Setter>
+        <Setter Property="BorderBrush" Value="#2A4444"/>
+        <Setter Property="RenderTransform">
+            <ScaleTransform ScaleX="0.90" ScaleY="0.90"/>
+        </Setter>
+    </Style>
+
+    <!-- Indeterminate State -->
+    <Style Selector="CheckBox:indeterminate /template/ Border#CheckBoxBorder">
+        <Setter Property="Background">
+            <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+                <GradientStop Color="#5F9EA0" Offset="0"/>
+                <GradientStop Color="#4A8A8C" Offset="0.5"/>
+                <GradientStop Color="#3A7A7C" Offset="1"/>
+            </LinearGradientBrush>
+        </Setter>
+        <Setter Property="BorderBrush" Value="#5F9EA0"/>
+        <Setter Property="Effect">
+            <DropShadowEffect Color="#405F9EA0" OffsetX="0" OffsetY="2" BlurRadius="6"/>
+        </Setter>
+    </Style>
+
+    <Style Selector="CheckBox:indeterminate /template/ ui|SymbolIcon#IndeterminateMark">
+        <Setter Property="IsVisible" Value="True"/>
+        <Setter Property="Opacity" Value="1"/>
+    </Style>
+
+    <Style Selector="CheckBox:indeterminate:pointerover /template/ Border#CheckBoxBorder">
+        <Setter Property="Background">
+            <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+                <GradientStop Color="#7FBEBE" Offset="0"/>
+                <GradientStop Color="#6AAEAE" Offset="0.5"/>
+                <GradientStop Color="#5A9E9E" Offset="1"/>
+            </LinearGradientBrush>
+        </Setter>
+        <Setter Property="BorderBrush" Value="#7FBEBE"/>
+    </Style>
+
+    <!-- CheckBox Disabled State -->
+    <Style Selector="CheckBox:disabled /template/ Border#CheckBoxBorder">
+        <Setter Property="Background" Value="#F9F9F9"/>
+        <Setter Property="BorderBrush" Value="#E0E0E0"/>
+        <Setter Property="Effect">
+            <DropShadowEffect Color="#20000000" OffsetX="0" OffsetY="1" BlurRadius="2"/>
+        </Setter>
+    </Style>
+
+    <Style Selector="CheckBox:disabled">
+        <Setter Property="Foreground" Value="#A6A6A6"/>
+    </Style>
+
+    <Style Selector="CheckBox:disabled /template/ ui|SymbolIcon#CheckMark">
+        <Setter Property="Foreground" Value="#A6A6A6"/>
+    </Style>
+
+    <Style Selector="CheckBox:disabled /template/ ui|SymbolIcon#IndeterminateMark">
+        <Setter Property="Foreground" Value="#A6A6A6"/>
+    </Style>
+
+    <!-- CheckBox Disabled Checked State -->
+    <Style Selector="CheckBox:disabled:checked /template/ Border#CheckBoxBorder">
+        <Setter Property="Background">
+            <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+                <GradientStop Color="#D8E5E5" Offset="0"/>
+                <GradientStop Color="#CDD9D9" Offset="1"/>
+            </LinearGradientBrush>
+        </Setter>
+        <Setter Property="BorderBrush" Value="#B8CACA"/>
+    </Style>
+
+    <!-- CheckBox Disabled Indeterminate State -->
+    <Style Selector="CheckBox:disabled:indeterminate /template/ Border#CheckBoxBorder">
+        <Setter Property="Background">
+            <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+                <GradientStop Color="#E0EDED" Offset="0"/>
+                <GradientStop Color="#D5E3E3" Offset="1"/>
+            </LinearGradientBrush>
+        </Setter>
+        <Setter Property="BorderBrush" Value="#C0D0D0"/>
+    </Style>
+
+    <!-- Focus State -->
+    <Style Selector="CheckBox:focus /template/ Border#CheckBoxBorder">
+        <Setter Property="BorderBrush" Value="#5F9EA0"/>
+        <Setter Property="BorderThickness" Value="2"/>
+    </Style>
+
+    <Style Selector="CheckBox:checked:focus /template/ Border#CheckBoxBorder">
+        <Setter Property="BorderBrush" Value="#2F4F4F"/>
+        <Setter Property="BorderThickness" Value="2"/>
+    </Style>
+
+    <!-- DataGrid Cell CheckBox (centered) -->
+    <Style Selector="DataGridCell CheckBox">
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="0"/>
+    </Style>
+
+    <!-- Small CheckBox Variant -->
+    <Style Selector="CheckBox.small">
+        <Setter Property="MinHeight" Value="16"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Padding" Value="6,0,0,0"/>
+    </Style>
+
+    <Style Selector="CheckBox.small /template/ Border#CheckBoxBorder">
+        <Setter Property="Width" Value="16"/>
+        <Setter Property="Height" Value="16"/>
+    </Style>
+
+    <Style Selector="CheckBox.small /template/ ui|SymbolIcon#CheckMark">
+        <Setter Property="FontSize" Value="10"/>
+    </Style>
+
+    <Style Selector="CheckBox.small /template/ ui|SymbolIcon#IndeterminateMark">
+        <Setter Property="FontSize" Value="8"/>
+    </Style>
+
+    <!-- Large CheckBox Variant -->
+    <Style Selector="CheckBox.large">
+        <Setter Property="MinHeight" Value="24"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="Padding" Value="10,0,0,0"/>
+    </Style>
+
+    <Style Selector="CheckBox.large /template/ Border#CheckBoxBorder">
+        <Setter Property="Width" Value="24"/>
+        <Setter Property="Height" Value="24"/>
+    </Style>
+
+    <Style Selector="CheckBox.large /template/ ui|SymbolIcon#CheckMark">
+        <Setter Property="FontSize" Value="16"/>
+    </Style>
+
+    <Style Selector="CheckBox.large /template/ ui|SymbolIcon#IndeterminateMark">
+        <Setter Property="FontSize" Value="14"/>
+    </Style>
+
+  
+
+</Styles>

@@ -1,0 +1,122 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Design.PreviewWith>
+		<Border Padding="20">
+           
+			<Border Width="100" Height="50" Classes="status-warning"></Border>
+			
+        </Border>
+	</Design.PreviewWith>
+
+	<Style Selector="Border.status-info">
+		<Setter Property="Background">
+			<LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+				<GradientStop Color="#E6F3FF" Offset="0"/>
+				<GradientStop Color="#CCE7FF" Offset="1"/>
+			</LinearGradientBrush>
+		</Setter>
+		<Setter Property="BorderBrush" Value="#0078D4"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="CornerRadius" Value="6"/>
+		<Setter Property="Padding" Value="12,8"/>
+		<Setter Property="Effect">
+			<DropShadowEffect Color="#200078D4" OffsetX="0" OffsetY="2" BlurRadius="6"/>
+		</Setter>
+	</Style>
+
+	<Style Selector="Border.status-info:pointerover">
+		<Setter Property="Background">
+			<LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+				<GradientStop Color="#D1E9FF" Offset="0"/>
+				<GradientStop Color="#B8DDFF" Offset="1"/>
+			</LinearGradientBrush>
+		</Setter>
+		<Setter Property="Effect">
+			<DropShadowEffect Color="#300078D4" OffsetX="0" OffsetY="3" BlurRadius="10"/>
+		</Setter>
+	</Style>
+
+	<Style Selector="Border.status-warning">
+		<Setter Property="Background">
+			<LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+				<GradientStop Color="#FFF8E1" Offset="0"/>
+				<GradientStop Color="#FFECB3" Offset="1"/>
+			</LinearGradientBrush>
+		</Setter>
+		<Setter Property="BorderBrush" Value="#FF8F00"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="CornerRadius" Value="6"/>
+		<Setter Property="Padding" Value="12,8"/>
+		<Setter Property="Effect">
+			<DropShadowEffect Color="#20FF8F00" OffsetX="0" OffsetY="2" BlurRadius="6"/>
+		</Setter>
+	</Style>
+
+	<Style Selector="Border.status-warning:pointerover">
+		<Setter Property="Background">
+			<LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+				<GradientStop Color="#FFE082" Offset="0"/>
+				<GradientStop Color="#FFD54F" Offset="1"/>
+			</LinearGradientBrush>
+		</Setter>
+		<Setter Property="Effect">
+			<DropShadowEffect Color="#30FF8F00" OffsetX="0" OffsetY="3" BlurRadius="10"/>
+		</Setter>
+	</Style>
+
+	<Style Selector="Border.status-error">
+		<Setter Property="Background">
+			<LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+				<GradientStop Color="#FFE6E6" Offset="0"/>
+				<GradientStop Color="#FFCCCC" Offset="1"/>
+			</LinearGradientBrush>
+		</Setter>
+		<Setter Property="BorderBrush" Value="#D13438"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="CornerRadius" Value="6"/>
+		<Setter Property="Padding" Value="12,8"/>
+		<Setter Property="Effect">
+			<DropShadowEffect Color="#20D13438" OffsetX="0" OffsetY="2" BlurRadius="6"/>
+		</Setter>
+	</Style>
+
+	<Style Selector="Border.status-error:pointerover">
+		<Setter Property="Background">
+			<LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+				<GradientStop Color="#FFCDD2" Offset="0"/>
+				<GradientStop Color="#FFBABA" Offset="1"/>
+			</LinearGradientBrush>
+		</Setter>
+		<Setter Property="Effect">
+			<DropShadowEffect Color="#30D13438" OffsetX="0" OffsetY="3" BlurRadius="10"/>
+		</Setter>
+	</Style>
+
+	<Style Selector="Border.status-success">
+		<Setter Property="Background">
+			<LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+				<GradientStop Color="#E8F5E8" Offset="0"/>
+				<GradientStop Color="#C8E6C8" Offset="1"/>
+			</LinearGradientBrush>
+		</Setter>
+		<Setter Property="BorderBrush" Value="#107C10"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="CornerRadius" Value="6"/>
+		<Setter Property="Padding" Value="12,8"/>
+		<Setter Property="Effect">
+			<DropShadowEffect Color="#20107C10" OffsetX="0" OffsetY="2" BlurRadius="6"/>
+		</Setter>
+	</Style>
+
+	<Style Selector="Border.status-success:pointerover">
+		<Setter Property="Background">
+			<LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+				<GradientStop Color="#C8E6C8" Offset="0"/>
+				<GradientStop Color="#A5D6A5" Offset="1"/>
+			</LinearGradientBrush>
+		</Setter>
+		<Setter Property="Effect">
+			<DropShadowEffect Color="#30107C10" OffsetX="0" OffsetY="3" BlurRadius="10"/>
+		</Setter>
+	</Style>
+</Styles>
